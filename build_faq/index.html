@@ -267,6 +267,8 @@ export PYTHONPATH=$PYTHONPATH:${CARLA_ROOT}/PythonAPI/carla
 <h2 id="windows_1">Windows 构建</h2>
 <!-- ======================================================================= -->
 
+<h6 id="xcopy-s">执行 xcopy 报 /S 无法识别</h6>
+<p>解决：原目录和目的目的不能包含 <code>/</code> ，需要用<code>\</code>替换。</p>
 <h6 id="buildcarlaue4bat-jenkins">BuildCarlaUE4.bat 在jenkins的日志中中文乱码</h6>
 <p>日志乱码开始出现的地方：
 <div class="highlight"><pre><span></span><code>-[BuildCarlaUE4]: Building Unreal Editor...
