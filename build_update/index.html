@@ -156,7 +156,7 @@ git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/ca
 <p><strong>Linux.</strong>
 <div class="highlight"><pre><span></span><code>./Update.sh
 </code></pre></div></p>
-<p><strong>Windows.</strong>  </p>
+<p><strong>Windows.</strong></p>
 <p><strong>1.</strong> 删除 <code>Unreal\CarlaUE4\Content\Carla</code> 中之前的内容。<br />
 <strong>2.</strong> 转至 <code>\Util\ContentVersions.txt</code>。<br />
 <strong>3.</strong> 下载最新的 <code>latest</code> 的内容。<br />
@@ -174,8 +174,13 @@ git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/ca
 <p>Carla 团队使用仍在开发中的资产。这些模型和地图有一个 <a href="https://bitbucket.org/carla-simulator/carla-content">公共 git 存储库</a>，Carla 团队定期在其中推送最新更新。资产尚未完成，仅建议开发人员使用它们。</p>
 <p>为了处理这个存储库，建议安装 <a href="https://github.com/git-lfs/git-lfs/wiki/Installation">git-lfs</a>。存储库会定期修改，并且 <a href="https://blog.csdn.net/xun527/article/details/132207700">git-lfs 处理大型二进制文件</a> 的速度更快。</p>
 <p>要克隆存储库，请 <strong>转到主 Carla 目录</strong> 并运行以下命令。</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/carla-simulator/carla-content<span class="w"> </span>Unreal/CarlaUE4/Content/Carla
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>http://172.20.46.154:8090/traffic/Content.git
+<span class="nb">cd</span><span class="w"> </span>Content
+git<span class="w"> </span>lfs<span class="w"> </span>pull<span class="w">  </span><span class="c1"># 拉取大文件资产</span>
 </code></pre></div>
+<p>原始 Carla 资产的获取方法：
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/carla-simulator/carla-content<span class="w"> </span>Unreal/CarlaUE4/Content/Carla
+</code></pre></div></p>
 <div class="admonition 笔记">
 <p class="admonition-title">笔记</p>
 <p>在克隆存储库之前删除包含资产的 <code>/Carla</code> 文件夹。否则，将显示错误。</p>

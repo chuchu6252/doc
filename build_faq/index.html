@@ -312,7 +312,7 @@ ERROR: Could not install packages due to an OSError: [Errno 2] No such file or d
 <h6 id="vs2022boost-1800-install_boost-b2-error-an-error-ocurred-while-installing-using-b2exe">升级到vs2022后，编译boost-1.80.0报错：<a href="https://github.com/boostorg/boost/issues/914#issuecomment-2327689539">-[install_boost]: [B2 ERROR] An error ocurred while installing using "b2.exe".</a></h6>
 <p><a href="https://zhuanlan.zhihu.com/p/666616256">解决办法</a> ：</p>
 <p>执行<code>b2 install address-model=64 architecture=x86</code>后删除源代码目录<code>Build/boost-1.84.0-source</code>，然后再执行编译就成功（原因不明）。
-但是jenkins执行时报错：
+但是jenkins执行时报错信息包含：
 <div class="highlight"><pre><span></span><code>The input line is too long.
 The syntax of the command is incorrect.
 </code></pre></div>
@@ -324,6 +324,7 @@ PATH
 %PATH%<span class="p">;</span>C:<span class="se">\s</span>oftware<span class="se">\G</span>nuWin32<span class="se">\b</span>in<span class="p">;</span>C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="p">;</span>C:<span class="se">\W</span>indows<span class="p">;</span>C:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\W</span>bem<span class="p">;</span>C:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\W</span>indowsPowerShell<span class="se">\v</span><span class="m">1</span>.0<span class="se">\;</span>C:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\O</span>penSSH<span class="se">\;</span>C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\A</span>ppData<span class="se">\L</span>ocal<span class="se">\M</span>icrosoft<span class="se">\W</span>indowsApps<span class="p">;</span>C:<span class="se">\s</span>oftware<span class="se">\a</span>naconda3<span class="se">\c</span>ondabin<span class="p">;</span>C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\A</span>ppData<span class="se">\R</span>oaming<span class="se">\n</span>pm<span class="p">;</span>C:<span class="se">\s</span>oftware<span class="se">\a</span>naconda3<span class="se">\e</span>nvs<span class="se">\c</span>arla_dev<span class="p">;</span>C:<span class="se">\j</span>enkins<span class="se">\s</span>oftware<span class="se">\G</span>it<span class="se">\b</span>in
 </code></pre></div>
 移除<code>%PATH%;</code>即可解决。</p>
+<p>第二次执行b2.exe失败，可能是第一步<code>Build/boost-1.84.0-source</code>因TortoiseGit删除失败。</p>
 <p>1.<a href="https://link.zhihu.com/?target=https%3A//github.com/carla-simulator/carla/discussions/4534">删除build，然后将carla文件夹移动到更靠近根目录的位置</a></p>
 <p>2.在<code>Build/boost-1.84.0-source/libs/context/build/Jamfile.v2</code>里增加以下内容，但并没有修改编译脚本：
 <div class="highlight"><pre><span></span><code><span class="nb">alias</span><span class="w"> </span>asm_sources
