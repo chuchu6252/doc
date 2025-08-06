@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>将 NVIDIA 神经重建与 HUTB 结合使用 - 人车模拟</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u5c06 NVIDIA \u795e\u7ecf\u91cd\u5efa\u4e0e HUTB \u7ed3\u5408\u4f7f\u7528";
+        var mkdocs_page_input_path = "nvidia_nurec.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">将 NVIDIA 神经重建与 HUTB 结合使用</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/nvidia_nurec.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="nvidia-hutb">将 NVIDIA 神经重建与 HUTB 结合使用</h1>
+<p>NVIDIA 神经重建 (Neural Reconstruction, NuRec) 是指 NVIDIA 提供的重建和渲染模型及服务，支持无缝提取真实世界数据并将其转换为适合训练和测试物理 AI 代理（包括机器人和自动驾驶系统）的模拟环境。</p>
+<p>借助 NuRec，开发者可以将记录的摄像头和激光雷达数据转换为 3D 场景。NuRec 使用多个 AI 网络创建交互式 3D 测试环境，开发者可以在其中修改场景并观察外部环境的反应。开发者可以更改场景、添加合成对象并应用随机化效果（例如，孩子跟随弹跳的球冲向道路），从而让初始场景更具挑战性。借助 NuRec gRPC API，开发者可以将渲染服务直接引入他们选择的模拟平台，例如 HUTB。</p>
+<p>NuRec gRPC API 充当 HUTB 回放和 NuRec 容器之间的数据和渲染管道，场景在 NuRec 容器中重建和渲染。您可以从 NVIDIA 自动驾驶汽车物理 AI 数据集加载预先训练的场景，并使用 NuRec gRPC API 在 Python 脚本 (<code>replay_recording.py</code>) 中定义场景。下图进一步说明了 NuRec 与 HUTB 之间的关系。</p>
+<p><img alt="NVIDIA NuRec and HUTB" src="../img/hutb_nurec_api.jpg" /></p>
+<p>运行回放脚本时，<strong>HUTB</strong> 会通过 <strong>HUTB API</strong> 从 <strong>HUTB 服务器</strong> 加载地图和 Actor。脚本中的渲染请求会通过 <strong>NuRec gRPC API</strong> 从 <strong>NuRec 容器</strong> 返回帧。这两个 API 均可作为 HUTB 和 NuRec 服务器的便捷接口，为您的模拟提供无缝更新。</p>
+<p>要在 HUTB 模拟中使用神经渲染，请使用 NVIDIA 神经重建 API 和 <strong>NVIDIA 物理 AI 数据</strong> 集中的数据。请按照本指南中的说明进行操作。</p>
+<h2 id="_1">开始之前</h2>
+<p>在开始之前，请确保您已满足以下先决条件：</p>
+<ul>
+<li><a href="https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation">CARLA 0.9.16 或更新的安装</a></li>
+<li>CUDA 12.8 或更高的版本</li>
+<li><a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html">NVIDIA container toolkit</a></li>
+<li>Python 3.10+</li>
+</ul>
+<h2 id="_2">设置</h2>
+<p>要开始使用 NVIDIA 的示例数据集，请使用安装程序脚本。如果您希望自定义数据集，请按照说明从 HuggingFace 获取资源并手动设置环境。</p>
+<h3 id="_3">使用安装程序脚本</h3>
+<p>要快速轻松地开始使用 <a href="https://huggingface.co/datasets/nvidia/PhysicalAI-Autonomous-Vehicles-NuRec">NVIDIA PhysicalAI-Autonomous-Vehicles-NuRec 数据集</a> 中精选的样本集，请导航到计算机上的 CARLA 目录并运行以下启动脚本：</p>
+<div class="highlight"><pre><span></span><code>./PythonAPI/examples/nvidia/install_nurec.sh
+</code></pre></div>
+<p>该脚本可帮助您设置 HuggingFace 访问令牌（如果还没有），设置 NuRec 容器所需的环境变量，从 HuggingFace 中提取精选的示例数据集，并安装所需的 Python 包。</p>
+<h3 id="_4">使用自定义数据集</h3>
+<p>如果您希望自定义使用的数据集，请按照以下说明获取资产、启动 NuRec 容器并安装所需的 Python 包。</p>
+<ol>
+<li>
+<p>从 <a href="https://huggingface.co/datasets/nvidia/PhysicalAI-Autonomous-Vehicles-NuRec">HuggingFace 上的 NVIDIA PhysicalAI-Autonomous-Vehicles-NuRec 数据集</a> <strong>获取预先训练的资产</strong>。</p>
+</li>
+<li>
+<p><strong>设置你的环境。</strong> 在你的机器上的 HUTB 目录下运行以下命令，下载并安装所需的 Python 包：</p>
+<div class="highlight"><pre><span></span><code>pip install -r requirements.txt
+</code></pre></div>
+</li>
+<li>
+<p><strong>设置环境变量。</strong> 重放脚本需要两个环境变量 — <code>NUREC_IMAGE</code> 和 <code>CUDA_VISIBLE_DEVICES</code>:</p>
+<ul>
+<li>
+<p><code>NUREC_IMAGE</code> 是必需的，必须将其设置为 HUTB 仓库中 NuRec 镜像的完整路径。运行以下命令进行设置： </p>
+<div class="highlight"><pre><span></span><code>export NUREC_IMAGE=&quot;docker.io/carlasimulator/nvidia-nurec-grpc:0.1.0&quot;
+</code></pre></div>
+</li>
+<li>
+<p><a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#env-vars"><code>CUDA_VISIBLE_DEVICES</code></a> 是可选的，您可以使用它来指定运行回放的 GPU。如果您未将其设置为特定的 GPU，则脚本默认为“0”，并在 GPU 0 上运行。如果您已设置此环境变量，则脚本将继承先前设置的内容。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="hutb-nurec">运行 HUTB NuRec 重放</h2>
+<p><strong>1. 启动 HUTB 服务器。</strong>  在 HUTB 软件包所在的目录中，运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>./CarlaUE4.sh
+</code></pre></div>
+<p><strong>2. 重放 NuRec 场景。</strong> HUTB 运行后，打开一个新的终端窗口并导航到 HUTB 包所在的目录，然后使用以下脚本之一重放 NuRec 场景：  </p>
+<ul>
+<li><strong>多摄像头回放：</strong> 该脚本提供了一个完整的多视图可视化系统，非常适合了解如何集成各种摄像头类型并创建全面的监控设置。运行该脚本时，它会在 Pygame 显示网格中以不同的摄像头位置回放多个 NuRec 摄像头（前摄像头、左交叉摄像头、右交叉摄像头）的模拟结果。它还支持从连接到目标车辆的标准 HUTB 摄像头提取的额外视角，以及具有不同帧率和分辨率的多个摄像头信号。 </li>
+</ul>
+<div class="highlight"><pre><span></span><code>source carla/bin/activate
+cd PythonAPI/examples/nvidia/
+python example_replay_recording.py --usdz-filename /path/to/scenario.usdz
+</code></pre></div>
+<ul>
+<li><strong>自定义相机参数：</strong> 如果您需要复制特定的相机硬件或匹配真实世界的相机校准，请使用此脚本配置 NuRec 相机的自定义固有参数。可用的高级相机配置包括自定义 F-Theta 配置、精确的固有参数指定（主点、畸变多项式）、通过相机变换矩阵进行自定义定位、滚动快门模拟以及使用 Pygame 进行实时可视化。 </li>
+</ul>
+<div class="highlight"><pre><span></span><code>source carla/bin/activate
+cd PythonAPI/examples/nvidia/
+python example_custom_camera.py --usdz-filename /path/to/scenario.usdz
+</code></pre></div>
+<ul>
+<li><strong>图像捕获：</strong> 如果您需要从场景回放中导出并保存图像，请使用此脚本。它会回放 NuRec 场景并从 NuRec 和 HUTB 摄像头捕获图像，然后将它们保存到指定的输出目录。您可以自定义 NuRec 摄像头的帧速率和分辨率，将标准 HUTB 摄像头连接到目标车辆，使用 Pygame 显示实时摄像头图像，并将捕获的图像以 JPEG (.jpg) 文件格式保存到按摄像头类型分类的文件夹中。 </li>
+</ul>
+<div class="highlight"><pre><span></span><code>source vecarla/bin/activate
+cd PythonAPI/examples/nvidia/
+python example_save_images.py --usdz-filename /path/to/scenario.usdz --output-dir ./captured_images
+</code></pre></div>
+<p>根据需要使用尽可能多的示例场景运行重放脚本。</p>
+<h3 id="_5">命令行参数</h3>
+<p>下表解释了脚本可用的命令行参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>长格式</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-h</td>
+<td>--host</td>
+<td>127.0.0.1</td>
+<td>HUTB 主机服务器的 IP 地址</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>--port</td>
+<td>2000</td>
+<td>HUTB 服务器的 TCP 端口</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>--usdz-filename</td>
+<td>(必需的)</td>
+<td>包含 NuRec 场景的 USDZ 文件的路径</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>--camera</td>
+<td>camera_front_wide_120fov</td>
+<td>用于可视化的相机名称</td>
+</tr>
+<tr>
+<td>--move-spectator</td>
+<td></td>
+<td>False</td>
+<td>移动观察者摄像机来跟随自主车辆</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">其他</h2>
+<ul>
+<li><a href="../ue/HUTB_NUREC_integration/">HUTB - NUREC 集成</a></li>
+<li><a href="../ue/tools/">NUREC 集成工具</a></li>
+<li><a href="../ue/grpc_proto/">NVIDIA 神经重建引擎 gRPC 协议缓冲区</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../js/umlconvert.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>NVIDIA SimReady - 人车模拟</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "NVIDIA SimReady";
+        var mkdocs_page_input_path = "nvidia_simready.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">NVIDIA SimReady</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/nvidia_simready.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="nvidia-simready">NVIDIA SimReady</h1>
+<p><strong>SimReady</strong> 是与用于模拟的 3D 资产相关的信息和元数据的标准规范。SimReady 标准确保 3D 资产不仅是数字孪生中的高保真视觉资源，而且还具有组织良好的元数据定义，包括语义标记、密集字幕、非视觉传感器信息和物理属性。</p>
+<ul>
+<li><strong><a href="#simready-converter">SimReady 转换器</a></strong>  </li>
+<li><strong><a href="#exporting-an-asset-with-the-simready-converter">使用 SimReady 转换器导出 SimReady 资产</a></strong><ul>
+<li><a href="#exporting-a-map">导出地图</a></li>
+<li><a href="#exporting-a-vehicle-or-a-pedestrian">导出车辆或行人</a></li>
+</ul>
+</li>
+<li><strong><a href="#simready-export-options">SimReady 导出选项</a></strong></li>
+<li><strong><a href="#semantic-labels-and-q-codes">语义标签和 Q-codes</a></strong></li>
+</ul>
+<h2 id="simready">SimReady 转换器</h2>
+<p>NVIDIA SimReady 转换器使 CARLA 资产能够以符合 SimReady 标准的方式导出为通用场景描述 （USD） 格式，从而有助于从 OmniVerse 生态系统导入到其他应用程序中，例如 Sensor RTX 或 RTX 渲染器以进行协同模拟。</p>
+<p>SimReady转换器在可能的情况下将虚幻对象、属性和参数映射到符合 USD/SimReady 的等效项，并应用适当的元数据（例如语义标签）用于模拟目的。</p>
+<h3 id="simready-simready">使用 SimReady 转换器导出 SimReady 资产</h3>
+<h4 id="_1">导出地图</h4>
+<p>要导出地图，请在 CARLA 内容浏览器(content browser) 中找到相应的地图文件。例如，<code>Content &gt; Carla &gt; Maps</code>中的 <em>Town10HD_Opt</em>。</p>
+<p><img alt="map_asset" src="../img/nvidia/map_file.png" /></p>
+<p>在内容浏览器中双击地图资产以加载它。选择<code>File &gt; Export All</code>。将<code>Save as type</code>设置为 <em>AV Sim 的通用场景描述二进制 SimReady 资产 (*.usd)</em>。</p>
+<p><img alt="export_simready_map" src="../img/nvidia/export_simready_map.png" /></p>
+<p>选择资产的文件夹位置。单击 <em>保存(Save)</em> 选项后，将出现一个选项对话框。在大多数情况下，使用默认选项导出将有效。有关导出选项的更多详细信息，请参阅 <a href="#simready-export-options">SimReady 选项</a> 部分。</p>
+<p><img alt="options_simready_map" src="../img/nvidia/simready_export_options_map.png" /></p>
+<h4 id="_2">导出车辆或行人</h4>
+<p>要导出车辆或行人，请找到蓝图文件。例如，<code>Content &gt;  Carla &gt; Blueprints &gt; Vehicles &gt; Ford_Crown</code>中的 <em>BP_Ford_Crown</em>  或 <code>Content &gt; Carla &gt; Blueprints &gt; Walkers</code> 中的 <em>BP_Walker</em>。右键单击蓝图并选择 <em>导出为 USD(Export as USD)</em>。</p>
+<p><img alt="vehicle_bp" src="../img/nvidia/bp_simready_export.png" /></p>
+<p>将打开一个文件浏览器，为导出的 USD 文件选择一个位置。选择 <em>保存(Save)</em> 后，将打开一个选项对话框。默认选项适用于大多数情况。</p>
+<p><img alt="bp_export_options" src="../img/nvidia/simready_bp_export_options.png" /></p>
+<p>有关 SimReady 导出选项的更多详细信息，请参阅以下部分。</p>
+<h2 id="simready_1">SimReady 导出选项</h2>
+<p>两个最重要的选项如下：</p>
+<ul>
+<li>
+<p><code>Include MDL</code> - 选择此选项会将虚幻材质转换为 MDL 材质。确保您要导出的应用程序与 MDL 材质兼容。Omniverse Kit 应用程序与 MDL 材料兼容。</p>
+</li>
+<li>
+<p><code>Include USD Preview Surface</code> - 选择此选项会导出带有 USD 预览表面的 USD，这可确保可视化的更广泛兼容性，但材质功能集更有限。这有助于确保在不支持完整 MDL 规范的应用程序中可以正确查看资产。</p>
+</li>
+</ul>
+<p>下表提供了有关可用导出选项的详细信息。更多详细信息可以在 Omniverse Connect 文档中找到 <a href="https://docs.omniverse.nvidia.com/connect/latest/ue4/manual.html#exporting-to-omniverse-as-usd-and-mdl">点击此处</a> 。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Export Method</td>
+<td>共享（Shared） 组织材质，以便它们可以由许多资源共享\n模块化（Modular） 为<br>每个资源导出一个材质，以便资源及其材质都是独立的</td>
+</tr>
+<tr>
+<td>Include MDL</td>
+<td>导出 MDL 材料</td>
+</tr>
+<tr>
+<td>MDL Dependency Option</td>
+<td>Include Dependencies - Duplicates the MDL dependencies (templates) in Destination Folder<br> Use Core Library Dependencies - Core MDL Library templates are referenced</td>
+</tr>
+<tr>
+<td>Destination Unreal Template Path</td>
+<td>Destination Folder on Omniverse Nucleus for the MDL dependencies (templates)<br> Note: A file must be selected, but only the folder is used</td>
+</tr>
+<tr>
+<td>Texture Size</td>
+<td>Use Texture Setting or Source as Exported Texture Size</td>
+</tr>
+<tr>
+<td>Export Texture as DDS</td>
+<td>Save DDS Files to Destination Path and reference them from materials</td>
+</tr>
+<tr>
+<td>Include USD Preview Surface</td>
+<td>Export Preview Surfaces</td>
+</tr>
+<tr>
+<td>Include Unreal Materials</td>
+<td>Export a reference to an Unreal material (note, when importing/opening<br> the material must be available in the within the Unreal project)</td>
+</tr>
+<tr>
+<td>Create a material overrides layer</td>
+<td>Export a sublayer that contains all of the material reference overs for the stage. <br> Also create USD files for each material rather than including them in the prop stages.</td>
+</tr>
+<tr>
+<td>Export physics data</td>
+<td>Include collision data with static meshes (not available with Unreal Engine 5.0 due to USD Schema updates)</td>
+</tr>
+<tr>
+<td>Export source geometry for<br> Nanite high-poly detailed mesh</td>
+<td>Brute-force export the Nanite geometry as USD geometry data.<br> (only available with Unreal Engine 5.0, this generates a LOT of triangles)</td>
+</tr>
+<tr>
+<td>USD Scenegraph Instancing</td>
+<td>Make every referenced mesh in a stage an instance. If the stage has<br> duplicate meshes this can greatly reduce geometric GPU memory in<br> another renderer, but the editing workflow may be hampered.</td>
+</tr>
+<tr>
+<td>Export as Payloads</td>
+<td>Use Payloads instead of References in the stage</td>
+</tr>
+<tr>
+<td>Export as Y-up axis</td>
+<td>If checked, USD and MDL are exported with a Y-up<br> stage up-axis rather than the default Z-up</td>
+</tr>
+<tr>
+<td>Export Sublevels as Sublayers</td>
+<td>If checked, levels are exported as USD sublayers<br> and referenced in the root stage</td>
+</tr>
+<tr>
+<td>Convert Skeleton root to identity transform</td>
+<td>This option will convert a Skeleton’s root node to an identity transform to assist<br> downstream tools that require this. All animations exported during this<br> export will be transformed properly so they’ll work in downstream tools.</td>
+</tr>
+<tr>
+<td>Include invisible levels</td>
+<td>If checked, levels that are hidden will be included<br> in the export and marked as invisible</td>
+</tr>
+<tr>
+<td>Export Decal Actors as planes</td>
+<td>If checked, decal actors are exported as “floating”<br> plane meshes offset from their base mesh</td>
+</tr>
+<tr>
+<td>Add extra extension to exports</td>
+<td>Stage files will be named <code>.stage.usd</code>, props will be named <code>.prop.usd</code></td>
+</tr>
+<tr>
+<td>Checkpoint Comment (Optional)</td>
+<td>Set the checkpoint comment on the Nucleus server for each exported file</td>
+</tr>
+</tbody>
+</table>
+<h2 id="q">语义标签和 Q代码</h2>
+<p>SimReady 标准使用 <a href="https://en.wikipedia.org/wiki/Q_code">Q 代码</a> 进行语义标记。Q 代码是三个字母代码的标准化集合，这些代码都以字母 Q 开头。SimReady 导出器为从 CARLA 导出的每个语义标记项应用适当的 Q 代码，作为 USD 文件中对象元数据的一部分。您可以在 <a href="https://www.wikidata.org/wiki/Wikidata:Main_Page">维基数据网站</a> 上查找 Q 代码定义。</p>
+<p>下表显示了 CARLA 语义类到 Q 代码的映射：</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Q-code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Road</td>
+<td>Q34442</td>
+</tr>
+<tr>
+<td>SideWalk</td>
+<td>Q177749</td>
+</tr>
+<tr>
+<td>Building</td>
+<td>Q41176</td>
+</tr>
+<tr>
+<td>Wall</td>
+<td>Q42948</td>
+</tr>
+<tr>
+<td>Fence</td>
+<td>Q148571</td>
+</tr>
+<tr>
+<td>Pole</td>
+<td>Q2180428</td>
+</tr>
+<tr>
+<td>TrafficLight</td>
+<td>Q8004</td>
+</tr>
+<tr>
+<td>TrafficSign</td>
+<td>Q170285</td>
+</tr>
+<tr>
+<td>Vegetation</td>
+<td>Q187997</td>
+</tr>
+<tr>
+<td>Terrain</td>
+<td>Q186131</td>
+</tr>
+<tr>
+<td>Sky</td>
+<td>Q527</td>
+</tr>
+<tr>
+<td>Pedestrian</td>
+<td>Q221488</td>
+</tr>
+<tr>
+<td>Rider</td>
+<td>Q11998775</td>
+</tr>
+<tr>
+<td>Car</td>
+<td>Q1420</td>
+</tr>
+<tr>
+<td>Truck</td>
+<td>Q43193</td>
+</tr>
+<tr>
+<td>Bus</td>
+<td>Q5638</td>
+</tr>
+<tr>
+<td>Train</td>
+<td>Q870</td>
+</tr>
+<tr>
+<td>Motorcycle</td>
+<td>Q34493</td>
+</tr>
+<tr>
+<td>Bicycle</td>
+<td>Q11442</td>
+</tr>
+<tr>
+<td>Static</td>
+<td>Q2302426</td>
+</tr>
+<tr>
+<td>Dynamic</td>
+<td>Q2302426</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>Q55107540</td>
+</tr>
+<tr>
+<td>Water</td>
+<td>Q283</td>
+</tr>
+<tr>
+<td>RoadLine</td>
+<td>Q1392287</td>
+</tr>
+<tr>
+<td>Ground</td>
+<td>Q36133</td>
+</tr>
+<tr>
+<td>Bridge</td>
+<td>Q12280</td>
+</tr>
+<tr>
+<td>RailTrack</td>
+<td>Q57498564</td>
+</tr>
+<tr>
+<td>GuardRail</td>
+<td>Q1188866</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../js/umlconvert.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
