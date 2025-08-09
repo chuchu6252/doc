@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>CARLA 多 GPU 模块技术文档（multigpu） - 人车模拟</title>
+    <title>HUTB 多 GPU 模块技术文档（multigpu） - 人车模拟</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "CARLA \u591a GPU \u6a21\u5757\u6280\u672f\u6587\u6863\uff08multigpu\uff09";
+        var mkdocs_page_name = "HUTB \u591a GPU \u6a21\u5757\u6280\u672f\u6587\u6863\uff08multigpu\uff09";
         var mkdocs_page_input_path = "modules/multigpu.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">CARLA 多 GPU 模块技术文档（multigpu）</li>
+      <li class="breadcrumb-item active">HUTB 多 GPU 模块技术文档（multigpu）</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/modules/multigpu.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,7 +68,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="carla-gpu-multigpu">CARLA 多 GPU 模块技术文档（multigpu）</h1>
+                <h1 id="hutb-gpu-multigpu">HUTB 多 GPU 模块技术文档（multigpu）</h1>
 <h1 id="_1">目录</h1>
 <ul>
 <li><a href="#1-模块概述">1. 模块概述</a></li>
@@ -82,7 +82,7 @@
 </ul>
 <hr />
 <h2 id="1">1. 模块概述</h2>
-<p><code>multigpu</code> 模块用于支持 CARLA 模拟器在多 GPU 环境下进行分布式渲染和任务计算。模块采用主从架构：主节点负责调度与控制，从节点承担实际渲染任务，从而提升模拟器的可扩展性与运行效率。</p>
+<p><code>multigpu</code> 模块用于支持 HUTB 模拟器在多 GPU 环境下进行分布式渲染和任务计算。模块采用主从架构：主节点负责调度与控制，从节点承担实际渲染任务，从而提升模拟器的可扩展性与运行效率。</p>
 <p>主要组件包括：</p>
 <ul>
 <li><strong>Primary</strong>：主节点，调度中心，分发任务与监控从节点状态  </li>
