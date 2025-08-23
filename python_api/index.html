@@ -811,7 +811,7 @@
 <li><a name="carla.Client.start_recorder"></a><strong><font color="#7fb800">start_recorder</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>filename</strong></font>, <font color="#00a6ed"><strong>additional_data</strong>=False</font>)<br />
 启用记录功能，该功能将开始保存服务器重放模拟所需的所有信息。<ul>
 <li><strong>参数：</strong><ul>
-<li><code>filename</code> (<em>str</em>) - 用于写入记录数据的文件的名称。一个简单的名称会将记录保存在“CarlaUE4/Saved/recording.log”中。否则，如果名称中出现某个文件夹，则会将其视为绝对路径。</li>
+<li><code>filename</code> (<em>str</em>) - 用于写入记录数据的文件的名称。如果名称中出现文件夹，则将考虑绝对路径。否则，所选路径将是以下之一：<strong>从源代码构建</strong> - <code>&lt;HUTB_ROOT&gt;/Unreal/CarlaUE4/Saved</code>，<strong>Windows 软件包</strong> - <code>C:\Users\&lt;user&gt;\AppData\Local\CarlaUE4\Saved</code>，<strong>Linux 软件包</strong> - <code>/home/&lt;user&gt;/.config/Epic/CarlaUE4/Saved/</code>。</li>
 <li><code>additional_data</code> (<em>bool</em>) - 启用或禁用记录用于再现模拟的非必要数据（边界框位置、物理控制参数等）。</li>
 </ul>
 </li>
@@ -5672,34 +5672,24 @@ carla.World.enable_environment_objects 代码片段
 
 </div>
 
-<div id ="carla.DebugHelper.draw_string-snipet" style="display: none;">
+<div id ="carla.Map.get_waypoint-snipet" style="display: none;">
 <p class="SnipetFont">
-carla.DebugHelper.draw_string 代码片段
+carla.Map.get_waypoint 代码片段
 </p>
-<div id="carla.DebugHelper.draw_string-code" class="SnipetContent">
+<div id="carla.Map.get_waypoint-code" class="SnipetContent">
 
-<div class="highlight"><pre><span></span><code><span class="c1"># 该代码片段是 lane_explorer.py 示例的修改</span>
-<span class="c1"># 它在直接中绘制参与者的路径，打印每个路径点的信息。</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 该代码片段此配方显示了当前影响车辆的交通规则。显示当前车道类型以及是否可以在当前车道或周围车道上进行变道。</span>
 
 <span class="c1"># ...</span>
-<span class="n">current_w</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">get_waypoint</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_location</span><span class="p">())</span>
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-
-    <span class="n">next_w</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">get_waypoint</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_location</span><span class="p">(),</span> <span class="n">lane_type</span><span class="o">=</span><span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Driving</span> <span class="o">|</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Shoulder</span> <span class="o">|</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Sidewalk</span> <span class="p">)</span>
-    <span class="c1"># 检查车辆是否在移动</span>
-    <span class="k">if</span> <span class="n">next_w</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">current_w</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-        <span class="n">vector</span> <span class="o">=</span> <span class="n">vehicle</span><span class="o">.</span><span class="n">get_velocity</span><span class="p">()</span>
-        <span class="c1"># Check if the vehicle is on a sidewalk</span>
-        <span class="k">if</span> <span class="n">current_w</span><span class="o">.</span><span class="n">lane_type</span> <span class="o">==</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Sidewalk</span><span class="p">:</span>
-            <span class="n">draw_waypoint_union</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="n">current_w</span><span class="p">,</span> <span class="n">next_w</span><span class="p">,</span> <span class="n">cyan</span> <span class="k">if</span> <span class="n">current_w</span><span class="o">.</span><span class="n">is_junction</span> <span class="k">else</span> <span class="n">red</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">draw_waypoint_union</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="n">current_w</span><span class="p">,</span> <span class="n">next_w</span><span class="p">,</span> <span class="n">cyan</span> <span class="k">if</span> <span class="n">current_w</span><span class="o">.</span><span class="n">is_junction</span> <span class="k">else</span> <span class="n">green</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="n">debug</span><span class="o">.</span><span class="n">draw_string</span><span class="p">(</span><span class="n">current_w</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">location</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%15.0f</span><span class="s1"> km/h&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mf">3.6</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vector</span><span class="o">.</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vector</span><span class="o">.</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">))),</span> <span class="kc">False</span><span class="p">,</span> <span class="n">orange</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
-        <span class="n">draw_transform</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="n">current_w</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="n">white</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
-
-    <span class="c1"># 更新当前路径点并休眠一段时间</span>
-    <span class="n">current_w</span> <span class="o">=</span> <span class="n">next_w</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">tick_time</span><span class="p">)</span>
+<span class="n">waypoint</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span><span class="o">.</span><span class="n">get_waypoint</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_location</span><span class="p">(),</span><span class="n">project_to_road</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lane_type</span><span class="o">=</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Driving</span> <span class="o">|</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Shoulder</span> <span class="o">|</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Sidewalk</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current lane type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">lane_type</span><span class="p">))</span>
+<span class="c1"># Check current lane change allowed</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current Lane change:  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">lane_change</span><span class="p">))</span>
+<span class="c1"># Left and Right lane markings</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L lane marking type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">left_lane_marking</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L lane marking change: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">left_lane_marking</span><span class="o">.</span><span class="n">lane_change</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R lane marking type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">right_lane_marking</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R lane marking change: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">right_lane_marking</span><span class="o">.</span><span class="n">lane_change</span><span class="p">))</span>
 <span class="c1"># ...</span>
 </code></pre></div>
 <button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.DebugHelper.draw_string-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
@@ -5779,28 +5769,34 @@ Snippet for carla.Client.__init__
 
 </div>
 
-<div id ="carla.Map.get_waypoint-snipet" style="display: none;">
+<div id ="carla.World.get_spectator-snipet" style="display: none;">
 <p class="SnipetFont">
-carla.Map.get_waypoint 代码片段
+carla.World.get_spectator 代码片段
 </p>
-<div id="carla.Map.get_waypoint-code" class="SnipetContent">
+<div id="carla.World.get_spectator-code" class="SnipetContent">
 
-<div class="highlight"><pre><span></span><code><span class="c1"># 该代码片段显示当前交通规则影响的车辆。</span>
-<span class="c1"># 显示当前车辆类型，在实际的车道或周围的物体中车道线是否改变。</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 该代码片段会在参与者的位置产生一个参与者和观众摄像机。</span>
 
 <span class="c1"># ...</span>
-<span class="n">waypoint</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span><span class="o">.</span><span class="n">get_waypoint</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_location</span><span class="p">(),</span><span class="n">project_to_road</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lane_type</span><span class="o">=</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Driving</span> <span class="o">|</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Shoulder</span> <span class="o">|</span> <span class="n">carla</span><span class="o">.</span><span class="n">LaneType</span><span class="o">.</span><span class="n">Sidewalk</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current lane type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">lane_type</span><span class="p">))</span>
-<span class="c1"># Check current lane change allowed</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current Lane change:  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">lane_change</span><span class="p">))</span>
-<span class="c1"># Left and Right lane markings</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L lane marking type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">left_lane_marking</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;L lane marking change: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">left_lane_marking</span><span class="o">.</span><span class="n">lane_change</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R lane marking type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">right_lane_marking</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;R lane marking change: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">waypoint</span><span class="o">.</span><span class="n">right_lane_marking</span><span class="o">.</span><span class="n">lane_change</span><span class="p">))</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
+<span class="n">spectator</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_spectator</span><span class="p">()</span>
+
+<span class="n">vehicle_bp</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;vehicle.bmw.*&#39;</span><span class="p">))</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span><span class="o">.</span><span class="n">get_spawn_points</span><span class="p">())</span>
+<span class="n">vehicle</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">try_spawn_actor</span><span class="p">(</span><span class="n">vehicle_bp</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+
+<span class="c1"># Wait for world to get the vehicle actor</span>
+<span class="n">world</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+
+<span class="n">world_snapshot</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">wait_for_tick</span><span class="p">()</span>
+<span class="n">actor_snapshot</span> <span class="o">=</span> <span class="n">world_snapshot</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+<span class="c1"># Set spectator at given transform (vehicle transform)</span>
+<span class="n">spectator</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">actor_snapshot</span><span class="o">.</span><span class="n">get_transform</span><span class="p">())</span>
+
 <span class="c1"># ...</span>
 </code></pre></div>
-<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.Map.get_waypoint-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
+<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.World.get_spectator-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
 
 
 <img src="/img/snipets_images/carla.Map.get_waypoint.jpg">
@@ -5871,44 +5867,13 @@ Snippet for carla.DebugHelper.draw_box
 
 </div>
 
-<div id ="carla.World.get_spectator-snipet" style="display: none;">
-<p class="SnipetFont">
-Snippet for carla.World.get_spectator
-</p>
-<div id="carla.World.get_spectator-code" class="SnipetContent">
-
-<div class="highlight"><pre><span></span><code><span class="c1"># This recipe spawns an actor and the spectator camera at the actor&#39;s location.</span>
-
-<span class="c1"># ...</span>
-<span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
-<span class="n">spectator</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_spectator</span><span class="p">()</span>
-
-<span class="n">vehicle_bp</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;vehicle.bmw.*&#39;</span><span class="p">))</span>
-<span class="n">transform</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span><span class="o">.</span><span class="n">get_spawn_points</span><span class="p">())</span>
-<span class="n">vehicle</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">try_spawn_actor</span><span class="p">(</span><span class="n">vehicle_bp</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
-
-<span class="c1"># Wait for world to get the vehicle actor</span>
-<span class="n">world</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
-
-<span class="n">world_snapshot</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">wait_for_tick</span><span class="p">()</span>
-<span class="n">actor_snapshot</span> <span class="o">=</span> <span class="n">world_snapshot</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-
-<span class="c1"># Set spectator at given transform (vehicle transform)</span>
-<span class="n">spectator</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">actor_snapshot</span><span class="o">.</span><span class="n">get_transform</span><span class="p">())</span>
-<span class="c1"># ...</span>
-</code></pre></div>
-<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.World.get_spectator-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
-
-</div>
-
 <div id ="carla.Sensor.listen-snipet" style="display: none;">
 <p class="SnipetFont">
 Snippet for carla.Sensor.listen
 </p>
 <div id="carla.Sensor.listen-code" class="SnipetContent">
 
-<div class="highlight"><pre><span></span><code><span class="c1"># This recipe applies a color conversion to the image taken by a camera sensor,</span>
-<span class="c1"># so it is converted to a semantic segmentation image.</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 此配方对相机传感器拍摄的图像应用颜色转换，因此将其转换为语义分割图像。</span>
 
 <span class="c1"># ...</span>
 <span class="n">camera_bp</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;sensor.camera.semantic_segmentation&#39;</span><span class="p">)</span>
@@ -5918,6 +5883,31 @@ Snippet for carla.Sensor.listen
 <span class="c1"># ...</span>
 </code></pre></div>
 <button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.Sensor.listen-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
+
+</div>
+
+<div id ="carla.DebugHelper.draw_box-snipet" style="display: none;">
+<p class="SnipetFont">
+Snippet for carla.DebugHelper.draw_box
+</p>
+<div id="carla.DebugHelper.draw_box-code" class="SnipetContent">
+
+<div class="highlight"><pre><span></span><code><span class="c1"># 本教程展示了如何从世界快照中绘制交通灯参与者边界框。</span>
+
+<span class="c1"># ...</span>
+<span class="n">debug</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">debug</span>
+<span class="n">world_snapshot</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_snapshot</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">actor_snapshot</span> <span class="ow">in</span> <span class="n">world_snapshot</span><span class="p">:</span>
+    <span class="n">actual_actor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_actor</span><span class="p">(</span><span class="n">actor_snapshot</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">actual_actor</span><span class="o">.</span><span class="n">type_id</span> <span class="o">==</span> <span class="s1">&#39;traffic.traffic_light&#39;</span><span class="p">:</span>
+        <span class="n">debug</span><span class="o">.</span><span class="n">draw_box</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">BoundingBox</span><span class="p">(</span><span class="n">actor_snapshot</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span><span class="o">.</span><span class="n">location</span><span class="p">,</span><span class="n">carla</span><span class="o">.</span><span class="n">Vector3D</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">2</span><span class="p">)),</span><span class="n">actor_snapshot</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">carla</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># ...</span>
+</code></pre></div>
+<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.DebugHelper.draw_box-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
+
+
+<img src="/img/snipets_images/carla.DebugHelper.draw_box.jpg">
 
 </div>
 
@@ -5961,32 +5951,29 @@ Snippet for carla.TrafficLight.set_state
 
 </div>
 
-<div id ="carla.ActorBlueprint.set_attribute-snipet" style="display: none;">
+<div id ="carla.World.enable_environment_objects" style="display: none;">
 <p class="SnipetFont">
-Snippet for carla.ActorBlueprint.set_attribute
+Snippet for carla.World.enable_environment_objects
 </p>
-<div id="carla.ActorBlueprint.set_attribute-code" class="SnipetContent">
+<div id="carla.World.enable_environment_objects-code" class="SnipetContent">
 
-<div class="highlight"><pre><span></span><code><span class="c1"># This recipe changes attributes of different type of blueprint actors.</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 此代码片段可关闭和打开地图上两个特定建筑物的可见性</span>
+<span class="c1"># 获取世界上的建筑物</span>
 
-<span class="c1"># ...</span>
-<span class="n">walker_bp</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;walker.pedestrian.0002&#39;</span><span class="p">)</span>
-<span class="n">walker_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;is_invincible&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
+<span class="n">env_objs</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_environment_objects</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">CityObjectLabel</span><span class="o">.</span><span class="n">Buildings</span><span class="p">)</span>
 
-<span class="c1"># ...</span>
-<span class="c1"># Changes attribute randomly by the recommended value</span>
-<span class="n">vehicle_bp</span> <span class="o">=</span> <span class="n">wolrd</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;vehicle.bmw.*&#39;</span><span class="p">)</span>
-<span class="n">color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">vehicle_bp</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">recommended_values</span><span class="p">)</span>
-<span class="n">vehicle_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+<span class="c1"># Access individual building IDs and save in a set</span>
+<span class="n">building_01</span> <span class="o">=</span> <span class="n">env_objs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">building_02</span> <span class="o">=</span> <span class="n">env_objs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">objects_to_toggle</span> <span class="o">=</span> <span class="p">{</span><span class="n">building_01</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">building_02</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
 
-<span class="c1"># ...</span>
-
-<span class="n">camera_bp</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;sensor.camera.rgb&#39;</span><span class="p">)</span>
-<span class="n">camera_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;image_size_x&#39;</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
-<span class="n">camera_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;image_size_y&#39;</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
-<span class="c1"># ...</span>
+<span class="c1"># Toggle buildings off</span>
+<span class="n">world</span><span class="o">.</span><span class="n">enable_environment_objects</span><span class="p">(</span><span class="n">objects_to_toggle</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Toggle buildings on</span>
+<span class="n">world</span><span class="o">.</span><span class="n">enable_environment_objects</span><span class="p">(</span><span class="n">objects_to_toggle</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
-<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.ActorBlueprint.set_attribute-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
+<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.World.enable_environment_objects-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
 
 </div>
 
@@ -6059,27 +6046,40 @@ Snippet for carla.Client.apply_batch_sync
 
 </div>
 
-<div id ="carla.World.load_map_layer-snipet" style="display: none;">
+<div id ="carla.Client.__init__" style="display: none;">
 <p class="SnipetFont">
-Snippet for carla.World.load_map_layer
+Snippet for carla.Client.__init__
 </p>
-<div id="carla.World.load_map_layer-code" class="SnipetContent">
+<div id="carla.Client.__init__-code" class="SnipetContent">
 
-<div class="highlight"><pre><span></span><code><span class="c1"># This recipe toggles on several layers in our &quot;_Opt&quot; maps</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># 此配方显示在 PythonAPI/Examples 中提供的每个脚本中，并用于在运行脚本时解析客户端创建参数。</span>
 
-<span class="c1"># Load town one with only minimum layout (roads, sidewalks, traffic lights and traffic signs)</span>
-<span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">load_world</span><span class="p">(</span><span class="s1">&#39;Town01_Opt&#39;</span><span class="p">,</span> <span class="n">carla</span><span class="o">.</span><span class="n">MapLayer</span><span class="o">.</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">argparser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;--host&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;IP of the host server (default: 127.0.0.1)&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="s1">&#39;--port&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;P&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;TCP port to listen to (default: 2000)&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="s1">&#39;--speed&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;FACTOR&#39;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;rate at which the weather changes (default: 1.0)&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">argparser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">speed_factor</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">speed</span>
+    <span class="n">update_freq</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">/</span> <span class="n">speed_factor</span>
 
-<span class="c1"># Toggle all buildings on</span>
-<span class="n">world</span><span class="o">.</span><span class="n">load_map_layer</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">MapLayer</span><span class="o">.</span><span class="n">Buildings</span><span class="p">)</span>
-
-<span class="c1"># Toggle all foliage on</span>
-<span class="n">world</span><span class="o">.</span><span class="n">load_map_layer</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">MapLayer</span><span class="o">.</span><span class="n">Foliage</span><span class="p">)</span>
-
-<span class="c1"># Toggle all parked vehicles on</span>
-<span class="n">world</span><span class="o">.</span><span class="n">load_map_layer</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">MapLayer</span><span class="o">.</span><span class="n">ParkedVehicles</span><span class="p">)</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>  
 </code></pre></div>
-<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.World.load_map_layer-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
+<button id="button1" class="CopyScript" onclick="CopyToClipboard('carla.Client.__init__-code')">Copy snippet</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="button1" class="CloseSnipet" onclick="CloseSnipet()">Close snippet</button><br><br>
 
 </div>
 

@@ -69,98 +69,47 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="_1"><a href="https://carla.readthedocs.io/en/latest/start_quickstart/">快速启动</a></h1>
-<p>本指南介绍如何下载和安装 Carla 的打包版本。该软件包包括 Carla 服务器和两个客户端库选项。还可以下载其他资源并将其导入到包中。需要使用虚幻引擎编辑器的高级自定义和开发选项不可用，但可以通过使用适用于 <a href="../build_windows/">Windows</a> 或 <a href="../build_linux/">Linux</a> 的 Carla 构建版本来访问这些选项。</p>
+<p>本指南演示如何下载并安装 HUTB 的软件包版本。该软件包包含 HUTB 服务器和 HUTB Python 客户端库。</p>
 <ul>
 <li><strong><a href="#before-you-begin">在你开始之前</a></strong>  </li>
-<li><strong><a href="#carla-installation">Carla 安装</a></strong>  <ul>
-<li><a href="#a-debian-carla-installation">A. Debian Carla 安装</a>  </li>
-<li><a href="#b-package-installation">B. 包安装</a>  </li>
-</ul>
-</li>
+<li><strong><a href="#carla-installation">下载 HUTB 打包版</a></strong></li>
 <li><strong><a href="#import-additional-assets">导入额外资产</a></strong>  </li>
-<li><strong><a href="#install-client-library">安装客户端库</a></strong><ul>
-<li><a href="#carla-versions-prior-to-0912">0.9.12 之前的 Carla 版本</a></li>
-<li><a href="#carla-0912">Carla 0.9.12+</a></li>
-</ul>
-</li>
-<li><strong><a href="#running-carla">运行 Carla</a></strong>  <ul>
+<li><strong><a href="#install-client-library">安装 Python 客户端库</a></strong></li>
+<li><strong><a href="#running-carla">运行 HUTB</a></strong>  <ul>
+<li><a href="#launch-the-carla-server">启动 HUTB 服务端</a></li>
+<li><a href="#run-a-python-client-example-script">运行 Python 客户端示例</a> </li>
 <li><a href="#command-line-options">命令行选项</a>  </li>
 </ul>
 </li>
-<li><strong><a href="#updating-carla">更新 Carla</a></strong></li>
+<li><strong><a href="#updating-carla">更新 HUTB</a></strong></li>
 <li><strong><a href="#intranet">湖工商内网访问资源</a></strong></li>
-<li><strong><a href="#follow-up">跟进</a></strong></li>
+<li><strong><a href="#follow-up">下一步</a></strong></li>
 </ul>
+<p>HUTB 的打包版本可让您快速上手使用 HUTB 模拟器。如果您希望修改 HUTB 的引擎代码或为 HUTB 创建自定义地图或资源，则应按照适合您操作系统的说明 <a href="../build_carla/">从源代码构建 HUTB</a> 。</p>
 <hr />
 <h2 id="_2">在你开始之前 <span id="before-you-begin"></span></h2>
 <p>安装 Carla 之前应满足以下要求：</p>
 <ul>
-<li><strong>系统要求。</strong> Carla 是为 Windows 和 Linux 系统构建的。</li>
-<li><strong>足够的 GPU。</strong> Carla 旨在实现真实模拟，因此服务器至少需要 6 GB GPU，但我们建议使用 8 GB。强烈建议使用专用 GPU 进行机器学习。</li>
-<li><strong>磁盘空间。</strong> Carla 将使用大约 20 GB 的空间。</li>
-<li><strong>Python.</strong> <a href="(https://www.python.org/downloads/)">Python</a> 是 Carla 中的主要脚本语言。Carla 在 Linux 上支持 Python 2.7 和 Python 3，在 Windows 上支持 Python 3。</li>
-<li><strong>Pip.</strong> Carla 客户端库的某些安装方法需要 <strong>pip</strong> 或 <strong>pip3</strong> （取决于您的 Python 版本）版本 20.3 或更高版本。要检查您的 <strong>pip</strong> 版本：</li>
+<li><strong>操作系统。</strong> HUTB 是为 Windows <strong>10</strong> 和 <strong>11</strong>、Ubuntu <strong>22.04</strong> 和 <strong>24.04</strong> 构建的。</li>
+<li><strong>足够的 GPU。</strong> 我们建议使用相当于 NVIDIA 2070 或更高版本的专用 GPU，并且至少具有 8Gb 或更大的 VRAM。</li>
+<li><strong>磁盘空间。</strong> HUTB 将使用大约 20 GB 的空间。</li>
+<li><strong>两个 TCP 端口。</strong> 默认端口为 2000 和 2001。确保这些端口未被防火墙或任何其他应用程序阻止。</li>
+<li><strong>Python.</strong> HUTB API 使用 <a href="(https://www.python.org/downloads/)">Python</a> 进行脚本编写。HUTB 在 Linux 上支持 Python 3.7 至 3.12，在 Windows 上支持 Python 3.7 至 3.12。</li>
+<li><strong>Pip.</strong> Python 包管理器版本 20.3 或更高版本。</li>
 </ul>
-<blockquote>
-<pre><code> # 对于 Python 3
- pip3 -V
-
- # 对于 Python 2
- pip -V
-</code></pre>
-<p>如果您需要升级：</p>
-<pre><code> # 对于 Python 3
- pip3 install --upgrade pip
-
- # 对于 Python 2
- pip install --upgrade pip
-</code></pre>
-</blockquote>
-<ul>
-<li><strong>两个 TCP 端口和良好的互联网连接。</strong> 默认为 2000 年和 2001 年。确保这些端口未被防火墙或任何其他应用程序阻止。</li>
-<li><strong>其他需求。</strong>  Carla 需要一些 Python 依赖项。根据您的操作系统安装依赖项：</li>
-</ul>
-<h3 id="windows">Windows</h3>
-<div class="highlight"><pre><span></span><code>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>pygame<span class="w"> </span>numpy
-</code></pre></div>
-<h3 id="linux">Linux</h3>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>pygame<span class="w"> </span>numpy<span class="w"> </span><span class="o">&amp;&amp;</span>
-pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>pygame<span class="w"> </span>numpy
-</code></pre></div>
+<p>检查你的 <strong>PIP</strong> 版本：
+<div class="highlight"><pre><span></span><code>pip3<span class="w"> </span>-V
+</code></pre></div></p>
+<p>如果你需要升级：
+<div class="highlight"><pre><span></span><code><span class="c1"># 对于 Python 3</span>
+pip3<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</code></pre></div></p>
 <hr />
 <h2 id="carla">Carla 安装 <span id="carla-installation"></span></h2>
-<p>有两种方法可以下载并安装 Carla 作为软件包：</p>
-<p><strong>A)</strong> <a href="#a-debian-carla-installation">下载  Debian 软件包。</a></p>
-<p><strong>B)</strong> <a href="#b-package-installation">从 GitHub 下载软件包。</a> </p>
-<h3 id="a-debian-carla">A. Debian Carla 安装 <span id="a-debian-carla-installation"></span></h3>
-<p>Debain 软件包适用于 Ubuntu 18.04 和 Ubuntu 20.04，但 <strong>官方支持的平台是 Ubuntu 18.04</strong> 。</p>
-<p><strong>1.</strong> 在系统中设置Debian存储库：
-<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt-key<span class="w"> </span>adv<span class="w"> </span>--keyserver<span class="w"> </span>keyserver.ubuntu.com<span class="w"> </span>--recv-keys<span class="w"> </span>1AF1527DE64CB8D9
-sudo<span class="w"> </span>add-apt-repository<span class="w"> </span><span class="s2">&quot;deb [arch=amd64] http://dist.carla.org/carla </span><span class="k">$(</span>lsb_release<span class="w"> </span>-sc<span class="k">)</span><span class="s2"> main&quot;</span>
-</code></pre></div></p>
-<p><strong>2.</strong> 安装 Carla 并检查 <code>/opt/</code> 文件夹中是否有安装：
-<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="c1"># Update the Debian package index</span>
-sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>carla-simulator<span class="w"> </span><span class="c1"># Install the latest Carla version, or update the current installation</span>
-<span class="nb">cd</span><span class="w"> </span>/opt/carla-simulator<span class="w"> </span><span class="c1"># Open the folder where Carla is installed</span>
-</code></pre></div></p>
-<p>该存储库包含 Carla 0.9.10 及更高版本。要安装特定版本，请将版本标签添加到安装命令中：
-<div class="highlight"><pre><span></span><code>apt-cache<span class="w"> </span>madison<span class="w"> </span>carla-simulator<span class="w"> </span><span class="c1"># List the available versions of Carla</span>
-sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>carla-simulator<span class="o">=</span><span class="m">0</span>.9.10-1<span class="w"> </span><span class="c1"># In this case, &quot;0.9.10&quot; refers to a CARLA version, and &quot;1&quot; to the Debian revision</span>
-</code></pre></div></p>
-<div class="admonition 重要">
-<p class="admonition-title">重要</p>
-<p>要安装 0.9.10 之前的 Carla 版本，请使用窗口右下角的面板更改为文档的早期版本，然后按照旧的说明进行操作。</p>
-</div>
-<h3 id="b">B. 包安装 <span id="b-package-installation"></span></h3>
-<div class="build-buttons">
-<p>
-<a href="https://github.com/carla-simulator/carla/blob/master/Docs/download.md" target="_blank" class="btn btn-neutral" title="Go to the latest CARLA release">
-<span class="icon icon-github"></span> Carla 仓库</a>
-</p>
-</div>
-
-<p>该存储库包含不同版本的 Carla。您将找到下载包含所有最新修复和功能的 <strong>当前版本</strong> 、以前的版本以及包含所有开发修复和功能的 <strong>夜间构建</strong> （夜间构建是 Carla 最不稳定的版本）的选项。</p>
-<p>该包是一个名为 <strong>CARLA_version.number</strong> 的压缩文件。下载并解压发布文件。它包含模拟器的预编译版本、Python API 模块和一些用作示例的脚本。</p>
+<h3 id="hutb">下载并解压 HUTB 包</h3>
+<p>使用下方提供的链接从网盘下载所需的 HUTB 软件包。我们建议下载最新版本的软件包，目前版本号为 <a href="https://pan.baidu.com/s/1YJc4Gnhp20Og7VhKkrkXcQ?pwd=hutb">2.2</a> 。</p>
+<p>此网盘可能包含多个版本的 HUTB。您可以选择下载包含所有最新修复和功能的 <strong>当前版本</strong> 、<strong>之前的版本</strong> 以及包含所有开发修复和功能的 <strong>夜间版本</strong> （夜间版本可能不稳定，请谨慎使用）。</p>
+<p>该软件包是一个以版本号命名的压缩文件。请下载并解压该压缩包，并将其保存到方便的位置（例如<code>home</code>或<code>Documents</code>目录）。</p>
 <hr />
 <h2 id="_3"><span id="import-additional-assets">导入额外资产</span></h2>
 <p>每个版本都有其自己的附加资产和地图包。此附加包包括地图 <strong>Town06</strong> 、<strong>Town07</strong> 和 <strong>Town10</strong> 。它们单独存储以减少构建的大小，因此只能在安装主包后才能导入它们。</p>
@@ -188,88 +137,56 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w
 </ul>
 <hr />
 <h2 id="_4">安装客户端库 <span id="install-client-library"></span></h2>
-<h3 id="0912-carla">0.9.12 之前的 Carla 版本 <span id="carla-versions-prior-to-0912"></span></h3>
-<p>以前版本的 Carla 不需要安装 Python 库，它们附带了一个 <code>.egg</code> 开箱即用的文件。<strong>Carla 版本 0.9.12+ 显着改变了这种行为；有多个选项可用于安装客户端库</strong> 。如果您使用的是 0.9.12 之前的 Carla 版本，请在屏幕右下角选择该版本以查看相关文档。否则，请阅读下面有关 Carla 0.9.12+ 中可用选项的信息。</p>
-<h3 id="carla-0912">Carla 0.9.12+ <span id="carla-0912"></span></h3>
-<p>有多个选项可用于安装和使用 Carla 客户端库：</p>
-<ul>
-<li><strong>.egg</strong> 文件</li>
-<li><strong>.whl</strong> 文件</li>
-<li><strong>可下载的Python包</strong></li>
-</ul>
-<p>在决定使用哪种方法之前，请阅读下面有关每种方法的要求和限制的更多信息。请注意，混合使用不同的方法可能会导致不兼容，因此请尽可能使用虚拟环境，或者在使用新库之前 <a href="../build_faq/#how-do-i-uninstall-the-carla-client-library">卸载</a> 以前安装的库。</p>
-<blockquote>
-<p><strong>A. .egg 文件</strong></p>
-<blockquote>
-<p>Carla 提供了在 <code>PythonAPI/carla/dist/</code> 文件夹下的不同 Python 版本 <code>.egg</code> 文件，可以开箱即用。<code>PythonAPI/examples</code> 中的每个示例脚本都包含一个自动查找此文件的 <a href="../build_system/#versions-prior-to-0912">代码片段</a> 。在 Linux 中，您可能需要将此文件添加到您的 <code>PYTHONPATH</code>。.在 <a href="../build_faq/#importerror-no-module-named-carla">此处</a> 阅读有关  Carla 中 <code>.egg</code> 文件的更多信息。</p>
-<p><strong>如果您之前已经安装了客户端库 <code>pip</code>，则该库将优先于该 <code>.egg</code> 文件</strong>。您需要先 <a href="../build_faq/#how-do-i-uninstall-the-carla-client-library">卸载</a> 以前的库。</p>
-</blockquote>
-<p><strong>B. .whl 文件</strong></p>
-<blockquote>
-<p>Carla 提供了不同 Python 版本的 <code>.whl</code> 文件。您将需要安装该.whl文件。该<code>.whl</code>文件位于<code>PythonAPI/carla/dist/</code>。每个受支持的 Python 版本都有一个文件，由文件名指示（例如，carla-0.9.12-<strong>cp36</strong>-cp36m-manylinux_2_27_x86_64.whl 表示 Python 3.6）。</p>
-<p><strong>建议在虚拟环境中安装 Carla 客户端库，以避免在使用多个版本时发生冲突。</strong></p>
-<p>要安装 Carla 客户端库，请运行以下命令，选择适合您所需 Python 版本的文件。您将需要 <strong>pip/pip3</strong> 版本 20.3 或更高版本。有关如何检查版本和升级pip/pip3的信息，请参阅 <a href="#before-you-begin"><strong>开始之前</strong></a> 部分：</p>
-<pre><code> # Python 3
- pip3 install &lt;wheel-file-name&gt;.whl
-
- # Python 2
- pip install &lt;wheel-file-name&gt;.whl
-</code></pre>
-<p>如果您之前安装了客户端库，则应先 <a href="../build_faq/#how-do-i-uninstall-the-carla-client-library">卸载</a> 旧客户端库，然后再安装新客户端库。</p>
-</blockquote>
-<p><strong>C. 可下载的 Python 包</strong></p>
-<blockquote>
-<p>Carla 客户端库可以从 <a href="https://pypi.org/project/carla/">PyPi</a> 下载。该库与 Python 版本 2.7、3.6、3.7 和 3.8 兼容。要安装它，您需要 <strong>pip/pip3</strong> 版本 20.3 或更高版本。有关如何检查版本和升级pip/pip3的信息，请参阅 <a href="#before-you-begin"><strong>开始之前</strong></a> 部分。</p>
-<p><strong>建议在虚拟环境中安装 Carla 客户端库，以避免在使用多个版本时发生冲突。</strong></p>
-<p>要从 PyPi 安装客户端库，请运行以下命令：</p>
-<pre><code> # Python 3
- pip3 install carla
-
- # Python 2
- pip install carla
-</code></pre>
-<p>PyPi 下载仅适合与 Carla 包一起使用（即不适用于从源代码构建的版本）。由于 PyPi 下载 <strong>仅包含客户端库</strong>，因此在您将与远程 Carla 服务器通信且不需要下载完整的 Carla 包的情况下，它非常有用。</p>
-</blockquote>
-</blockquote>
+<p>使用 PIP 从 <a href="https://pypi.org/project/hutb/">PyPi</a> 安装 Python 客户端库以获取正式发布的版本：</p>
+<div class="highlight"><pre><span></span><code>pip3<span class="w"> </span>install<span class="w"> </span>hutb
+</code></pre></div>
+<p>HUTB 软件包的 Python Wheels 也包含在 <code>PythonAPI/carla/dist</code> 中。<strong>如果您使用的是从源代码构建的自定义软件包或 CARLA-latest 软件包，则需要安装软件包中包含的 wheels，而不是 PyPi 中的 wheels</strong>。在此目录中，使用 PIP 安装相关的 wheels：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>PythonAPI/carla/dist
+pip3<span class="w"> </span>install<span class="w"> </span>carla-0.9.15-cp37m-manylinux_2_27_x86_64.whl<span class="w"> </span><span class="c1"># 对于使用 Python 3.7 的 CARLA v0.9.15</span>
+</code></pre></div>
+<p>Python 客户端示例脚本依赖于一些先决条件包，请使用 <code>PythonAPI/examples</code> 目录中的 PIP 安装这些包：
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>PythonAPI/examples
+pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div></p>
 <hr />
-<h2 id="carla_1">运行 Carla <span id="running-carla"></span></h2>
-<p>启动 Carla 服务器的方法取决于您使用的安装方法和操作系统：</p>
+<h2 id="hutb_1">运行 HUTB <span id="running-carla"></span></h2>
+<h3 id="hutb_2">启动 HUTB 服务端</h3>
+<p>使用包顶层的启动脚本启动 HUTB 服务器：</p>
 <ul>
-<li>Debian 安装:</li>
+<li>Ubuntu 包：</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/opt/carla-simulator/bin/
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>path/to/hutb/root
 
 ./CarlaUE4.sh
 </code></pre></div>
 <ul>
-<li>Linux 软件包安装：</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>path/to/carla/root
-
-./CarlaUE4.sh
-</code></pre></div>
-<ul>
-<li>Windows 包安装：</li>
+<li>Windows 包：</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>path/to/carla/root
 
 CarlaUE4.exe
 </code></pre></div>
-<p>将弹出一个包含城市景观的窗口。这是 <strong>观察者</strong> 的看法。要在城市中飞行，请使用鼠标和WASD按键，按住鼠标右键控制方向。</p>
-<p>这是服务器模拟器，它现在正在运行并等待客户端连接并与世界交互。您可以尝试一些示例脚本来在城市中产生生命并驾驶汽车：</p>
+<p>将会打开一个窗口，其中包含默认城市地图的视图。这是 HUTB 服务器的 <strong>观察者</strong> 视图，可用于检查您的模拟情况。要在旁观者视图中飞行，请使用鼠标和 <code>WASD</code> 键，按住鼠标右键即可调整视图方向。</p>
+<p><img alt="spectator_view" src="../img/build_install/town10_spectator_view.png" /></p>
+<h3 id="python">运行 Python 客户端示例脚本</h3>
+<p>现在 Python API 客户端库已安装完毕，HUTB 服务器也已运行，它现在正在运行并等待客户端连接并与世界交互。您可以尝试一些示例脚本来在城市中产生生命并驾驶汽车。导航到 <code>PythonAPI/examples</code> 目录，打开两个命令行终端，然后运行 <code>generate_traffic.py</code> 脚本，再运行 <code>manual_control.py</code>。</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># 终端 A </span>
 <span class="nb">cd</span><span class="w"> </span>PythonAPI<span class="se">\e</span>xamples
-
-python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span><span class="c1"># Support for Python2 is provided in the CARLA release packages</span>
-
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 python3<span class="w"> </span>generate_traffic.py<span class="w">  </span>
 
-<span class="c1"># Terminal B</span>
+<span class="c1"># 终端 B</span>
 <span class="nb">cd</span><span class="w"> </span>PythonAPI<span class="se">\e</span>xamples
-
 python3<span class="w"> </span>manual_control.py<span class="w"> </span>
 </code></pre></div>
-<h4 id="_5">命令行选项 <span id="command-line-options"></span></h4>
+<p>此时将打开一个新的 Pygame 窗口，您可以使用键盘上的箭头键控制 HUTB 模拟器中的车辆。编写 HUTB 脚本时，您需要导入 HUTB Python API，连接到服务器（需要先启动服务器），并使用以下代码访问模拟世界对象 <a href="../python_api/#carlaworld"><code>world</code></a> ：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">carla</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
+</code></pre></div>
+<p>还可以在命令行中添加其他参数以用于特殊模式或配置，详情请参阅 <a href="ext_quickstart.md#command-line-options">命令行选项文档</a> 。此外，还有一个辅助 Python 配置脚本可以启动。</p>
+<h3 id="_5">命令行选项 <span id="command-line-options"></span></h3>
 <p>启动 Carla 时有一些可用的配置选项，可以按如下方式使用它们：</p>
 <div class="highlight"><pre><span></span><code>./CarlaUE4.sh<span class="w"> </span>-carla-rpc-port<span class="o">=</span><span class="m">3000</span>
 </code></pre></div>
@@ -287,8 +204,8 @@ python3<span class="w"> </span>manual_control.py<span class="w"> </span>
 ./config.py<span class="w"> </span>--help<span class="w"> </span><span class="c1"># 检查所有可获得的配置选项</span>
 </code></pre></div>
 <hr />
-<h2 id="carla_2">更新 Carla <span id="updating-carla"></span></h2>
-<p>无法更新 Carla 的打包版本。当新版本发布时，存储库会更新，您需要删除以前的版本并安装新版本。</p>
+<h2 id="hutb_3">更新 HUTB <span id="updating-carla"></span></h2>
+<p>无法更新 HUTB 的打包版本。当新版本发布时，存储库会更新，您需要删除以前的版本并安装新版本。</p>
 <p>如果您使用 <strong>pip/pip3</strong> 安装了客户端库，则应通过运行以下命令将其卸载：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Python 3</span>
 pip3<span class="w"> </span>uninstall<span class="w"> </span>carla
@@ -308,8 +225,8 @@ pip<span class="w"> </span>uninstall<span class="w"> </span>carla
 <p>可以通过部署好的 <a href="../software/llm/">大模型</a> 来辅助开发。</p>
 <hr />
 <h2 id="_9">跟进 <span id="follow-up"></span></h2>
-<p>现在您应该已经启动并运行了 Carla 的打包版本。如果您在安装过程中遇到任何困难，请随时在 <a href="https://github.com/carla-simulator/carla/discussions/">Carla 论坛</a> 或 <a href="https://discord.gg/8kqACuC">Discord</a> 频道中发帖。</p>
-<p>下一步是详细了解 Carla 的核心概念。阅读 <strong>“第一步”</strong> 部分开始学习。您还可以在 Python API 参考中找到有关 Python API 类和方法的所有信息。</p>
+<p>现在您应该已经启动并运行了 HUTB 的打包版本。如果您在安装过程中遇到任何困难，请随时在 <a href="https://github.com/OpenHUTB/hutb/discussions">OpenHUTB 论坛</a> 或 <a href="https://discord.gg/8kqACuC">Discord</a> 频道中发帖。</p>
+<p>下一步是详细了解 HUTB 的核心概念。阅读 <strong>“第一步”</strong> 部分开始学习。您还可以在 Python API 参考中找到有关 Python API 类和方法的所有信息。</p>
 <div class="build-buttons">
 <p>
 <a href="../core_concepts" target="_blank" class="btn btn-neutral" title="Go to first steps">

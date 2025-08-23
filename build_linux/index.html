@@ -317,8 +317,8 @@ gedit<span class="w"> </span>~/.profile
 <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">UE4_ROOT</span><span class="o">=</span>~/UnrealEngine_4.26<span class="w"> </span>
 </code></pre></div>
 <p><strong>3.</strong> 保存文件并重置终端。</p>
-<h3 id="carla_2">构建 Carla <span id="build-carla"></span></h3>
-<p>本节概述了构建 Carla 的命令。<strong>所有命令都应在根 Carla 文件夹中运行。</strong></p>
+<h3 id="make-carla">使用 Make 构建 Carla <span id="build-carla"></span></h3>
+<p>以下命令应从您之前下载或使用 git 克隆的 HUTB 代码库的根文件夹运行。HUTB 的构建过程分为 2 个部分：编译客户端和编译服务器。</p>
 <p>Carla 的构建过程分为两个部分，编译客户端和编译服务器。</p>
 <div class="admonition 警告">
 <p class="admonition-title">警告</p>
@@ -326,15 +326,56 @@ gedit<span class="w"> </span>~/.profile
 或者 <code>make LibCarla</code> 将准备 Carla 库以导入到任何地方。</p>
 </div>
 <p><strong>1.</strong> <strong>编译 Python API 客户端：</strong>：</p>
-<p>Python API 客户端授予对模拟的控制权。第一次构建 Carla 时需要编译 Python API 客户端，并且在执行任何更新后需要再次编译。客户端编译完成后，您将能够运行脚本与模拟进行交互。</p>
+<p>Python API 客户端授予对模拟的控制权。首次构建 HUTB 时以及执行任何更新后都需要编译 Python API 客户端。客户端编译完成后，您将能够运行脚本与模拟进行交互。</p>
 <p>以下命令编译 Python API 客户端：</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>PythonAPI
 </code></pre></div>
-<p>或者，要为特定版本的 Python 编译 PythonAPI，请在根 Carla 目录中运行以下命令。</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Delete versions as required</span>
-make<span class="w"> </span>PythonAPI<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--python-version=2.7, 3.6, 3.7, 3.8&quot;</span>
+<p><strong>为特定 Python 版本构建 Python API</strong></p>
+<p>上述命令将为系统 Python 版本构建 Python API。您可以按照以下说明将目标版本定位到 Python 3.11 及更高版本：</p>
+<ul>
+<li>使用开发头文件和 distutils 在系统级别安装目标 Python 版本，将 <em>X</em> 替换为所需版本：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># 某些 Python 版本可能需要 Deadsnakes PPA</span>
+sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:deadsnakes/ppa
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+
+<span class="c1"># 将 X 替换为所需的 Python 版本</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.X<span class="w"> </span>python3.X-dev<span class="w"> </span>python3.X-distutils
 </code></pre></div>
-<p>Carla 客户端库将以两种截然不同、互斥的形式构建。这使用户可以自由选择他们喜欢的形式来运行 Carla 客户端代码。两种形式包括<code>.egg</code>文件和<code>.whl</code>文件。选择以下选项之一来使用客户端库：</p>
+<ul>
+<li>我们建议禁用所有虚拟环境管理器，例如 PyEnv、Rye 或 Conda。这些可能会干扰安装。</li>
+<li>然后在 HUTB 根目录下运行以下命令：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># 根据需要删除版本</span>
+make<span class="w"> </span>PythonAPI<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--python-version=3.8, 3.9, 3.10, 3.11&quot;</span>
+</code></pre></div>
+<ul>
+<li><strong>对于 Python 3.12 和 3.13</strong>, Ubuntu 中不存在 <em>distutils</em> 库，因此可能需要更新 <em>setuptools</em>，请运行以下命令来更新 <em>setuptools</em>： </li>
+</ul>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.12<span class="w"> </span>python3.12-dev<span class="w"> </span>python3.12-venv
+python3.12<span class="w"> </span>-m<span class="w"> </span>ensurepip<span class="w"> </span>--upgrade
+python3.12<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>setuptools
+
+<span class="c1"># 然后从 HUTB 根目录运行 make</span>
+make<span class="w"> </span>PythonAPI<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--python-version=3.12&quot;</span>
+</code></pre></div>
+<ul>
+<li>如果您使用的是非标准 Python 安装或 Python 虚拟环境管理器（例如 PyEnv、Rye 或 Conda），则最好使用 <code>--python-root</code> 参数（您可以使用 <code>which python3</code> 找到安装）：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>PythonAPI<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--python-root=/path/to/python/installation&quot;</span>
+</code></pre></div>
+<p>HUTB Python API wheel 将在 <code>CARLA_ROOT/PythonAPI/carla/dist</code> 中生成。wheel 的名称取决于当前的 HUTB 版本和所选的 Python 版本。使用 PIP 安装 wheel：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># HUTB 2.9.16, Python 3.8</span>
+pip3<span class="w"> </span>install<span class="w"> </span>HUTB_ROOT/PythonAPI/carla/dist/carla-2.9.16-cp38-linux_x86_64.whl
+
+<span class="c1"># HUTB 2.9.16, Python 3.10</span>
+<span class="c1"># pip3 install HUTB_ROOT/PythonAPI/carla/dist/carla-0.9.16-cp310-linux_x86_64.whl</span>
+</code></pre></div>
+<div class="admonition 警告">
+<p class="admonition-title">警告</p>
+<p>使用不同的方法安装 HUTB 客户端库，并且系统中存在不同版本的 HUTB，都可能引发问题。建议在安装 <code>.whl</code> 文件时使用虚拟环境，并在安装新的客户端库之前 <a href="../build_faq/#how-do-i-uninstall-the-carla-client-library">卸载</a> 所有先前安装的客户端库。</p>
+</div>
+<p>同时 HUTB 客户端库将以两种截然不同、互斥的形式构建。这使用户可以自由选择他们喜欢的形式来运行 HUTB 客户端代码。两种形式包括<code>.egg</code>文件和<code>.whl</code>文件。选择以下选项之一来使用客户端库：</p>
 <p><strong>A. <code>.egg</code> 文件</strong></p>
 <blockquote>
 <p><code>.egg</code> 文件不需要安装。导入 Carla 时，Carla 的所有示例脚本都会自动 <a href="../build_system/#versions-prior-to-0912">查找此文件</a> 。</p>
@@ -361,7 +402,8 @@ pip<span class="w"> </span>install<span class="w"> </span>&lt;path/to/wheel&gt;.
 <p>以下命令编译并启动虚幻引擎。每次您想要启动服务器或使用虚幻引擎编辑器时运行此命令：</p>
 <div class="highlight"><pre><span></span><code><span class="w">    </span>make<span class="w"> </span>launch
 </code></pre></div>
-<p>该项目可能会要求构建其他实例，例如<code>UE4Editor-Carla.dll</code>第一次。同意才能打开项目。在首次启动期间，编辑器可能会显示有关着色器和网格距离场的警告。这些需要一些时间来加载，在此之前地图将无法正确显示。</p>
+<p>首次启动时，编辑器可能会显示有关着色器和网格距离场的警告。这些警告需要一些时间加载，在此之前地图无法正常显示。后续启动编辑器的速度会更快。</p>
+<p><img alt="ue4_editor_open" src="../img/ue4_editor_open.png" /></p>
 <p><strong>3.</strong> <strong>开始模拟</strong>：</p>
 <p>按“运行”开始服务器模拟。可以使用<code>WASD</code>键移动相机，并通过在移动鼠标的同时单击场景来旋转相机。</p>
 <p>使用<code>PythonAPI\examples</code>里面的示例脚本测试模拟器。在模拟器运行的情况下，为每个脚本打开一个新终端并运行以下命令以在城镇中产生一些生命并创建天气循环：</p>
@@ -432,17 +474,17 @@ python3<span class="w"> </span>dynamic_weather.py<span class="w"> </span>
 <p><code>A C++11 capable compiler is required for building the B2 engine.
 Toolset 'clang' does not appear to support C++11.</code></p>
 <hr />
-<p>有关本指南的任何问题， 请阅读 <strong><a href="../build_faq/">常见问题解答</a></strong> 页面或<a href="https://github.com/carla-simulator/carla/discussions">Carla 论坛</a> 中的帖子。</p>
-<p>接下来，学习如何更新 Carla 构建或在模拟中迈出第一步，并学习一些核心概念。</p>
+<p>有关本指南的任何问题， 请阅读 <strong><a href="../build_faq/">常见问题解答</a></strong> 页面或 <a href="https://github.com/OpenHUTB/hutb/discussions">HUTB 论坛</a> 中的帖子。</p>
+<p>接下来，学习如何更新 HUTB 构建或在模拟中迈出第一步，并学习一些核心概念。</p>
 <div class="build-buttons">
 
 <p>
 <a href="../build_update" target="_blank" class="btn btn-neutral" title="Learn how to update the build">
-更新 Carla</a>
+更新 HUTB</a>
 </p>
 
 <p>
-<a href="../core_concepts" target="_blank" class="btn btn-neutral" title="Learn about CARLA core concepts">
+<a href="../core_concepts" target="_blank" class="btn btn-neutral" title="Learn about HUTB core concepts">
 第一步</a>
 </p>
 
