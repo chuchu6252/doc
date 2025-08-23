@@ -80,7 +80,13 @@
 </ol>
 <h3 id="_3">优化</h3>
 <p>量化参数（Quantization Parameter, QP）值用于控制每帧视频中每一个宏块的压缩量，和比特率成反比，QP值越小画质越高。</p>
-<h3 id="_4">问题</h3>
+<h3 id="_4">打开页面自动播放</h3>
+<p>webRtcPlayer.js 的53行添加
+<div class="highlight"><pre><span></span><code>video.autoplay<span class="w"> </span><span class="o">=</span><span class="w"> </span>true<span class="p">;</span>
+video.muted<span class="w"> </span><span class="o">=</span><span class="w"> </span>true<span class="p">;</span>
+</code></pre></div>
+同时隐藏按钮：player.css中修改<code>#videoMessageOverlay</code>和<code>#videoPlayOverlay</code>的<code>z-index</code>属性为<code>-1</code>。</p>
+<h3 id="_5">问题</h3>
 <blockquote>
 <p>使用链接<code>http://127.0.0.1:8888</code>访问时出现：<code>Upgrade Required</code>，改用地址<code>http://127.0.0.1:80</code>访问则没有问题。</p>
 <p>当启动信令服务后访问不了像素流（出现：Disconnected: Streamer is not connected），尝试关闭系统代理然后再访问。</p>
@@ -99,7 +105,7 @@
 <div class="highlight"><pre><span></span><code>offer.sdp<span class="w"> </span><span class="o">=</span><span class="w"> </span>offer.sdp.replace<span class="o">(</span>/<span class="o">(</span><span class="nv">a</span><span class="o">=</span>extmap-allow-mixed<span class="o">)</span><span class="se">\r\n</span>/gm,<span class="w"> </span><span class="s2">&quot;&quot;</span><span class="o">)</span><span class="p">;</span>
 </code></pre></div></p>
 </blockquote>
-<h3 id="_5">参考</h3>
+<h3 id="_6">参考</h3>
 <ul>
 <li><a href="https://github.com/OpenHUTB/gpt/tree/main/sim/WindowsNoEditor/Engine/Source/Programs/PixelStreaming/WebServers/SignallingWebServer">交通大模型实现的像素流推送</a></li>
 <li><a href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/getting-started-with-pixel-streaming?application_version=4.27">像素流送入门</a></li>

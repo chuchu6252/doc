@@ -96,6 +96,13 @@
 <li><a href="https://zhuanlan.zhihu.com/p/637746453">USkeletalMeshComponent</a></li>
 <li><a href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/actor-lifecycle?application_version=4.27">Actor生命周期</a></li>
 </ul>
+<h3 id="uatbat">UAT.bat参数分析</h3>
+<p>构建发布版的命令：<code>Engine\Build\BatchFiles\RunUAT.bat BuildGraph -target="Make Installed Build Win64" -script=Engine/Build/InstalledEngineBuild.xml -clean -set:HostPlatformOnly=true -set:WithDDC=false</code></p>
+<p>搜索<code>Engine/Build/InstalledEngineBuild.xml</code>配置文件中的<code>Node Name=</code>，可以替换中间的<code>-target</code>来进行切换：</p>
+<ul>
+<li><code>Compile UE4Editor Win64</code> 构建编辑器</li>
+<li><code>Compile UE4Game Win64</code></li>
+</ul>
 <h2 id="_9">其他</h2>
 <ul>
 <li><a href="https://blog.csdn.net/qq_43497224/article/details/129336509">PIE 和 SIE</a></li>

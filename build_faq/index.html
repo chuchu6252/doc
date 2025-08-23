@@ -267,6 +267,10 @@ export PYTHONPATH=$PYTHONPATH:${CARLA_ROOT}/PythonAPI/carla
 <h2 id="windows_1">Windows 构建</h2>
 <!-- ======================================================================= -->
 
+<h6 id="cicd-make-package-boost">CICD 到 make package 时候出现链接 boost 的错误</h6>
+<blockquote>
+<p>解决：重新安装报错的 python 虚拟环境。</p>
+</blockquote>
 <h6 id="pip-install-whl">pip install *.whl文件找不到</h6>
 <p>即使在windows平台下，*.whl文件目录中的分割符需要都是<code>/</code>。</p>
 <h6 id="xcopy-s">执行 xcopy 报 /S 无法识别</h6>
