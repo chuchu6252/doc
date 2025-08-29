@@ -162,18 +162,51 @@ AutomationTool.exe<span class="w"> </span>BuildGraph<span class="w"> </span>-tar
 <h2 id="_4">设计</h2>
 <p>参考<a href="https://baike.baidu.com/item/BeamNG%E8%B5%9B%E8%BD%A6/18880401">BeamNG</a></p>
 <h2 id="_5">自定义发布</h2>
-<h3 id="pythonapipypi">发布PythonAPI到PyPi</h3>
+<h3 id="hutb-pythonapi-pypi"><a href="https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/#uploading-your-project-to-pypi">发布 hutb PythonAPI到 PyPi</a></h3>
 <ol>
 <li>注册pypi账号，并激活。</li>
+</ol>
+<p>创建一个 PyPI <a href="https://pypi.org/help/#apitoken">API 令牌</a> ，以便能够安全地上传您的项目。</p>
+<p>转到 https://pypi.org/manage/account/#api-tokens 并创建一个新的 API 令牌；不要将其范围限制在特定项目中，因为您正在创建一个新项目。</p>
+<p>在复制并保存令牌之前请勿关闭页面 - 您将不会再看到该令牌。</p>
+<p>在$HOME/.pypirc文件中加入：
+<div class="highlight"><pre><span></span><code><span class="o">[</span>pypi<span class="o">]</span>
+<span class="w">  </span><span class="nv">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>__token__
+<span class="w">  </span><span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pypi-AgEIcHlwaS5*******************
+</code></pre></div></p>
+<ol>
 <li>生成可发布的whl文件
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>PythonAPI<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--chrono&quot;</span>
 </code></pre></div></li>
-<li>发布到 <a href="https://pypi.org/project/hutb/">PyPi</a> ：
+<li>
+<p>发布到 <a href="https://pypi.org/project/hutb/">PyPi</a> ：
 <div class="highlight"><pre><span></span><code><span class="c1"># 删除文件 carla/PythonAPI/carla/dist/hutb-1.0.0-py3.7-win-amd64.egg</span>
 pip<span class="w"> </span>install<span class="w"> </span>twine
 twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w">  </span><span class="c1"># 需要使用PyPi的Token</span>
-</code></pre></div></li>
+</code></pre></div></p>
+</li>
+<li>
+<p>其他：发布自定义mkdocs
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenHUTB/mkdocs.git
+<span class="nb">cd</span><span class="w"> </span>mkdocs
+pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;build&lt;0.10.0&#39;</span>
+python<span class="w"> </span>-m<span class="w"> </span>build
+twine<span class="w"> </span>upload<span class="w"> </span>dist/*
+</code></pre></div>
+上传报错：
+<div class="highlight"><pre><span></span><code>requests.exceptions.ProxyError: HTTPSConnectionPool(host=&#39;upload.pypi.org&#39;, port=443): Max retries exceeded with url: /legacy/ (Caused by ProxyError(&#39;Unable to connect to proxy&#39;, SSLError(SSLZeroReturnError(6, &#39;TLS/SSL connection has been closed (EOF) (_ssl.c:1149)&#39;))))
+</code></pre></div>
+关闭系统代理即可解决。</p>
+</li>
 </ol>
+<p>上传权限不够：
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"> </span>--repository-url<span class="w"> </span>https://pypi.org/manage/project/hutb-doc/releases/
+</code></pre></div></p>
+<p>使用方法：
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>hubt-doc<span class="w"> </span>-i<span class="w"> </span>https://pypi.org/simple
+</code></pre></div></p>
 <h3 id="_6">发布镜像</h3>
 <ul>
 <li><a href="https://wiki.eryajf.net/pages/5baf0a/#%E5%89%8D%E8%A8%80">利用GitHub Actions自动构建项目的docker镜像并发布到DockerHub</a></li>
