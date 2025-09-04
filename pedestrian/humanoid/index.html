@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>人形机器人仿真 - 人车模拟</title>
+    <title>Humanoid - 人车模拟</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "\u4eba\u5f62\u673a\u5668\u4eba\u4eff\u771f";
+        var mkdocs_page_name = "Humanoid";
         var mkdocs_page_input_path = "pedestrian/humanoid.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">人形机器人仿真</li>
+      <li class="breadcrumb-item active">Humanoid</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/pedestrian/humanoid.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,11 +68,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="_1">人形机器人仿真</h1>
+                <h1 id="_1"><a href="https://github.com/google-deepmind/mujoco/network/dependents">人形机器人仿真</a></h1>
 <!-- 更新到最新的仓库： - -->
 
 <h2 id="mujoco">Mujoco</h2>
+<p><a href="https://github.com/google-deepmind/dm_control/tree/main/dm_control/locomotion">官方的移动任务实现</a></p>
+<p><a href="https://github.com/OpenHUTB/locomotion">层次世界模型实现人形全身控制</a></p>
+<p><a href="https://github.com/robfiras/loco-mujoco">模仿学习基准专注于使用 MuJoCo 执行复杂的运动任务</a></p>
+<h2 id="ros">ROS</h2>
+<p><a href="https://github.com/LejuRobotics/kuavo-ros-opensource">乐聚机器人控制</a> - 包含 Mujoco 仿真环境</p>
+<p><a href="https://github.com/ubi-agni/mujoco_ros_pkgs">将 ROS 与 MuJoCo 结合使用的封装器、工具和附加 API</a> - 支持 Noetic</p>
 <h2 id="opensim">OpenSim</h2>
+<p><a href="https://github.com/MyoHub/myosuite">使用 MuJoCo 物理引擎模拟的肌肉骨骼模型要解决的环境</a> - 包含在 OpenAI gym API 中</p>
+<p><a href="https://github.com/MyoHub/myoconverter">将 opensim 4.0+ MSK 模型转换为 MuJoCo 格式的工具</a> - 具有优化的肌肉运动学和动力学</p>
               
             </div>
           </div><footer>
