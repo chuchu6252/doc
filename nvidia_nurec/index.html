@@ -75,7 +75,26 @@
 <p><img alt="NVIDIA NuRec and HUTB" src="../img/hutb_nurec_api.jpg" /></p>
 <p>运行回放脚本时，<strong>HUTB</strong> 会通过 <strong>HUTB API</strong> 从 <strong>HUTB 服务器</strong> 加载地图和 Actor。脚本中的渲染请求会通过 <strong>NuRec gRPC API</strong> 从 <strong>NuRec 容器</strong> 返回帧。这两个 API 均可作为 HUTB 和 NuRec 服务器的便捷接口，为您的模拟提供无缝更新。</p>
 <p>要在 HUTB 模拟中使用神经渲染，请使用 NVIDIA 神经重建 API 和 <strong>NVIDIA 物理 AI 数据</strong> 集中的数据。请按照本指南中的说明进行操作。</p>
+<ul>
+<li><strong><a href="#before-you-begin">开始之前</a></strong><ul>
+<li><a href="#prerequisites">先决条件</a></li>
+<li><a href="#hugging-face-account">Hugging Face accoung</a></li>
+</ul>
+</li>
+<li><strong><a href="#setup">Setup</a></strong><ul>
+<li><a href="#prerequisite-installation">Prerequisite installation</a></li>
+<li><a href="#run-the-installer-script">Run the installer script</a></li>
+<li><a href="#example-datasets">Example datasets</a></li>
+<li><a href="#python-environment">Python environment</a></li>
+<li><a href="#python-environment">Environment variables</a></li>
+</ul>
+</li>
+<li><strong><a href="#run-the-carla-nurec-replays">Run the CARLA NuRec replays</a></strong></li>
+<li><strong><a href="#command-line-parameters">Command line parameters</a></strong></li>
+</ul>
+<hr />
 <h2 id="_1">开始之前</h2>
+<h3 id="_2">先决条件</h3>
 <p>在开始之前，请确保您已满足以下先决条件：</p>
 <ul>
 <li><a href="https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation">CARLA 0.9.16 或更新的安装</a></li>
@@ -83,14 +102,27 @@
 <li><a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html">NVIDIA container toolkit</a></li>
 <li>Python 3.10+</li>
 </ul>
-<h2 id="_2">设置</h2>
+<h3 id="hugging-face">Hugging face 账户</h3>
+<p>安装过程中会从 Hugging Face 下载一些示例数据集。要完成安装，您必须拥有 Hugging Face 帐户并创建令牌。</p>
+<ul>
+<li>如果您还没有 Hugging Face 帐户，请 <a href="https://huggingface.co/join">创建一个</a> 并登录。 </li>
+<li>同意分享您的联系信息以访问数据集：<ul>
+<li>点击 <a href="https://huggingface.co/datasets/nvidia/PhysicalAI-Autonomous-Vehicles-NuRec">此处</a> 查找 Hugging face 网站上的数据集 </li>
+<li>点击 <em>&#10004; 同意并访问仓库</em></li>
+</ul>
+</li>
+<li><a href="https://huggingface.co/settings/tokens">创建</a> 具有<em>读取</em>权限的令牌 <a href="https://huggingface.co/settings/tokens">Create a token</a> </li>
+<li>将令牌保存在安全的地方，并在安装过程中出现提示时输入</li>
+</ul>
+<hr />
+<h2 id="_3">设置</h2>
 <p>要开始使用 NVIDIA 的示例数据集，请使用安装程序脚本。如果您希望自定义数据集，请按照说明从 HuggingFace 获取资源并手动设置环境。</p>
-<h3 id="_3">使用安装程序脚本</h3>
+<h3 id="_4">使用安装程序脚本</h3>
 <p>要快速轻松地开始使用 <a href="https://huggingface.co/datasets/nvidia/PhysicalAI-Autonomous-Vehicles-NuRec">NVIDIA PhysicalAI-Autonomous-Vehicles-NuRec 数据集</a> 中精选的样本集，请导航到计算机上的 CARLA 目录并运行以下启动脚本：</p>
 <div class="highlight"><pre><span></span><code>./PythonAPI/examples/nvidia/install_nurec.sh
 </code></pre></div>
 <p>该脚本可帮助您设置 HuggingFace 访问令牌（如果还没有），设置 NuRec 容器所需的环境变量，从 HuggingFace 中提取精选的示例数据集，并安装所需的 Python 包。</p>
-<h3 id="_4">使用自定义数据集</h3>
+<h3 id="_5">使用自定义数据集</h3>
 <p>如果您希望自定义使用的数据集，请按照以下说明获取资产、启动 NuRec 容器并安装所需的 Python 包。</p>
 <ol>
 <li>
@@ -142,7 +174,7 @@ cd PythonAPI/examples/nvidia/
 python example_save_images.py --usdz-filename /path/to/scenario.usdz --output-dir ./captured_images
 </code></pre></div>
 <p>根据需要使用尽可能多的示例场景运行重放脚本。</p>
-<h3 id="_5">命令行参数</h3>
+<h3 id="_6">命令行参数</h3>
 <p>下表解释了脚本可用的命令行参数：</p>
 <table>
 <thead>
@@ -186,7 +218,7 @@ python example_save_images.py --usdz-filename /path/to/scenario.usdz --output-di
 </tr>
 </tbody>
 </table>
-<h2 id="_6">其他</h2>
+<h2 id="_7">其他</h2>
 <ul>
 <li><a href="../ue/HUTB_NUREC_integration/">HUTB - NUREC 集成</a></li>
 <li><a href="../ue/tools/">NUREC 集成工具</a></li>
