@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Content authoring - props - 人车模拟</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Content authoring - props";
+        var mkdocs_page_input_path = "content_authoring_props.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Content authoring - props</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/content_authoring_props.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="content-authoring-props">Content authoring - props</h1>
+<p>Creating a custom prop in CARLA is quick and straightforward. Follow these steps to import and use a custom asset as a prop inside a CARLA simulation.</p>
+<ul>
+<li><strong><a href="#download-or-model-an-asset">Download or model an asset</a></strong> </li>
+<li><strong><a href="#import-the-asset-into-the-unreal-editor">Import the asset</a></strong> </li>
+<li><strong><a href="#add-the-new-prop-to-the-json-configuration-file">Add the new prop to the JSON configuration</a></strong> </li>
+<li><strong><a href="#use-the-new-prop-in-the-simulation">Use the new prop in simulation</a></strong></li>
+<li><strong><a href="#make-a-carla-package-with-new-props">Make a CARLA package with new props</a></strong> </li>
+<li><strong><a href="#use-static-mesh-as-a-prop-through-the-api">Use a static mesh as a prop</a></strong> </li>
+</ul>
+<hr />
+<h2 id="download-or-model-an-asset">Download or model an asset</h2>
+<p>You may find ready-made 3D assets on sites such as <a href="https://www.turbosquid.com/">TurboSquid</a> or <a href="https://sketchfab.com/">Sketchfab</a> that suite your usecase (<strong>make sure to check that the license suits your intended use</strong>). Alternatively, if you are adept at 3D modelling, you may choose to model the object in a 3D modelling application such as Blender or Maya.</p>
+<p><img alt="police_barrier" src="../img/content_tutorials/police_barrier_model.png" /></p>
+<p>For this example, we <a href="https://skfb.ly/ozJB6">download an asset</a> from Sketchfab that has a creative commons license. First, import the asset into Blender to inspect it to ensure it suits our intended use. For this asset, a couple of modifications were required to prepare it for use in CARLA:</p>
+<ul>
+<li><strong>Rescaling</strong>: The asset was unrealistically large (5m tall), scaling down to 1m tall was required to suit our intended use in CARLA. Check the dimensions carefully in Blender before exporting.</li>
+<li><strong>Origin of geometry</strong>: The origin of geometry for this asset was above the ground plane. This was moved to the scene origin since this will serve as our anchor point for the prop inside the CARLA simulation.</li>
+</ul>
+<p>If the model is not already in FBX format or needed modification, export it as FBX from Blender or your preferred 3D application.</p>
+<hr />
+<h2 id="import-the-asset-into-the-unreal-editor">Import the asset into the Unreal Editor</h2>
+<p>Now that we have an asset in FBX format, we can import it into the CARLA content library. Launch the CARLA Unreal Engine editor by running <code>make launch</code> in the root directory of the CARLA source code repository. Once the editor is open, navigate to an appropriate place in the content directories (<code>Content/Carla/Static/Static</code> in this example). Drag the FBX file into the content browser, import with the default options. Once the import is complete we can see our new prop as a static mesh in the content folder:</p>
+<p><img alt="police_barrier" src="../img/content_tutorials/police_barrier_imported.png" /></p>
+<hr />
+<h2 id="add-the-new-prop-to-the-json-configuration-file">Add the new prop to the JSON configuration file</h2>
+<p>To register the asset as a prop and use it through the CARLA API, we need to include it in the configuration file <code>Default.Package.json</code> in the <code>Unreal/CarlaUE4/Content/Carla/Config</code> directory, inside the root folder of the CARLA source code repository. Add a new entry in this file matching the format of the existing entries, locating the static mesh file that you imported (you can double check the path by hovering over the imported asset in the content browser):</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;props&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ATM&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/Game/Carla/Static/Static/SM_Atm.SM_Atm&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Medium&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+
+<span class="w">        </span><span class="err">...</span><span class="p">,</span>
+
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PoliceBarrier&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/Game/Carla/Static/Static/Police_barrier.Police_barrier&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Medium&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h1 id="use-the-new-prop-in-the-simulation">Use the new prop in the simulation</h1>
+<p>Start the CARLA simulation Unreal Engine editor with the play command. Once it is running, open a Python script or notebook. The new prop will be assigned the ID <code>static.prop.policebarrier</code> (i.e. <code>static.prop.&lt;name_lower_case&gt;</code>).</p>
+<p>Filter for the name you entered in the name field in <code>Default.Package.json</code> in lower case and you will find a new blueprint ID for your new prop:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">carla</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+<span class="n">world</span>  <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
+<span class="n">bp_lib</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">bp</span> <span class="ow">in</span> <span class="n">bp_lib</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;*policebarrier*&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">bp</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+<p>This should return:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt;<span class="w"> </span>static.prop.policebarrier
+</code></pre></div>
+<p>Now you can place your new prop in the simulation in the same way as native CARLA props:</p>
+<div class="highlight"><pre><span></span><code><span class="n">barrier_bp</span> <span class="o">=</span> <span class="n">bp_lib</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;static.prop.policebarrier&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">spawn_loc</span> <span class="ow">in</span> <span class="n">spawn_locations</span><span class="p">:</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">barrier_bp</span><span class="p">,</span> <span class="n">spawn_loc</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="police_barrier_in_sim" src="../img/content_tutorials/police_barriers_sim.png" /></p>
+<hr />
+<h2 id="make-a-carla-package-with-new-props">Make a CARLA package with new props</h2>
+<p>Once you have imported one or more props into CARLA using the previous steps, ensure you have saved everything in the Unreal Editor interface.You can then export a new CARLA package containing the new props using the following command:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>package<span class="w"> </span><span class="c1">#ARGS=&quot;--python-version=3.X&quot; - for a specific Python version</span>
+</code></pre></div>
+<p>When the export process is finished, the exported map package will be saved as a compressed archive:</p>
+<ul>
+<li><strong>Linux</strong>: <code>.tar.gz</code> archive in the <code>${CARLA_ROOT}/Dist</code> directory</li>
+<li><strong>Windows</strong>: <code>.zip</code> archive in the <code>${CARLA_ROOT}/Build/UE4Carla</code> directory</li>
+</ul>
+<hr />
+<h2 id="use-static-mesh-as-a-prop-through-the-api">Use static mesh as a prop through the API</h2>
+<p>Static meshes already included in the CARLA content library can be nominated for use as props through the Python API using the <code>static.prop.mesh</code> blueprint. Locate the desired mesh in the CARLA content browser and take note of its path. For this example we will choose the Dodge Charger model from the <code>/Game/Carla/Static/Car/4Wheeled/ParkedVehicles</code> directory. </p>
+<p><img alt="parked_charger_in_content" src="../img/content_tutorials/charger_static_mesh.png" /></p>
+<p>We can use the following code to place the vehicle in the map as a prop:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Set the path for the chosen static mesh</span>
+<span class="n">mesh_path</span> <span class="o">=</span> <span class="s1">&#39;/Game/Carla/Static/Car/4Wheeled/ParkedVehicles/Charger/SM_ChargerParked.SM_ChargerParked&#39;</span>
+<span class="n">spawn_point</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">52.7</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">127.7</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">carla</span><span class="o">.</span><span class="n">Rotation</span><span class="p">())</span>
+
+<span class="c1"># Use the static.prop.mesh bp and set the mesh_path attribute</span>
+<span class="n">parked_vehicle_bp</span> <span class="o">=</span> <span class="n">bp_lib</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;static.prop.mesh&#39;</span><span class="p">)</span>
+<span class="n">parked_vehicle_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;mesh_path&#39;</span><span class="p">,</span> <span class="n">mesh_path</span><span class="p">)</span>
+
+<span class="n">parked_vehicle</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">mesh_bp</span><span class="p">,</span> <span class="n">spawn_point</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="parked_charger_in_sim" src="../img/content_tutorials/charger_in_sim.png" /></p>
+<p>This method works both with the built-from-source version of CARLA and also a package version of CARLA, as long as the package contains the nominated static mesh in the correct location. </p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../js/umlconvert.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

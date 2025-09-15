@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>carla-cosmos-transfer - 人车模拟</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "carla-cosmos-transfer";
+        var mkdocs_page_input_path = "ue/carla-cosmos-transfer.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">carla-cosmos-transfer</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/ue/carla-cosmos-transfer.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="carla-cosmos-transfer">carla-cosmos-transfer</h1>
+<p>Welcome to the integration of CARLA and Cosmos Transfer1. 
+In practice, this integration is based on 3 components:</p>
+<ol>
+<li>
+<p>A CARLA log playback script <code>client/carla_cosmos_gen.py</code>. This tool can read back a log (e.g. <code>client/example_data/iai_carla_synthetic_log_1731622446_actorPOV4641_startTime3.7s_log</code>) and generate the required artifacts to control Cosmos Transfer1 using the sensor rig defined by <code>client/cosmos_aov.yaml</code>. You can also play with the semantic labels used by modifying the file <code>client/filter_semantic_classes.yaml</code>.</p>
+</li>
+<li>
+<p>A rest client <code>client/cosmos_client.py</code> that will send queries to a remote Cosmos Transfer1 service, based on your query (toml file). An example of this can be seen in <code>client/example_data/prompts/rain.toml</code>.</p>
+</li>
+<li>
+<p>A docker image that includes Cosmos Transfer1 and a server enabled to answer queries. See the <code>server</code> directory to get familiar with the different components:</p>
+</li>
+<li>Dockerfile.server: Creates the docker image with Cosmos Transfer1 and the rest of components. It expects to find a Cosmos Transfer1 installation + all these scripts in the root folder.</li>
+<li>supervisord.conf: Enables the Docker container to keep processes alive</li>
+</ol>
+<h2 id="getting-started">Getting started</h2>
+<p>First, you need to setup the server. Please refer to <a href="server/README_SERVER.md">server/README_SERVER.md</a>.</p>
+<p>When the server is up and running, you can continue to setup the client. Please refer to <a href="client/README_CLIENT.md">server/README_CLIENT.md</a>.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../../js/umlconvert.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
