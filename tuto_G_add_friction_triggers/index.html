@@ -69,7 +69,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="_1">如何添加摩擦触发器</h1>
-<p>摩擦触发器(<em>Friction Triggers</em>) 是可以在运行时添加的框触发器，让用户在处于这些类型的触发器内时定义车辆车轮的不同摩擦力。例如，这对于动态地在地图的某些区域中制作光滑的表面可能很有用。</p>
+<p><a href="https://github.com/carla-simulator/carla/pull/1562">摩擦触发器</a> (<em>Friction Triggers</em>) 是可以在运行时添加的框触发器，允许用户定义车辆车轮在此类触发器内时的不同摩擦力。例如，这对于动态地在地图的某些区域中制作光滑的表面可能很有用。</p>
 <p>为了使用 PythonAPI 生成摩擦触发器，用户必须首先获取
 <code>static.trigger.friction</code> 蓝图定义，然后为该蓝图定义设置以下必要属性：</p>
 <ul>
@@ -91,7 +91,7 @@
     <span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
     <span class="n">actors</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_actors</span><span class="p">()</span>
 
-    <span class="c1"># Find Trigger Friction Blueprint</span>
+    <span class="c1"># 找到摩擦触发器的蓝图</span>
     <span class="n">friction_bp</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;static.trigger.friction&#39;</span><span class="p">)</span>
 
     <span class="n">extent</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="mf">700.0</span><span class="p">,</span> <span class="mf">700.0</span><span class="p">,</span> <span class="mf">700.0</span><span class="p">)</span>
@@ -101,12 +101,12 @@
     <span class="n">friction_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;extent_y&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">extent</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
     <span class="n">friction_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;extent_z&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">extent</span><span class="o">.</span><span class="n">z</span><span class="p">))</span>
 
-    <span class="c1"># Spawn Trigger Friction</span>
+    <span class="c1"># 生成摩擦触发器</span>
     <span class="n">transform</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Transform</span><span class="p">()</span>
     <span class="n">transform</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
     <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">friction_bp</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
 
-    <span class="c1"># Optional for visualizing trigger</span>
+    <span class="c1"># 可视化触发器（可选）</span>
     <span class="n">world</span><span class="o">.</span><span class="n">debug</span><span class="o">.</span><span class="n">draw_box</span><span class="p">(</span><span class="n">box</span><span class="o">=</span><span class="n">carla</span><span class="o">.</span><span class="n">BoundingBox</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">location</span><span class="p">,</span> <span class="n">extent</span> <span class="o">*</span> <span class="mf">1e-2</span><span class="p">),</span> <span class="n">rotation</span><span class="o">=</span><span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="p">,</span> <span class="n">life_time</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">carla</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span><span class="n">g</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
