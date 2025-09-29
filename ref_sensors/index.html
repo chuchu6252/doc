@@ -604,9 +604,11 @@ in_meters = 1000 * normalized
 <li><strong>蓝图：</strong> sensor.lidar.ray_cast</li>
 <li><strong>输出：</strong> 每一步 <a href="../python_api/#carla.LidarMeasurement">carla.LidarMeasurement</a> （除非<code>sensor_tick</code> 另有说明）。</li>
 </ul>
-<p>激光雷达测量包含一个包，其中包含在某个时间间隔内生成的所有点1/FPS。在此间隔期间，物理不会更新，因此测量中的所有点都反映场景的相同“静态图片”。
+<p>该传感器模拟了使用光线投射实现的旋转激光雷达。通过为垂直视场中分布的每个通道添加一个激光器来计算点。旋转是通过计算激光雷达在一帧内旋转的水平角度来模拟的。点云是通过在每一步中对每个激光器进行光线投射来计算的。</p>
+<p>每一步中每个通道的点数 = 每秒钟的点数 / (PFS * 通道数)，即
 <code>points_per_channel_each_step = points_per_second / (FPS * channels)</code></p>
-<p>此输出包含模拟点云，因此可以对其进行迭代以检索它们的列表 <a href="../python_api/#carla.Location"><code>carla.Location</code></a>：</p>
+<p>激光雷达测量包含一个包，其中包含在 1/FPS 间隔内生成的所有点。在此间隔期间，物理特性不会更新，因此测量中的所有点都反映场景的相同“静态图片”。</p>
+<p>此输出包含模拟点云，因此可以对其进行迭代以检索它们的 <a href="../python_api/#carla.Location"><code>carla.Location</code></a> 列表 ：</p>
 <div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="n">lidar_measurement</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
 </code></pre></div>
@@ -616,15 +618,17 @@ in_meters = 1000 * normalized
 \frac{I}{I_0} = e^{-a \cdot d }
 </script>
 </p>
-<p>其中，<code>a</code> 为衰减系数。这可能取决于传感器的波长和大气条件。可以使用激光雷达属性对其进行修改<code>atmosphere_attenuation_rate</code>。
-<code>d</code> 为从击中点到传感器的距离。</p>
-<p>为了获得更好的真实感，可以删除点云中的点。这是模拟外部扰动造成的损失的简单方法。这可以结合两个不同的来完成。</p>
+<p>其中，<code>a</code> 为衰减系数。这可能取决于传感器的波长和大气条件。可以使用激光雷达属性 大气衰减率 <code>atmosphere_attenuation_rate</code> 对其进行修改。
+<code>d</code> 为撞击点到传感器的距离。</p>
+<p>为了更真实，可以删除点云中的点。这是模拟外部扰动造成损失的简单方法。这可以通过结合两种不同的方法来实现。</p>
 <ul>
-<li><strong>General drop-off</strong> — 随机掉落的分数比例。这是在跟踪之前完成的，这意味着不会计算被丢弃的点，从而提高性能。如果是<code>dropoff_general_rate = 0.5</code>，则扣掉一半的分数。</li>
-<li><strong>Instensity-based drop-off</strong> — 对于检测到的每个点，根据计算的强度的概率执行额外的下降。该概率由两个参数确定。<code>dropoff_zero_intensity</code>是强度为零的点被丢弃的概率。<code>dropoff_intensity_limit</code>是阈值强度，超过该阈值将不会掉落任何分数。范围内的点被丢弃的概率是基于这两个参数的线性比例。</li>
+<li><strong>一般丢弃率(General drop-off)</strong> — 随机丢弃点的比例。这是在跟踪之前完成的，这意味着不会计算被丢弃的点，从而提高性能。如果 一般丢弃率<code>dropoff_general_rate = 0.5</code>，则一半的点将被丢弃。</li>
+<li><strong>基于强度的丢弃(Instensity-based drop-off)</strong> — 对于检测到的每个点，根据计算的强度以一定概率执行额外的丢弃。该概率由 2 个参数确定。<code>dropoff_zero_intensity</code>表示丢弃强度为 0 的点的概率。<code>dropoff_intensity_limit</code>表示强度阈值，超过该阈值将的点不会被丢弃。范围内的点被丢弃的概率是基于这 2 个参数的线性比例。</li>
 </ul>
-<p>此外，该<code>noise_stddev</code>属性还使噪声模型能够模拟现实传感器中出现的意外偏差。对于正值，每个点都会沿着激光射线的矢量随机扰动。结果是激光雷达传感器具有完美的角度定位，但距离测量存在噪音。</p>
-<p>可以调整激光雷达的旋转以覆盖每个模拟步骤的特定角度（使用 <a href="../adv_synchrony_timestep/">固定的时间步长</a> ）。例如，每步旋转一次（整圈输出，如下图），旋转频率和模拟的 FPS 应该相等。 <br> <strong>1.</strong> 设置传感器的频率 <code>sensors_bp['lidar'][0].set_attribute('rotation_frequency','10')</code>. <br> <strong>2.</strong> 使用 <code>python3 config.py --fps=10</code> 运行模拟。</p>
+<p>此外，<code>noise_stddev</code>属性可以用于噪声模型，以模拟实际传感器中出现的意外偏差。对于正值，每个点都会沿着激光射线的矢量随机扰动。结果是激光雷达传感器具有完美的角度定位，但距离测量存在噪音。</p>
+<p>可以调整激光雷达的旋转以覆盖每个模拟步骤的特定角度（使用 <a href="../adv_synchrony_timestep/">固定的时间步长</a> ）。例如，每步旋转一次（整圈输出，如下图），旋转频率和模拟的 FPS 应该相等。 <br> 
+<strong>1.</strong> 设置传感器的频率 <code>sensors_bp['lidar'][0].set_attribute('rotation_frequency','10')</code>. <br> 
+<strong>2.</strong> 使用 <code>python3 config.py --fps=10</code> 运行模拟。</p>
 <p><img alt="LidarPointCloud" src="../img/lidar_point_cloud.jpg" /></p>
 <h4 id="_17">激光雷达属性</h4>
 <table>
