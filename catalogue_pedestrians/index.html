@@ -186,7 +186,14 @@
 <li><a href="#police_2"><strong>警察 - 2</strong></a></li>
 </ul>
 <hr />
-<h2 id="_5">成年人</h2>
+<h2 id="_5">轮椅使用者</h2>
+<p>轮椅模型与大多数行人模型兼容。您可以使用行人蓝图的 has_attribute 方法测试所选行人是否具有 can_use_wheelchair 属性，从而确定其是否与轮椅模型兼容。然后将 use_wheelchair 属性设置为 True：</p>
+<div class="highlight"><pre><span></span><code><span class="n">pedestrian_bp</span> <span class="o">=</span> <span class="n">bp_lib</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;walker.pedestrian.0028&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">pedestrian_bp</span><span class="o">.</span><span class="n">has_attribute</span><span class="p">(</span><span class="s1">&#39;can_use_wheelchair&#39;</span><span class="p">):</span>
+    <span class="n">pedestrian_bp</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;use_wheelchair&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">)</span>
+    <span class="n">pedestrian</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">pedestrian_bp</span><span class="p">,</span> <span class="n">spawn_point</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="_6">成年人</h2>
 <hr />
 <h4 id="1-1">成年行人 1 - 变体 1 <span id="adult_pedestrian_1_variant_1"></span></h4>
 <p><img alt="pedestrian_0001" src="../img/catalogue/pedestrians/pedestrian_0001.webp" /></p>
@@ -393,7 +400,7 @@
 <li><strong>蓝图 ID</strong>: <span style="color:#00a6ed;">walker.pedestrian.0046<span></li>
 </ul>
 <hr />
-<h2 id="_6">小孩</h2>
+<h2 id="_7">小孩</h2>
 <hr />
 <h4 id="child-pedestrian-1-1">Child pedestrian 1 - 变体 1 <span id="child_pedestrian_1_variant_1"></span></h4>
 <p><img alt="pedestrian_0011" src="../img/catalogue/pedestrians/pedestrian_0011.webp" /></p>
@@ -439,7 +446,7 @@
 <li><strong>蓝图 ID</strong>: <span style="color:#00a6ed;">walker.pedestrian.0049<span></li>
 </ul>
 <hr />
-<h2 id="_7">警察</h2>
+<h2 id="_8">警察</h2>
 <hr />
 <h4 id="1">警察 1 <span id="police_1"></span></h4>
 <p><img alt="pedestrian_0030" src="../img/catalogue/pedestrians/pedestrian_0030.webp" /></p>
