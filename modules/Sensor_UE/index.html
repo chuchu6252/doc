@@ -130,7 +130,7 @@
 <h2 id="_3">文件详细说明</h2>
 <h3 id="1-collisionsensorcpp">1. CollisionSensor.cpp</h3>
 <h4 id="_4">文件路径</h4>
-<p><code>~/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/CollisionSensor.cpp</code></p>
+<p><code>hutb/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/CollisionSensor.cpp</code></p>
 <h4 id="_5">功能</h4>
 <ul>
 <li><strong>类</strong>：<code>ACollisionSensor</code>（继承自传感器基类，推测为<code>ASensor</code>）。</li>
@@ -501,8 +501,31 @@
 <li>使用并行处理（如多线程）加速像素遍历。</li>
 <li>调整<code>refractory_period_ns</code>以减少事件生成率。</li>
 </ul>
-<h2 id="_32">集成和扩展</h2>
-<h3 id="_33">依赖关系总结</h3>
+<h3 id="pixelreader">像素读取器 PixelReader</h3>
+<p>该类是一个从 UTextureRenderTarget2D 中读取像素的工具（仅支持 PF_R8G8B8A8 格式）。UTextureRenderTarget2D（渲染目标纹理）是一个可以在运行时由 GPU 动态绘制、渲染的“画布”或“屏幕截图”。</p>
+<p>包括由游戏线程调用的方法：</p>
+<ul>
+<li>WritePixelsToArray 将渲染目标 RenderTarget 的像素拷贝到 BitMap。</li>
+<li>RenderTarget 将像素倒进 渲染目标 RenderTarget。</li>
+<li>SavePixelsToDisk 将 RenderTarget 中的像素异步保存到磁盘。</li>
+<li>SendPixelsInRenderThread 用于将渲染命令入队，该命令将像素发送到传感器的数据流。它需要一个派生自 ASceneCaptureSensor 或兼容的传感器。请注意，序列化器需要定义一个在缓冲区前面分配的“header_offset”。</li>
+<li>WritePixelsToBuffer 将 RenderTarget 中的像素拷贝到缓冲区</li>
+</ul>
+<h4 id="_32">在渲染线程中发送像素</h4>
+<p>渲染线程中安全地读取 UTextureRenderTarget2D 的像素数据，经过处理后通过传感器数据流发送给客户端（网络或ROS2）。</p>
+<ol>
+<li>
+<p>阻塞执行，直到渲染线程完成所有任务</p>
+</li>
+<li>
+<p>在渲染线程中排队一个命令，该命令会将图像缓冲区写入数据流。我们需要在采集过程中获取帧、时间戳和传感器变换（因此在游戏线程中执行），以便它们反映当前时间点。否则，异步执行可能会向客户端发送一个未来版本的头。</p>
+</li>
+<li>
+<p>阻塞执行，直到渲染线程完成所有任务</p>
+</li>
+</ol>
+<h2 id="_33">集成和扩展</h2>
+<h3 id="_34">依赖关系总结</h3>
 <ul>
 <li><strong>共同依赖</strong>：</li>
 <li>Unreal Engine：<code>AActor</code>、<code>UPrimitiveComponent</code>、<code>UTextureRenderTarget2D</code>。</li>
@@ -513,7 +536,7 @@
 <li><code>DepthCamera</code>：后处理材质（<code>PhysicLensDistortion</code>、<code>DepthEffectMaterial</code>）。</li>
 <li><code>DVSCamera</code>：<code>URandomEngine</code>、<code>carla::Buffer</code>。</li>
 </ul>
-<h3 id="_34">扩展建议</h3>
+<h3 id="_35">扩展建议</h3>
 <ul>
 <li><strong>自定义传感器</strong>：</li>
 <li>继承<code>ASensor</code>或<code>ASceneCaptureSensor</code>，实现<code>GetSensorDefinition</code>和数据处理逻辑。</li>
