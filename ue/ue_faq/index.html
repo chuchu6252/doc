@@ -220,7 +220,22 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
 <p>3.丢弃本地提交，强制回到线上最新版本：
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/hutb
 </code></pre></div></p>
-<h2 id="_14">参考链接</h2>
+<h2 id="_14">常见问题</h2>
+<h6 id="carlaue4exe">CarlaUE4.exe 崩溃的日志保存目录</h6>
+<p>.dmp 文件分析要求本机中有崩溃发生版本对应的符号表文件（CarlaUE4.pdb 文件），使用 VS 2022 （VS 2019 的步骤类似）分析 .dmp 文件步骤如下：</p>
+<p><div class="highlight"><pre><span></span><code>C:\Users\Administrator\AppData\Local\CarlaUE4\Saved\Crashes
+</code></pre></div>
+附：崩溃日志的保存目录和项目名有关：C:\Users[Your Windows Username]\AppData\Local[Project Name]\Saved\Crashes</p>
+<h6 id="minidump">引擎 MiniDump 崩溃现场的恢复</h6>
+<p>1.找到崩溃时生成的 .dmp 文件，使用 VS 2022 打开，如下图所示：
+<img alt="" src="../../img/tuto_D_windows_debug/open_dump.jpg" /></p>
+<p>（打开文件后会有转储摘要、系统信息、引用模块的说明，但这些信息并不直观）。</p>
+<p>点击设置符号路径。该按钮在界面右侧，用于指定 CarlaUE4.pdb 文件的路径。</p>
+<p>2.选择 .pdb 文件的路径，路径为编译好的 HUTB 源码的 <code>D:\hutb\Unreal\CarlaUE4\Binaries\Win64</code> 路径下，点击确定</p>
+<p><img alt="" src="../../img/tuto_D_windows_debug/select_pdb.jpg" /></p>
+<p>3.点击 "使用 仅限本机 进行调试"，成功复现崩溃现场</p>
+<p><img alt="" src="../../img/tuto_D_windows_debug/restore_scene.jpg" /></p>
+<h2 id="_15">参考链接</h2>
 <ul>
 <li>
 <p><a href="https://www.bilibili.com/video/BV164411Y732/?share_source=copy_web&amp;vd_source=d956d8d73965ffb619958f94872d7c57">UE4初学者系列教程合集-全中文新手入门教程</a></p>
@@ -236,6 +251,9 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
 </li>
 <li>
 <p><a href="https://portal.productboard.com/epicgames/1-unreal-engine-public-roadmap/tabs/24-unreal-engine-4-27">虚幻引擎开放路线图</a></p>
+</li>
+<li>
+<p><a href="https://zhuanlan.zhihu.com/p/649610542">Unreal 的 MiniDump 机制调研</a></p>
 </li>
 </ul>
               
