@@ -73,6 +73,15 @@
 将<code>Unreal/CarlaUE4/Content/Carla/Static/Car/4Wheeled/Tesla</code>复制到当前文件夹并重命名为<code>BYD</code>，
 将<code>Unreal/CarlaUE4/Content/Carla/Blueprints/Vehicles/Tesla</code>复制到当前文件夹并重命名为<code>BYD</code>。</p>
 <p>2.添加车辆到蓝图库并测试。</p>
+<ul>
+<li>在 <code>内容(Content)/Carla/Blueprint/Vehicles</code> 中，打开 <code>VehicleFactory</code> 文件。</li>
+<li>在 <strong><em>Generate Definitions</em></strong> 选项卡中，双击 <strong><em>Vehicles</em></strong> 。</li>
+<li>在 <strong><em>细节(Details)</em></strong> 面板中，展开 <strong><em>默认值(Default Value)</em></strong> 部分并向车辆数组添加一个新元素。 </li>
+<li>填写您车辆的品牌 <strong><em>Make</em></strong>(BYD) 和型号 <strong><em>Model</em></strong>(seal) 。 </li>
+<li>使用您的 <code>BP_&lt;vehicle_name&gt;</code> 文件填写 <strong><em>Class</em></strong> 值(BP_BYDseal)。</li>
+<li>Number of Wheels 填 <code>4</code>，Generation 填 <code>0</code></li>
+<li>编译并保存。</li>
+</ul>
 <p>测试代码：
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>manual_control.py<span class="w"> </span>--filter<span class="w"> </span>vehicle.BYD.seal
 python<span class="w"> </span>manual_control.py<span class="w"> </span>--filter<span class="w"> </span>vehicle.tesla.model3
