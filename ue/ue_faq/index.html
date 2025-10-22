@@ -235,6 +235,11 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
 <p><img alt="" src="../../img/tuto_D_windows_debug/select_pdb.jpg" /></p>
 <p>3.点击 "使用 仅限本机 进行调试"，成功复现崩溃现场</p>
 <p><img alt="" src="../../img/tuto_D_windows_debug/restore_scene.jpg" /></p>
+<p>然后就可以在VS右下角的<code>调用堆栈</code>中查看堆栈中代码报错的行。</p>
+<h6 id="pie">编辑器中运行(PIE)场景时添加命令行参数</h6>
+<p>在自动测试时，需要在<code>CarlaUE4.exe</code>后面添加一些参数，操作步骤如下：</p>
+<p>1.在编辑器的菜单中：编辑(Edit) -&gt; 编辑器偏好设置(Editor Preferences) -&gt; 播放(Play) -&gt; 在独立进程游戏中运行(Play in Standalone game)，有一个文本框<code>附加启动参数</code>，可以在这里添加启动所需的参数（比如：<code>--carla-rpc-port=3654 --carla-streaming-port=0 -nosound</code>）</p>
+<p>2.点<code>运行</code>中的三角下拉菜单中的<code>独立进程游戏</code>启动场景（直接点运行附带的参数不生效）</p>
 <h2 id="_15">参考链接</h2>
 <ul>
 <li>

@@ -134,7 +134,23 @@ void UActorDispatcher::Bind(ACarlaActorFactory &amp;ActorFactory)
   }
 }
 </code></pre></div></p>
-<h2 id="_2">参考</h2>
+<h2 id="_2">新加内容的分析</h2>
+<h3 id="static">Static 资产</h3>
+<p>新加的车辆静态资产位于<code>Carla\Static\Car\4Wheeled\BYD</code>，包括：
+* SM_sc_BYDseal.uasset (SMC_BYDseal.uasset) ：静态网格(Static Mesh)</p>
+<h3 id="_3">蓝图</h3>
+<p>新加的车辆蓝图位于<code>Carla\Blueprints\Vehicles\BYD</code>，包括：</p>
+<ul>
+<li>BP_BYDseal.uasset ：车辆蓝图</li>
+<li>BP_BYD_FLW.uasset ：左前轮（Front Left Wheel）</li>
+<li>BP_BYD_FRW.uasset ：右前轮（Front Right Wheel）</li>
+<li>BP_BYD_RLW.uasset ：左后轮（Rear Left Wheel）</li>
+<li>BP_BYD_RRW.uasset ： 右后轮（Rear Right Wheel）</li>
+</ul>
+<h2 id="_4">问题</h2>
+<h6 id="_5">轮子不旋转</h6>
+<p>目录<code>Carla\Static\Car\4Wheeled\BYD</code>下有两个动画蓝图，删除其中的一个并参考 <a href="">8. 配置车辆蓝图</a> 重新将动画蓝图 <code>BYD_Animation</code> 绑定到车辆蓝图<code>Carla/Blueprints/Vehicles/{Vehicle_Name}/BP_BYDseal</code>。</p>
+<h2 id="_6">参考</h2>
 <p><a href="https://www.dongchedi.com/article/7119344427587813891">比亚迪海豹PK特斯拉Model 3</a></p>
 <p><a href="https://blog.csdn.net/csdncyn/article/details/136691547">跟踪和解决spawn_actor指令引发的问题：UnknownError while spawning the actor</a></p>
               
