@@ -178,15 +178,24 @@ AutomationTool.exe<span class="w"> </span>BuildGraph<span class="w"> </span>-tar
 <li>生成可发布的whl文件
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>PythonAPI<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--chrono&quot;</span>
 </code></pre></div></li>
-<li>
-<p>发布到 <a href="https://pypi.org/project/hutb/">PyPi</a> ：
+<li>发布到 <a href="https://pypi.org/project/hutb/">PyPi</a> ：
 <div class="highlight"><pre><span></span><code><span class="c1"># 删除文件 carla/PythonAPI/carla/dist/hutb-1.0.0-py3.7-win-amd64.egg</span>
 pip<span class="w"> </span>install<span class="w"> </span>twine
 twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w">  </span><span class="c1"># 需要使用PyPi的Token</span>
-</code></pre></div></p>
-</li>
-<li>
-<p>其他：发布自定义mkdocs
+</code></pre></div>
+报错：
+<div class="highlight"><pre><span></span><code>ERROR    InvalidDistribution: Metadata is missing required fields: Name, Version.
+         Make sure the distribution includes the files where those fields are specified, and is using a supported Metadata-Version: 1.0, 1.1, 1.2, 2.0, 2.1, 2.2.
+</code></pre></div>
+检查：
+<div class="highlight"><pre><span></span><code>twine<span class="w"> </span>check<span class="w"> </span>dist/*
+</code></pre></div>
+通过解压<code>PythonAPI\carla\dist\hutb-2.2-cp310-cp310-win_amd64.whl</code>发现：元数据版本<code>Metadata-Version</code>为2.4，不在支持的版本之列。</li>
+</ol>
+<p>解决：将 3.9~3.13 版本的whl文件用7zip打开，并编辑（F4）<code>hutb-2.2.dist-info\METADATA</code>，将<code>Metadata-Version</code>改为2.2，然后保存。</p>
+<hr />
+<ul>
+<li>其他：发布自定义mkdocs
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenHUTB/mkdocs.git
 <span class="nb">cd</span><span class="w"> </span>mkdocs
 pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;build&lt;0.10.0&#39;</span>
@@ -196,12 +205,9 @@ twine<span class="w"> </span>upload<span class="w"> </span>dist/*
 上传报错：
 <div class="highlight"><pre><span></span><code>requests.exceptions.ProxyError: HTTPSConnectionPool(host=&#39;upload.pypi.org&#39;, port=443): Max retries exceeded with url: /legacy/ (Caused by ProxyError(&#39;Unable to connect to proxy&#39;, SSLError(SSLZeroReturnError(6, &#39;TLS/SSL connection has been closed (EOF) (_ssl.c:1149)&#39;))))
 </code></pre></div>
-关闭系统代理即可解决。</p>
-</li>
-</ol>
+关闭系统代理即可解决。</li>
+</ul>
 <p>上传权限不够：
-<div class="highlight"><pre><span></span><code>
-</code></pre></div>
 <div class="highlight"><pre><span></span><code>twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"> </span>--repository-url<span class="w"> </span>https://pypi.org/manage/project/hutb-doc/releases/
 </code></pre></div></p>
 <p>使用方法：
@@ -240,6 +246,7 @@ huggingface-cli<span class="w"> </span>login
 <h2 id="_11">参考</h2>
 <ul>
 <li><a href="https://natapp.cn/article/config_ini">内网穿透</a></li>
+<li><a href="https://stackoverflow.com/questions/79791079/twine-error-with-recent-setuptools-build-but-previous-ones-fine-invaliddistribu">元数据检查</a></li>
 </ul>
               
             </div>
