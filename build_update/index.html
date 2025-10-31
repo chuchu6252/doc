@@ -185,6 +185,14 @@ git<span class="w"> </span>lfs<span class="w"> </span>pull<span class="w">  </sp
 <p class="admonition-title">笔记</p>
 <p>在克隆存储库之前删除包含资产的 <code>/Carla</code> 文件夹。否则，将显示错误。</p>
 </div>
+<h2 id="_7">其他</h2>
+<ul>
+<li>使用命令<code>git lfs migrate info</code>发现git管理的文件太大，将大于 100Kb 的文件迁移成大文件管理：
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>lfs<span class="w"> </span>migrate<span class="w"> </span>import<span class="w"> </span>--everything<span class="w"> </span>--above<span class="o">=</span>100Kb
+git<span class="w"> </span>lfs<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>master
+git<span class="w"> </span>push<span class="w"> </span>--force
+</code></pre></div></li>
+</ul>
               
             </div>
           </div><footer>

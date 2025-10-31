@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Windows 下的启动包的构建 - 人车模拟</title>
+    <title>Windows 下的可发布包的构建 - 人车模拟</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Windows \u4e0b\u7684\u542f\u52a8\u5305\u7684\u6784\u5efa";
+        var mkdocs_page_name = "Windows \u4e0b\u7684\u53ef\u53d1\u5e03\u5305\u7684\u6784\u5efa";
         var mkdocs_page_input_path = "launch_windows.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Windows 下的启动包的构建</li>
+      <li class="breadcrumb-item active">Windows 下的可发布包的构建</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/launch_windows.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,13 +68,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="windows">Windows 下的启动包的构建</h1>
+                <h1 id="windows">Windows 下的可发布包的构建</h1>
 <h2 id="_1">发布安装版本</h2>
 <p>参考<a href="https://github.com/chiefGui/ue-from-source?tab=readme-ov-file#step-by-step-1">链接</a> 进行虚幻引擎的发布。</p>
 <ol>
 <li>使用 Visual Studio 打开 <code>UE4.shn</code> 。</li>
 <li>在右侧边栏，您应该会看到一个<code>解决方案资源管理器</code>面板。展开<code>Programs</code>文件夹并找到<code>AutomationTool</code>项目（<code>Engine\Source\Programs\AutomationTool</code>）：
-<img alt="Image" src="Engine/Documentation/fig/AutomationTool.png" /></li>
+<img alt="Image" src="https://github.com/OpenHUTB/engine/raw/hutb/Engine/Documentation/fig/AutomationTool.png" /></li>
 <li>右键单击它并选择<code>生成(Build)</code>，应该很快。</li>
 </ol>
 <h3 id="_2">运行安装软件的构建脚本</h3>
@@ -87,7 +87,9 @@
 </li>
 </ol>
 <p>如果一切顺利，您应该会看到<code>LocalBuilds</code>与该文件夹处于同一级别的<code>Engine</code>文件夹，并且控制台中没有错误。(还包括一个 InstalledDDC 文件夹：DerivedDataCache)。</p>
-<h3 id="_3">问题</h3>
+<h3 id="_3">缓存</h3>
+<p>默认的缓存路径位于</p>
+<h3 id="_4">问题</h3>
 <p><div class="highlight"><pre><span></span><code>ERROR: Visual Studio 2017 must be installed in order to build this target.
 </code></pre></div>
 解决：下载<code>3d5_VisualStudio20171509.rar</code>进行安装。</p>
