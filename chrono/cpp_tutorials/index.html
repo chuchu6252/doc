@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Chrono::Vehicle 参考手册 - 人车模拟</title>
+    <title>Cpp tutorials - 人车模拟</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Chrono::Vehicle \u53c2\u8003\u624b\u518c";
-        var mkdocs_page_input_path = "chrono/manual_vehicle.md";
+        var mkdocs_page_name = "Cpp tutorials";
+        var mkdocs_page_input_path = "chrono/cpp_tutorials.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -58,9 +58,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Chrono::Vehicle 参考手册</li>
+      <li class="breadcrumb-item active">Cpp tutorials</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/chrono/manual_vehicle.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/chrono/cpp_tutorials.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -68,39 +68,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="chronovehicle">Chrono::Vehicle 参考手册</h1>
+                <h2 id="chrono-mbs"><a href="https://api.projectchrono.org/tutorial_table_of_content_chrono_mbs.html">Chrono MBS 模块示例</a></h2>
+<p>本教程将指导您如何使用 Chrono CORE 模块进行多体系统分析。</p>
+<p>以下是一些 Chrono 入门示例。这些演示需要 IRRLICHT 运行时可视化模块，部分示例可选地使用了 VSG 运行时可视化模块。</p>
 <ul>
-<li><a href="../module_vehicle_installation/"><strong>安装并构建 Chrono::Vehicle</strong></a></li>
-<li><a href="../vehicle_overview/"><strong>车辆建模与模拟概述</strong></a><ul>
-<li><a href="../vehicle_overview/#reference_frames">参考框架</a></li>
-<li><a href="../vehicle_overview/#simulation_loop">模拟循环</a></li>
-</ul>
-</li>
-<li><a href="../vehicle_chassis/"><strong>车辆底盘</strong></a></li>
-<li><a href="../wheeled_vehicle/"><strong>轮式车辆</strong></a><ul>
-<li><a href="../wheeled_suspension/">悬挂模型</a></li>
-<li><a href="../wheeled_steering/">转向机构模型</a></li>
-<li><a href="../wheeled_driveline/">传动系统模型</a></li>
-<li><a href="../wheeled_tire/">轮胎模型</a></li>
-<li><a href="../wheeled_rig/">测试台架</a></li>
-</ul>
-</li>
-<li><a href="../vehicle_powertrain/"><strong>动力系统模型</strong></a></li>
-<li><a href="../vehicle_terrain/"><strong>地形模型</strong></a></li>
-<li><a href="../vehicle_driver/"><strong>驱动子系统</strong></a></li>
-<li><a href="../vehicle_visualization/"><strong>可视化</strong></a></li>
 <li>
-<p><a href="../vehicle_models/"><strong>车辆模型</strong></a></p>
+<p>滑块曲柄机构示例 (demo_MBS_crank.cpp) 最简单的多体系统示例：滑块曲柄机构的骨架。</p>
 </li>
 <li>
-<p><a href="../cpp_tutorials/"><strong>C++ 教学示例</strong></a></p>
+<p>四杆机构示例 (demo_MBS_fourbar.cpp) 创建一个四杆机构并用简单的线条显示它</p>
 </li>
-</ul>
-<h2 id="_1">其他文档页面</h2>
-<ul>
-<li><a href="#creating-an-agent"><strong>Chrono Core 用户手册</strong></a></li>
-<li><a href="https://api.projectchrono.org/pychrono_introduction.html"><strong>PyChrono</strong></a></li>
-<li><a href="#creating-an-agent"><strong>Chrono::Vehicle 教程</strong></a></li>
+<li>
+<p>碰撞示例 (demo_MBS_collisionNSC.cpp) 通过这个入门示例学习如何在 Chrono 中设置碰撞</p>
+</li>
+<li>
+<p>砖块坠落示例 (demo_MBS_bricks.cpp) 模拟拆迁球与墙壁之间的碰撞（Irrlicht 或 VSG 运行时可视化）</p>
+</li>
+<li>
+<p>摆锤示例 (demo_MBS_pendulum.cpp) 模拟与力场相互作用的铰接式摆锤</p>
+</li>
+<li>
+<p>电机和执行器使用示例 (demo_MBS_motors.cpp) 在 Chrono 中使用电机的不同方法</p>
+</li>
+<li>
+<p>齿轮约束示例 (demo_MBS_gears.cpp) 创建一个由滑轮、正齿轮和锥齿轮组成的传动装置。</p>
+</li>
+<li>
+<p>麦克纳姆轮全向机器人示例 (demo_MBS_mecanum.cpp) 创建一个带有全向轮的机器人；学习坐标变换</p>
+</li>
+<li>
+<p>滚动和旋转摩擦示例 (demo_MBS_friction.cpp) 学习如何启用滚动和旋转摩擦（Irrlicht 或 VSG 运行时可视化）</p>
+</li>
+<li>
+<p>基本悬架示例 (demo_MBS_suspension.cpp) 创建一个非常简化的带有悬架的车辆模型</p>
+</li>
+<li>
+<p>履带车辆示例 (demo_MBS_tracks.cpp) 模拟一辆带有履带、可与障碍物交互且可由用户驾驶的车辆</p>
+</li>
+<li>
+<p>传送带示例 (demo_MBS_conveyor.cpp) 传送带基本组件的演示</p>
+</li>
+<li>
+<p><a href="https://api.projectchrono.org/tutorial_demo_forklift.html">叉车示例</a> (demo_MBS_forklift.cpp) 高级演示：创建一个可由用户驾驶的叉车</p>
+</li>
 </ul>
               
             </div>

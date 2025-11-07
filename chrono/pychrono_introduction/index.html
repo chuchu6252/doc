@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Chrono::Vehicle 参考手册 - 人车模拟</title>
+    <title>PyChrono - 人车模拟</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Chrono::Vehicle \u53c2\u8003\u624b\u518c";
-        var mkdocs_page_input_path = "chrono/manual_vehicle.md";
+        var mkdocs_page_name = "PyChrono";
+        var mkdocs_page_input_path = "chrono/pychrono_introduction.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -58,9 +58,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Chrono::Vehicle 参考手册</li>
+      <li class="breadcrumb-item active">PyChrono</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/chrono/manual_vehicle.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/chrono/pychrono_introduction.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -68,40 +68,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="chronovehicle">Chrono::Vehicle 参考手册</h1>
-<ul>
-<li><a href="../module_vehicle_installation/"><strong>安装并构建 Chrono::Vehicle</strong></a></li>
-<li><a href="../vehicle_overview/"><strong>车辆建模与模拟概述</strong></a><ul>
-<li><a href="../vehicle_overview/#reference_frames">参考框架</a></li>
-<li><a href="../vehicle_overview/#simulation_loop">模拟循环</a></li>
-</ul>
-</li>
-<li><a href="../vehicle_chassis/"><strong>车辆底盘</strong></a></li>
-<li><a href="../wheeled_vehicle/"><strong>轮式车辆</strong></a><ul>
-<li><a href="../wheeled_suspension/">悬挂模型</a></li>
-<li><a href="../wheeled_steering/">转向机构模型</a></li>
-<li><a href="../wheeled_driveline/">传动系统模型</a></li>
-<li><a href="../wheeled_tire/">轮胎模型</a></li>
-<li><a href="../wheeled_rig/">测试台架</a></li>
-</ul>
-</li>
-<li><a href="../vehicle_powertrain/"><strong>动力系统模型</strong></a></li>
-<li><a href="../vehicle_terrain/"><strong>地形模型</strong></a></li>
-<li><a href="../vehicle_driver/"><strong>驱动子系统</strong></a></li>
-<li><a href="../vehicle_visualization/"><strong>可视化</strong></a></li>
+                <h1 id="pychrono">PyChrono</h1>
+<h2 id="_1"><a href="https://api.projectchrono.org/pychrono_installation.html">安装</a></h2>
+<ol>
 <li>
-<p><a href="../vehicle_models/"><strong>车辆模型</strong></a></p>
+<p>初始化虚拟环境
+<div class="highlight"><pre><span></span><code>conda<span class="w"> </span>config<span class="w"> </span>--add<span class="w"> </span>channels<span class="w"> </span>https://conda.anaconda.org/conda-forge
+conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>chrono<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+conda<span class="w"> </span>activate<span class="w"> </span>chrono
+</code></pre></div></p>
 </li>
 <li>
-<p><a href="../cpp_tutorials/"><strong>C++ 教学示例</strong></a></p>
+<p>安装必要的依赖</p>
 </li>
-</ul>
-<h2 id="_1">其他文档页面</h2>
-<ul>
-<li><a href="#creating-an-agent"><strong>Chrono Core 用户手册</strong></a></li>
-<li><a href="https://api.projectchrono.org/pychrono_introduction.html"><strong>PyChrono</strong></a></li>
-<li><a href="#creating-an-agent"><strong>Chrono::Vehicle 教程</strong></a></li>
-</ul>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># 使用Pardiso直接稀疏线性求解器进行PyChrono演示、Numpy以及 PythonOCC 时所需</span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">mkl</span><span class="o">=</span><span class="m">2020</span>
+<span class="c1"># Chrono::Sensor 模块</span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">numpy</span><span class="o">=</span><span class="m">1</span>.24.0
+<span class="c1"># 运行时的可视化</span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span><span class="nv">irrlicht</span><span class="o">=</span><span class="m">1</span>.8.5
+<span class="c1"># Chrono::Cascade 支持</span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>pythonocc-core<span class="o">=</span><span class="m">7</span>.9.0
+<span class="c1"># 图形数据</span>
+conda<span class="w"> </span>install<span class="w"> </span>conda-forge::gnuplot
+<span class="c1"># 需要英伟达图形驱动 515.xx+</span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>nvidia/label/cuda-12.3.0<span class="w"> </span>cuda-toolkit
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>glfw
+</code></pre></div>
+<ol>
+<li>
+<p><a href="https://anaconda.org/projectchrono/pychrono/files">下载</a> 对应的版本，比如：
+<div class="highlight"><pre><span></span><code>wget<span class="w"> </span>https://anaconda.org/projectchrono/pychrono/7.0.0/download/win-64/pychrono-7.0.0-py310_2455.tar.bz2
+</code></pre></div></p>
+</li>
+<li>
+<p>安装
+<div class="highlight"><pre><span></span><code>conda<span class="w"> </span>install<span class="w"> </span>&lt;pychrono_package&gt;.tar.bz2
+</code></pre></div></p>
+</li>
+</ol>
               
             </div>
           </div><footer>
