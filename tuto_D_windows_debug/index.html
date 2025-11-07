@@ -255,6 +255,10 @@
 <h2 id="_4">其他 <span id="other"></span></h2>
 <h3 id="dll">检查所依赖dll库的符号是否加载 <span id="check_dll_loaded"></span></h3>
 <p>下断点，F5调试。然后“调试 - 窗口 - 模块”打开模块窗口。</p>
+<div class="admonition 笔记">
+<p class="admonition-title">笔记</p>
+<p>如果 Visual Studio 的解决方案资源管理器中没有显示本地新建的一些文件夹，右键<code>hutb\Unreal\CarlaUE4\CarlaUE4.uproject</code>选择运行<code>Generate Visual Studio project file</code>，然后重新打卡CarlaUE4.sln，即可看到最新的文件夹。</p>
+</div>
 <h2 id="visual-studio">使用 Visual Studio 调试引擎代码</h2>
 <p>1、先从VS工具栏中的第一个下拉菜单中选择设置<code>Development Editor</code></p>
 <p>2、在<code>解决方案</code>中右键项目<code>UE4</code>，选择<code>调试(Debug) -&gt; 进入单步执行新实例</code></p>
@@ -398,29 +402,33 @@ D:<span class="se">\w</span>ork<span class="se">\w</span>orkspace<span class="se
 新电脑运行<code>NativeDesktop.exe</code>出现<code>此版本的Windows不支持此产品，请尝试升级Windows。</code></p>
 <h3 id="_9">技巧 <span id="trick"></span></h3>
 <ul>
-<li>进行函数跳转时，vs一致出现<code>正在进行IntelliSense</code>：</li>
-</ul>
+<li>
+<p>进行函数跳转时，vs一致出现<code>正在进行IntelliSense</code>：</p>
 <p>选择“工具”菜单栏下的“选项”按钮打开选项页面，找到 文本编辑器-&gt;C/C++-&gt;高级,在右侧的禁用IntelliSense中改为True</p>
-<ul>
-<li><a href="https://blog.csdn.net/tomwillow/article/details/118387681">检查符号是否加载</a> </li>
-</ul>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/tomwillow/article/details/118387681">检查符号是否加载</a> </p>
 <p>启动调式并在断点停下，然后“调试 - 窗口 - 模块”打开模块窗口。
 找到第三方dll的名字，看“符号文件”一栏是空的。说明这个dll的符号文件没有加载。
 把.pdb和.dll放在一起。再次调试。可以看到符号文件已经加载了。</p>
-<ul>
+</li>
 <li>
 <p>改变ubuntu终端显示语言（桌面系统中文，终端提示英文）
-<div class="highlight"><pre><span></span><code>vim<span class="w"> </span>~/.bashrc
+    <div class="highlight"><pre><span></span><code>vim<span class="w"> </span>~/.bashrc
 <span class="nb">export</span><span class="w"> </span><span class="nv">LANGUAGE</span><span class="o">=</span>en_US<span class="w"> </span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
 <span class="nb">source</span><span class="w"> </span>~/.bashrc
 </code></pre></div></p>
 </li>
 <li>
+<p>UE4C++ 调试时监控变量显示 “变量已经被优化，因此不可见”</p>
+<p>解决：在需要调试的模块的 build.cs 里，<a href="https://ue5wiki.com/wiki/12876/">添加代码</a> ：<code>OptimizeCode = CodeOptimization.Never;</code></p>
+</li>
+<li>
 <p>日志记录</p>
+<p><code>UE_LOG</code>函数记录的日志位于<code>carla\Unreal\CarlaUE4\Saved\Logs\CarlaUE4.log</code>文件中。</p>
 </li>
 </ul>
-<p><code>UE_LOG</code>函数记录的日志位于<code>carla\Unreal\CarlaUE4\Saved\Logs\CarlaUE4.log</code>文件中。</p>
 <h3 id="_10">工具</h3>
 <p><a href="https://blog.csdn.net/helloasimo/article/details/130444217">VScode调试shell bash脚本</a>
 在VScode中安装<code>Bash Debug</code>，</p>
@@ -430,7 +438,11 @@ D:<span class="se">\w</span>ork<span class="se">\w</span>orkspace<span class="se
 <p><code>package_dir</code> 选项的值是字典而不是列表。当您的源代码不直接位于与 <code>setup.py</code> 相同的文件夹中时，请使用此选项。</p>
 <h3 id="_11">测试</h3>
 <p>自动化测试请参考 <a href="../test/tuto_test/">链接</a> 。</p>
-<h3 id="_12">学习 <span id="learn"></span></h3>
+<h2 id="_12">其他</h2>
+<ul>
+<li><a href="../ue/ue_faq/">引擎 MiniDump 崩溃现场的恢复</a></li>
+</ul>
+<h3 id="_13">学习 <span id="learn"></span></h3>
 <ul>
 <li><a href="../tuto_D_bat/">bat脚本</a></li>
 <li><a href="../libcarla/">LibCarla 说明</a></li>
