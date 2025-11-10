@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Chrono OpenSim 解析器 - 人车模拟</title>
+    <title>Chrono 的 OpenSim 解析器 - 人车模拟</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Chrono OpenSim \u89e3\u6790\u5668";
+        var mkdocs_page_name = "Chrono \u7684 OpenSim \u89e3\u6790\u5668";
         var mkdocs_page_input_path = "chrono/OpenSim_parser.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Chrono OpenSim 解析器</li>
+      <li class="breadcrumb-item active">Chrono 的 OpenSim 解析器</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/chrono/OpenSim_parser.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,12 +68,96 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="chrono-opensim">Chrono OpenSim 解析器</h1>
+                <h1 id="chrono-opensim">Chrono 的 OpenSim 解析器</h1>
 <h2 id="1">1.介绍</h2>
+<p>本报告简要概述了 <a href="https://github.com/projectchrono/chrono">Chrono</a> 解析 OpenSim 输入文件的功能，并包含一个带有代码示例的基本使用指南。</p>
+<p>OpenSim 的多体动力学功能基于开源的 <a href="https://simtk.org/projects/simbody">Simbody</a> 软件包，该软件包采用内部坐标系的递归公式，这与 Chrono 中使用的全坐标系笛卡尔公式截然不同。从概念上讲，笛卡尔公式和递归多体公式的主要区别在于对连接刚体的机械关节的抽象解释：在笛卡尔公式中，关节被建模为限制相对运动的约束集合；相反，在递归公式中，机械关节被解释为一种驱动装置，它能够产生一定数量的相对自由度。</p>
+<p>用于构建多体系统的基本 Simbody 组件包括：</p>
+<ul>
+<li>身体（质量特性和几何形状）</li>
+<li>活动器（内坐标关节）</li>
+<li>约束</li>
+<li>力</li>
+</ul>
+<p>前两个部分组合成 MobilizedBody 结构，它表示刚体及其内部动员器（定义了刚体相对于其父体的自由度）。</p>
+<p><a href="https://github.com/opensim-org/opensim-core">OpenSim</a> 模型可以通过编程方式构建，也可以通过基于 XML 格式的 <a href="https://github.com/opensim-org/opensim-models">osim 输入文件</a> 进行指定。此处描述的 Chrono 功能会解析此类 osim 输入文件，以创建等效的 Chrono 机械系统，或者使用 osim 输入文件中指定的元素填充现有的 Chrono 系统。</p>
 <h2 id="2">2.背景</h2>
+<p>我们将从帧 A 到帧 B 的位置变换定义为：</p>
+<p>
+<script type="math/tex; mode=display">
+^A \mathbf{X} ^B = [ ^A \mathbf{R} ^B; ^A \mathbf{t} ^B ]
+</script>
+</p>
+<p>其中 <script type="math/tex"> ^A \mathbf{R} ^B </script> 表示 3 × 3 旋转(Rotation)矩阵，<script type="math/tex"> ^A \mathbf{t} ^B </script> 表示两个坐标系原点之间的平移(translation)向量。因此，逆变换可推导如下：</p>
+<p>
+<script type="math/tex; mode=display">
+^B \mathbf{X} ^A = ( ^A \mathbf{X} ^B ) ^{-1} 
+        = [ ( ^A \mathbf{R} ^B )^{-1};  ( ^A \mathbf{R} ^B )^{-1} \cdot ^A \mathbf{t} ^B ]
+</script>
+</p>
+<p>由此，坐标系 B 中的位置向量 <script type="math/tex"> ^B \mathbf{v} </script> 可以用以下公式在坐标系 A 中表示：</p>
+<p>
+<script type="math/tex; mode=display">
+^A \mathbf{v} = ^A \mathbf{X} ^B \cdot ^B \mathbf{v}
+\equiv
+^A \mathbf{R} ^B \cdot ^B \mathbf{v} + ^A \mathbf{t} ^B
+</script>
+</p>
+<p>Simbody 开环多体系统从根体(root body)开始递归定义。给定父体 <script type="math/tex"> P </script> 的状态，动体(MobilizedBody) <script type="math/tex"> B </script> 的广义状态完全由以下方式定义：
+<script type="math/tex; mode=display">
+^P \mathbf{X} ^B = [ ^P \mathbf{R} ^B; ^P \mathbf{t} ^B ]
+</script>
+</p>
+<p>
+<script type="math/tex; mode=display">
+^P \mathbf{V} ^B = ^P \mathbf{H} ^B \cdot u
+</script>
+</p>
+<p>
+<script type="math/tex; mode=display">
+\dot{q} = \mathbf{N} (q) u
+</script>
+</p>
+<p>其中 <script type="math/tex"> ^P \mathbf{H} ^B </script> 是用于获得 6×1 空间速度 <script type="math/tex"> ^P \mathbf{V} ^B </script> 的速度变换矩阵，<script type="math/tex"> N </script> 是运动学耦合矩阵，表示广义速度与广义（内部）坐标的导数之间的关系。</p>
+<p>Chrono 多体系统由一系列物体和约束条件构成，这些约束条件模拟了连接物体之间的机械关节。状态向量是物体在笛卡尔坐标系中的位置和速度的集合，所有位置和速度均相对于绝对（地面）参考系表示。</p>
+<p><img alt="" src="../../img/chrono/recursive_mutibody.jpg" /></p>
+<p>如上图所示，给定一个 MobilizedBody 形式的 Simbody 表示，物体 <script type="math/tex"> ^G \mathbf{X} ^B </script>（在地面坐标系 G 中表示并相对于地面坐标系 G 表示）的绝对变换可确定为：</p>
+<p>
+<script type="math/tex; mode=display">
+^G \mathbf{X} ^B
+    = 
+    ^G \mathbf{X} ^P \cdot
+    ^P \mathbf{X} ^F \cdot
+    ^F \mathbf{X} ^M (q) \cdot
+    ^M \mathbf{M} ^B
+</script>
+</p>
+<p>其中，<script type="math/tex"> ^G \mathbf{X} ^P </script> 是父体的绝对变换，<script type="math/tex"> ^P \mathbf{X} ^F </script> 表示父体外侧关节的位置（在 <script type="math/tex"> P </script> 坐标系中表示），<script type="math/tex"> ^F \mathbf{X} ^M (q) </script> 是动子体的变换（在机械关节的固定坐标系和运动坐标系之间，由特定动子体的内部坐标参数化），<script type="math/tex"> ^B \mathbf{X} ^M </script> 是子体上 -1 内侧关节的位置（在 <script type="math/tex"> B </script> 坐标系中表示）。注意，<script type="math/tex"> ^M \mathbf{X} ^B = ( ^B \mathbf{X} ^M ) ^{-1} </script> 。</p>
+<p>Simbody 系统采用分层定义，每个 MobilizedBody 都指定其类型以及父体和子体上的动员位置（分别为 <script type="math/tex"> ^P \mathbf{X} ^F </script> 和 <script type="math/tex"> ^B \mathbf{X} ^M </script> ），以及体属性（例如质量、惯性张量、质心位置等）。此外，osim 模型规范提供初始内部坐标和速度值。解析器根据动员类型推断相应的 Chrono 关节，以及初始构型 <script type="math/tex"> q_0 </script>  的变换 <script type="math/tex"> ^F \mathbf(X) ^M (q_0) </script> 。换句话说，一个 Simbody MobilizedBody 会创建一个 Chrono 体和一个 Chrono 关节。生成的体的初始位置使用上一公式，根据其父体已计算的位置计算得出。</p>
 <h2 id="3">3.实现和使用</h2>
+<p>Chrono 的 osim 文件解析器封装在一个名为 <a href="https://github.com/projectchrono/chrono/blob/main/src/chrono_parsers/ChParserOpenSim.cpp"><code>ChParserOpenSim</code></a> 的类中，该类位于 <code>chrono::parsers</code> 命名空间下。Chrono 用户可以在其主程序中实例化此类型的对象，并使用它来解析给定的 <code>osim</code> 文件，从而在 <code>ChSystem</code> 中创建输入文件中指定的建模元素（实体、关节、力等）。</p>
+<p>解析器使用 <a href="https://github.com/Fe-Bell/RapidXML">RapidXML</a> 读取 XML 文件，RapidXML 是一个基于 MIT 许可证的开源 C 库。RapidXML 读取 osim 文件并进行原地解析，因此使用起来既快捷又简单。读取完成后，它会创建 XML 文件的树状表示。Chrono 解析器遍历这棵树，读取惯性矩和质量等通用仿真数据，然后读取物体信息。如有需要，它还可以从 osim 文件中读取其他字段。osim 文件的格式在 <a href="https://opensimconfluence.atlassian.net/wiki/spaces/OpenSim/overview">OpenSim 用户指南</a> 中有详细描述。</p>
+<p>解析器接收指向递归树根节点的指针。它假定该树是非循环的（即，表示一个没有闭合回路的机械系统），尽管一个节点可以有多个子节点。它选择根节点作为“地面”节点，该节点固定在地面上。所有节点都以递归方式定义，它们的相对位置和方向由其父节点的位置和方向以及其内侧关节的特定变换决定。</p>
+<p>目前，解析器仅处理初始位置，忽略初始内部运动器速度，并将其设置为 0。处理初始速度信息要复杂得多，因为它需要在 <code>ChParserOpenSim</code> 中实现所有已知关节的速度变换 <script type="math/tex"> ^F \mathbf{H} ^M </script> 。尽管如此，我们将在未来的扩展中考虑此选项。</p>
 <h3 id="31">3.1 刚体</h3>
+<p>出于效率考虑，Chrono 中的默认物体参考系是质心参考系。因此，与 <code>ChBody</code> 关联的标记、关节、可视化资源和碰撞形状必须相对于位于物体质心的参考系进行定义。为了便于建模，Chrono 提供了一个派生类 <code>ChBodyAuxRef</code>，允许指定物体相对于任意（可能非质心）参考系。由于 Simbody 中的 <em>MobilizedBodies</em> 是相对于任意参考系定义的，因此 ChParseOpenSim 生成的所有物体都是 <code>ChBodyAuxRef</code> 类型。这消除了在解析过程中进行额外参考系变换的需要。</p>
 <h3 id="32">3.2 支持的关节类型</h3>
+<p>以下 Simbody 关节在 Chrono 中都有直接对应的关节，因此可以完全解析：</p>
+<ul>
+<li>
+<p>旋转关节（又称销轴关节）</p>
+</li>
+<li>
+<p>球形关节（又称球窝关节）</p>
+</li>
+<li>
+<p>万向节（又称卡丹关节）</p>
+</li>
+<li>
+<p>焊接关节（零自由度关节）</p>
+</li>
+</ul>
+<p>无法识别的 Simbody 关节会被替换为 Chrono 球形关节；在这种情况下，关节变换 <script type="math/tex"> ^F \mathbf{X} ^M </script> 会被正确解析和计算，因此子身体会被初始化为正确的配置。以黑盒形式外部实现的自定义 Simbody 关节也会被替换为Chrono 球形关节，并且它们的关节变换会被设置为恒等变换。</p>
 <h3 id="33">3.3 力和执行器元件</h3>
 <p>目前，<code>Simbody</code> 力元素尚未被解析和解释（例如，<code>PrescribedForce</code>、<code>SpringGeneralizedForce</code> 和 <code>BushingForce</code>）。</p>
 <p>OpenSim 还包含“理想”执行器，它们通过其最佳力设置（即增益）施加与输入控制（即激励）成正比的纯力或扭矩。这些力和扭矩可以施加在单个物体上，也可以施加在两个物体之间。<code>ChParserOpenSim</code> 目前可以解析和解释以下内容：</p>
@@ -157,7 +241,111 @@
 <li>自定义关节的移动器坐标系 (FXM(q)) 设置为恒等变换，从而产生不同的初始姿态。</li>
 </ul>
 <h2 id="4">4. 将来可能的扩展</h2>
-<h3 id="41-chparseropensim">4.1 ChParserOpenSim 文档</h3>
+<p>目前，<code>ChParseSimBody</code> 仅解释和解析 osim 文件中有效属性的一个子集。这使得可以创建等效的 Chrono 模型，这些模型由刚体（带有可选的可视化资源和碰撞形状）、一组已识别的关节（即，在 Sim-body 中有直接对应的 Chrono 关节）和简单的执行器（<code>PointActuator</code> 和 <code>TorqueActuator</code>）组成。</p>
+<p>未来可能扩展的功能包括：解析和创建标记、其他力元素（例如，广义弹簧力），以及解析和解释初始内部坐标速度。</p>
+<h3 id="41">4.1 支持肌肉模型</h3>
+<p>目前 OpenSim – Chrono 解析器的功能仅能创建和模拟人体骨骼的底层运动学模型，对驱动的支持非常有限，而且肯定不够完善。未来的扩展需要包含肌肉和肌腱的模型，这就需要实现 Chrono 目前尚不具备的功能；具体而言：</p>
+<ul>
+<li>
+<p>基于肌腱特征曲线的肌肉致动器。此类力单元既可以实现为独立的、特定领域的 C++ 类层次结构，也可以利用现有的 <code>ChLoader</code> 机制。ChLoader 机制允许在 Chrono 系统中定义可加载单元（例如，实体和/或网格）上的通用集中载荷或分布式载荷。例如，前一种方法的实现方式类似于 Chrono 中当前通用弹簧阻尼力单元的实现，例如 <code>ChLinkSpringCB</code> 类，该类允许用户通过提供的函子对象指定任意力。作为后一种方法的示例，我们提到在有限元分析网格上实现接触力（通过 ChLoadContactSurfaceMesh），或者在 Chrono::Vehicle 模型中通过基于 ChLoaderPressure 类型表面加载器的载荷实现内部轮胎压力。在这两种情况下，实现方式都可以提供基于特征曲线（主动力长度、被动力长度、力速度和肌腱力长度）的预定义 Hill 型肌肉力模型，同时还可以通过回调机制兼容用户提供的肌肉模型。</p>
+</li>
+<li>
+<p>肌腱长度和路径的几何计算。需要额外的 Chrono 支持来表征和处理与肌腱复合体末端与骨骼的连接点、肌腱路径和过道点相关的几何信息，以及肌腱长度的计算。这些功能可以作为 Chrono 几何实用程序（位于 chrono::geometry 命名空间中）的扩展来实现，并且可以选择性地包含在碰撞和接触处理中。</p>
+</li>
+</ul>
+<p>我们建议将 Chrono 的建模和仿真功能扩展到生物力学系统，并将其封装在一个可选模块中（例如 Chrono:Biomechanics）。类似于专门用于灵活快速地对地面车辆系统进行建模的 Chrono::Vehicle 模块，未来的 Chrono::Biomechanics 模块可以提供生物力学系统的模板，用于表示具有固定已知拓扑结构的参数化多体系统模型。</p>
+<h3 id="5-chparseropensim">5. ChParserOpenSim 文档</h3>
+<p>这里列出 ChParserOpenSim 类中一些比较重要的函数。更多详情请参阅 <a href="http://api.chrono.projectchrono.org/index.html">Project Chrono API 文档</a> 。</p>
+<p><br></p>
+<p>解析指定的 OpenSim 输入文件，并在给定的系统中创建模型。</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="n">chrono</span><span class="o">::</span><span class="w"> </span><span class="n">utils</span><span class="w"> </span><span class="o">::</span><span class="n">ChParserOpenSim</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span>
+<span class="w">    </span><span class="n">ChSystem</span><span class="o">&amp;</span><span class="w"> </span><span class="n">system</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">filename</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>参数：</p>
+<ul>
+<li>
+<p><strong>system</strong> : 包含 Chrono 系统</p>
+</li>
+<li>
+<p><strong>filename</strong> : osim 输入文件名</p>
+</li>
+</ul>
+<p>解析指定的 OpenSim 输入文件，并在新系统中创建模型。请注意，解析器的析构函数不会删除创建的系统；而是将所有权转移给调用者。</p>
+<div class="highlight"><pre><span></span><code><span class="n">ChSystem</span><span class="err">∗</span><span class="w"> </span><span class="n">chrono</span><span class="o">::</span><span class="n">utils</span><span class="o">::</span><span class="n">ChParserOpenSim</span><span class="o">::</span><span class="n">Parse</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">filename</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ChMaterialSurface</span><span class="o">::</span><span class="n">ContactMethod</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ChMaterialSurface</span><span class="o">::</span><span class="n">NSC</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>参数：</p>
+<ul>
+<li>
+<p><strong>filename</strong>: osim 输入文件名</p>
+</li>
+<li>
+<p><strong>method</strong>: 接触方法（非光滑、基于互补性(non-smooth, complementarity-based, NSC)的方法；光滑、基于惩罚(smooth penalty-based, SMC)的方法）</p>
+</li>
+</ul>
+<p><br></p>
+<p>启用此模型中实体间的碰撞检测（默认值：false）。设置碰撞族可以禁用实体与其父实体之间的碰撞检测。</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="n">chrono</span><span class="o">::</span><span class="w"> </span><span class="n">utils</span><span class="w"> </span><span class="o">::</span><span class="n">ChParserOpenSim</span><span class="o">::</span><span class="n">EnableCollision</span><span class="p">(</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">family_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">family_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>参数：</p>
+<ul>
+<li>
+<p><strong>family_1</strong>: 第一个碰撞族</p>
+</li>
+<li>
+<p><strong>family_1</strong>: 第二个碰撞族</p>
+</li>
+</ul>
+<p><br></p>
+<p>设置身体可视化类型。</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="n">SetVisualizationType</span><span class="p">(</span><span class="n">VisType</span><span class="w"> </span><span class="n">val</span><span class="p">)</span>
+</code></pre></div>
+<p>参数：</p>
+<ul>
+<li><strong>val</strong>: 可视化模式（默认：NONE）</li>
+</ul>
+<p>可视化模式可以是以下几种之一：</p>
+<ul>
+<li>
+<p><strong>PRIMITIVES</strong> 使用可视化图元，例如圆柱体</p>
+</li>
+<li>
+<p><strong>MESH</strong> 使用通过 Wavefront 输入文件指定的网格</p>
+</li>
+<li>
+<p><strong>NONE</strong> 不进行可视化。</p>
+</li>
+</ul>
+<p>激活执行器。默认情况下，从 osim 文件读取的任何执行器都处于非活动状态（零激励）。如果启用，所有执行器都将接收值为 1 的恒定激励函数。解析后，可以使用 <code>SetExcitation-Function()</code> 函数指定执行器的激励函数。</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="n">ActivateActuators</span><span class="w"> </span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">val</span><span class="p">)</span>
+</code></pre></div>
+<p>参数：</p>
+<ul>
+<li><strong>val</strong>: 启用/禁用自动全激活</li>
+</ul>
+<p><br></p>
+<p>为指定名称的执行器设置激励函数。此方法仅在解析 osim 文件后才能调用。</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="n">SetExcitationFunction</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ChFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">modulation</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>参数：</p>
+<ul>
+<li><strong>name</strong>: 执行器（负载）的名称</li>
+<li><strong>modulation</strong>: 用于提供激励信号的函数对象</li>
+</ul>
+<h2 id="_1">参考</h2>
+<ul>
+<li><a href="https://sbel.wiscweb.wisc.edu/wp-content/uploads/sites/569/2018/06/TR-2017-08.pdf">Chrono OpenSim 解析器手册</a> - 源于 <a href="https://sbel.wisc.edu/publications/technicalreports/">技术报告列表</a></li>
+</ul>
               
             </div>
           </div><footer>
