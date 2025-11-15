@@ -937,11 +937,11 @@ https://github.com/google-deepmind/mujoco/network/dependents?dependents_before=N
 
 [训练 Shadow Hand 机器人在 MuJoCo 模拟中操控笔](https://github.com/br23aay/shadowhand-dexterity-ppo)
 
-[使用 NeuroMechFly v2 模拟具体感觉运动控制](https://github.com/NeLy-EPFL/flygym)
+[使用 NeuroMechFly v2 模拟果蝇具体感觉运动控制](https://github.com/NeLy-EPFL/flygym) - 包括生嗅觉、腿部粘附等
 
 [通过触觉反馈遥操作系统双手机器人的几个演示来学习变量柔顺控制](https://github.com/omron-sinicx/CompACT)
 
-[通过 ROS 集成，在 MuJoCo 中对 DexRobot 手进行触觉模拟](https://github.com/DexRobot/dexrobot_mujoco)
+[通过 ROS 集成，在 MuJoCo 中对 DexRobot 手进行触觉模拟](https://github.com/DexRobot/dexrobot_mujoco) - 支持 MuJoCo 原生触摸传感器和 TaShan 11 维触觉传感器，有视频效果
 
 [一个关于连接触觉设备、VR 耳机和物理模拟以模拟可变形物体的实时触摸的研究项目](https://github.com/SkytAsul/DeformableSimulation)
 

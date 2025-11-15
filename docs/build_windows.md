@@ -444,83 +444,97 @@ where python 1>nul
 if %errorlevel% neq 0 goto error_py
 ```
 
-### 系统
-Win11专业版 [激活方法](https://www.orcy.net.cn/1802.html) 。
-
 
 ## 报错 <span id="error"></span>
+
+当执行 make 相关命令报错时，可以顺着 bat 脚本的**构建流程**，在可能报错的地方加上 `echo` 语句输出所需查看变量的值是否正确，并加上 `pause` 命令暂停执行。
+
+![](img/tuto_D_windows_debug/file_specification_build_tools.png)
+
+以下为一些常见的报错信息和解决办法：
+
+* 执行 `make PythonAPI`报错：
+    > ```text
+    > Cmake Error: The source directory "XX/Build/**-source" does not exist
+    > ```
+    > 解决：Build目录下的对应依赖的源代码不存在，可能因为网络问题没下载好，或者手动下载。保证有这个源码后然后再继续编译。
+
 * 执行`make osm2odr`报错：
-```text
-CMake Error: The source directory "D:/work/workspace/carla/Build/osm2odr-visualstudio/x64" does not appear to contain CMakeLists.txt.
-Specify --help for usage, or press the help button on the CMake GUI.
-Error: could not load cache
-```
-从其他地方把`Build\osm2odr-visualstudio\CMakeCache.txt`拷贝过来，修改里面对应的目录为当前工程的目录。
+    > ```text
+    > CMake Error: The source directory "D:/work/workspace/carla/Build/osm2odr-visualstudio/x64" does not appear to contain CMakeLists.txt.
+    > Specify --help for usage, or press the help button on the CMake GUI.
+    > Error: could not load cache
+    > ```
+    > 从其他地方把`Build\osm2odr-visualstudio\CMakeCache.txt`拷贝过来，修改里面对应的目录为当前工程的目录。
 
 ---
 
 * 执行`make PythonAPI`报错：
-```text
-libcarla.obj : error LNK2001: 无法解析的外部符号 "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl osm2odr::ConvertOSMToOpenDRIVE(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,struct osm2odr::OSM2ODRSettings)" (?ConvertOSMToOpenDRIVE@osm2odr@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@UOSM2ODRSettings@1@@Z)
-```
-从其他编译成功的地方将`PythonAPI\carla\dependencies\lib\osm2odr.lib`拷贝过来。
+    > ```text
+    > libcarla.obj : error LNK2001: 无法解析的外部符号 "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl osm2odr::ConvertOSMToOpenDRIVE(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,struct osm2odr::OSM2ODRSettings)" (?ConvertOSMToOpenDRIVE@osm2odr@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@UOSM2ODRSettings@1@@Z)
+    > ```
+    > 从其他编译成功的地方将`PythonAPI\carla\dependencies\lib\osm2odr.lib`拷贝过来。
 
 
 * 同一台机器中之前安装过vs，再安装时报错：`无法安装  Microsoft.VisualStudio.Debugger.JustInTime.Msi`
 和 `Could not open key: UNKNOWNComponents Werify that you have sufficient access to that key, or contact your support personnel.`
 
-解决：[`注册表编辑器无法在当前所选的项及其部分子项上设置安全性`](https://blog.csdn.net/hsuehgw/article/details/131000227) 。
-
-注意：使用在线安装文件`vs_community__2019.exe`进行安装，不要使用离线版的vs2019安装包，否则会出现错误：`系统错误：&H8007007E(-2147024770)。 找不到指定的模块`。
+    > 解决：[`注册表编辑器无法在当前所选的项及其部分子项上设置安全性`](https://blog.csdn.net/hsuehgw/article/details/131000227) 。
+    > 
+    > 注意：使用在线安装文件`vs_community__2019.exe`进行安装，不要使用离线版的vs2019安装包，否则会出现错误：`系统错误：&H8007007E(-2147024770)。 找不到指定的模块`。
 
 
 * 执行`make launch`时报错`D:/work/workspace/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Server/CarlaServer.cpp(46): fatal error C1083: 无法打开包括文件: “carla/rpc/BoundingBox.h”: No such file or directory`
 
-换了vs环境，需要重新删除`Build/libcarla-visualstudio`，删除之前的 cmake 结果目录并再次运行 make launch(cmake) 后问题就消失了。
+    > 换了vs环境，需要重新删除`Build/libcarla-visualstudio`，删除之前的 cmake 结果目录并再次运行 make launch(cmake) 后问题就消失了。
 
 * 或者`D:\work\workspace\carla\Build\osm2odr-source\src\utils/geom/GeoConvHelper.h(31,10): fatal error C1083: 无法打开包括文件: “proj_api.h”: No such file or directory`
 
-目录`Build/proj-install`没有生成，尝试从其他电脑中拷贝过来。
+    > 目录`Build/proj-install`没有生成，尝试从其他电脑中拷贝过来。
 
 
 * 执行`make PythonAPI`提示成功，但是没生成dist文件夹，前面报错：`C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xtree(885) : fatal error C1128: 节数超过对象文件格式限制: 请使用 /bigobj 进行编译`
 
-原因：文件`PythonAPI/carla/setup.cfg`中配置了调试选项。
-解决：将`debug = 1`改为`debug = 0`。
+    >**原因**：文件`PythonAPI/carla/setup.cfg`中配置了调试选项。
+    >
+    >**解决**：将`debug = 1`改为`debug = 0`。
 
 
 * 执行`make PythonAPI` 报错：`libboost_filesystem-vc142-mt-gd-x64-1_80.lib(path_traits.obj) : error LNK2038: 检测到“_ITERATOR_DEBUG_LEVEL”的不匹配项: 值“2”不匹配值“0”(libcarla.obj 中)`
 
-原因：链接的是libboost库的调式版本。
-解决：将`PythonAPI\carla\dependencies\lib`目录下`libboost-*`开头的文件中，包含`*-gd-*`的文件（调试版本）移除，则可编译通过。
+    > **原因**：链接的是libboost库的调式版本。
+    >
+    > **解决**：将`PythonAPI\carla\dependencies\lib`目录下`libboost-*`开头的文件中，包含`*-gd-*`的文件（调试版本）移除，则可编译通过。
 
 * 使用`make Python`编译 Carla 0.9.13 时报错：`osm2odr.lib(GeoConvHelper.obj) : error LNK2001: 无法解析的外部符号 proj_create`：
 
-删除位于Build目录下的proj源代码和安装目录，然后运行下面命令（参数改为对应的Build目录）：
-```shell
-install_proj.bat --build-dir D:\work\DReyeVR\carla\Build
-```
-如果还报错sqlite的错误，需要把`sqlite3-install`和`sqlite3-src`删除后重新编译。
+    > 删除位于Build目录下的proj源代码和安装目录，然后运行下面命令（参数改为对应的Build目录）：
+    > ```shell
+    > install_proj.bat --build-dir D:\work\DReyeVR\carla\Build
+    > ```
+    > 如果还报错sqlite的错误，需要把`sqlite3-install`和`sqlite3-src`删除后重新编译。
 
 
 * 执行`make launch-only`报错：`The following modules are missing or built with a different version`
-> 右键 .uproject 文件生成vs 工程，然后使用vs打开，构建项目（点击菜单中的`生成`->`生成解决方案`）。
-> 注：执行`make clean`后然后执行`make launch-only`后会出现这种情况。
+    > 右键 .uproject 文件生成vs 工程，然后使用vs打开，构建项目（点击菜单中的`生成`->`生成解决方案`）。
+    > 注：执行`make clean`后然后执行`make launch-only`后会出现这种情况。
 
 
 ---
 
 ## 参考
 
-[持续集成](./dev/cicd.md)
+* [持续集成](./dev/cicd.md)
 
-[构建系统](./build_tools.md)
+* [构建系统](./build_tools.md)
 
-[bat脚本说明](dev/bat.md)
+* [bat脚本说明](dev/bat.md)
 
-[Windows平台下的依赖安装脚本](./build/installers_win.md)
+* [Windows平台下的依赖安装脚本](./build/installers_win.md)
 
-[车载HUD设计与验证平台文档](https://github.com/ZhilingResearch/Libra) ：[文档](https://g06o7xylva3.feishu.cn/docx/M4dQdH8saoenDTx1w4Ac07i0nNe) 包括：当前驾驶车辆工况、导航路径引导、提示周围环境信息、接管提升和辅助、个性化娱乐功能。。
+* Win11专业版 [激活方法](https://www.orcy.net.cn/1802.html) 。
+
+* [车载HUD设计与验证平台文档](https://github.com/ZhilingResearch/Libra) ：[文档](https://g06o7xylva3.feishu.cn/docx/M4dQdH8saoenDTx1w4Ac07i0nNe) 包括：当前驾驶车辆工况、导航路径引导、提示周围环境信息、接管提升和辅助、个性化娱乐功能。。
 
 ---
 

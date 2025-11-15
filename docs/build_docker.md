@@ -140,4 +140,29 @@ _这些说明已在 **Ubuntu 24.04** 中测试过。_
 
 - [CARLA Docker 开发环境 (Ubuntu 22.04)](build/build_docker_ubuntu22.md)
 
+
+## 拉取国内镜像
+```shell
+docker pull registry.cn-beijing.aliyuncs.com/synkrotron/carla:0.9.16
+# 查看已经拉取成功的镜像信息
+sudo docker images
+# 根据镜像创建容器
+# your_container_name 替换为自定义名，比如 hutb_2.9.16_test
+# YOUR_IMAGE_ID 替换为 docker immages 中的输出字段 IMAGE ID
+docker run --privileged --name {your_container_name} --gpus all --net host -e DISPLAY=$DISPLAY -e SDL_VIDEODRIVER=x11 -it {YOUR_IMAGE_ID} /bin/bash
+docker run --privileged --name hutb_2.9.16_test --gpus all --net host -e DISPLAY=$DISPLAY -e SDL_VIDEODRIVER=x11 -it a77a7620cf26 /bin/bash
+# 在容器中启动CARLA的服务端程序
+./CarlaUE4.sh
+# 在主机中运行 CARLA 的客户端程序
+# conda create -n hutb_dev python=3.8 -y
+# conda activate hutb_dev
+python automatic_control.py
+```
+
+
 ---
+
+## 参考
+
+* [Docker 版 CARLA 快速部署指南（附阿里云稳定镜像）](https://mp.weixin.qq.com/s/3JbsnfW4KSrJTfPskGQ58w)
+

@@ -227,9 +227,21 @@ Corlib not in sync with this runtime: expected corlib version 149, found 1051600
 ```shell
 chmod +x Setup.sh
 chmod +x Engine/Build/BatchFiles/Linux/GitDependencies.sh
-sudo apt-get install mono-complete
-git clone https://github.com/OpenHUTB/engine.git ~/UnrealEngine_4.26
 ```
+
+```shell
+Engine/Build/BatchFiles/Linux/GitDependencies.sh: 行 25: /newhome/humanoid02/UnrealEngine_4.26/Engine/Build/BatchFiles/Linux/../../../Binaries/ThirdParty/Mono/Linux/bin/mono: 权限不够
+Result: 126
+```
+解决：`sudo apt-get install mono-complete`
+
+
+```shell
+Corlib not in sync with this runtime: expected corlib string (ABB721D6-116A-4555-B4FD-9248146D2051) but not found or not string
+```
+
+解决：
+
 
 __4.__ 打开编辑器检查虚幻引擎是否已正确安装。
 ```sh
