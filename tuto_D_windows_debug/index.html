@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>在 Windows 上进行 Carla 的调试 - 人车模拟</title>
+    <title>在 Windows 上进行模拟器的调试 - 人车模拟</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "\u5728 Windows \u4e0a\u8fdb\u884c Carla \u7684\u8c03\u8bd5";
+        var mkdocs_page_name = "\u5728 Windows \u4e0a\u8fdb\u884c\u6a21\u62df\u5668\u7684\u8c03\u8bd5";
         var mkdocs_page_input_path = "tuto_D_windows_debug.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">在 Windows 上进行 Carla 的调试</li>
+      <li class="breadcrumb-item active">在 Windows 上进行模拟器的调试</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/tuto_D_windows_debug.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,7 +68,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="windows-carla">在 Windows 上进行 Carla 的调试</h1>
+                <h1 id="windows">在 Windows 上进行模拟器的调试</h1>
 <ul>
 <li><a href="#debug_CarlaUE4"><strong>虚幻引擎Carla插件的调试</strong></a></li>
 <li><a href="#cpp_client_debug"><strong>C++客户端调试</strong></a></li>
@@ -92,7 +92,7 @@
 </ul>
 </li>
 </ul>
-<p>程序调用流程：Python、libcarla.cp37-win_amd64.pyd、LibCarla、CarlaUE4。</p>
+<p><img alt="CARLA Modules" src="../img/build_modules.jpg" /></p>
 <h2 id="carla">虚幻引擎Carla插件的调试 <span id="debug_CarlaUE4"></span></h2>
 <ol>
 <li>进入目录<code>carla/Unreal/CarlaUE4/</code>，右键文件<code>CarlaUE4.uproject</code>，选择运行<code>Generate Visual Studio project files</code>，在当前目录中将会生成VS的工程文件，双击打开<code>CarlaUE4.sln</code>。</li>
