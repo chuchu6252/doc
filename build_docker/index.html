@@ -169,7 +169,27 @@ HUTB 论坛</a>
 <ul>
 <li><a href="../build/build_docker_ubuntu22/">CARLA Docker 开发环境 (Ubuntu 22.04)</a></li>
 </ul>
+<h2 id="_3">拉取国内镜像</h2>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>pull<span class="w"> </span>registry.cn-beijing.aliyuncs.com/synkrotron/carla:0.9.16
+<span class="c1"># 查看已经拉取成功的镜像信息</span>
+sudo<span class="w"> </span>docker<span class="w"> </span>images
+<span class="c1"># 根据镜像创建容器</span>
+<span class="c1"># your_container_name 替换为自定义名，比如 hutb_2.9.16_test</span>
+<span class="c1"># YOUR_IMAGE_ID 替换为 docker immages 中的输出字段 IMAGE ID</span>
+docker<span class="w"> </span>run<span class="w"> </span>--privileged<span class="w"> </span>--name<span class="w"> </span><span class="o">{</span>your_container_name<span class="o">}</span><span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--net<span class="w"> </span>host<span class="w"> </span>-e<span class="w"> </span><span class="nv">DISPLAY</span><span class="o">=</span><span class="nv">$DISPLAY</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SDL_VIDEODRIVER</span><span class="o">=</span>x11<span class="w"> </span>-it<span class="w"> </span><span class="o">{</span>YOUR_IMAGE_ID<span class="o">}</span><span class="w"> </span>/bin/bash
+docker<span class="w"> </span>run<span class="w"> </span>--privileged<span class="w"> </span>--name<span class="w"> </span>hutb_2.9.16_test<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--net<span class="w"> </span>host<span class="w"> </span>-e<span class="w"> </span><span class="nv">DISPLAY</span><span class="o">=</span><span class="nv">$DISPLAY</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">SDL_VIDEODRIVER</span><span class="o">=</span>x11<span class="w"> </span>-it<span class="w"> </span>a77a7620cf26<span class="w"> </span>/bin/bash
+<span class="c1"># 在容器中启动CARLA的服务端程序</span>
+./CarlaUE4.sh
+<span class="c1"># 在主机中运行 CARLA 的客户端程序</span>
+<span class="c1"># conda create -n hutb_dev python=3.8 -y</span>
+<span class="c1"># conda activate hutb_dev</span>
+python<span class="w"> </span>automatic_control.py
+</code></pre></div>
 <hr />
+<h2 id="_4">参考</h2>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/3JbsnfW4KSrJTfPskGQ58w">Docker 版 CARLA 快速部署指南（附阿里云稳定镜像）</a></li>
+</ul>
               
             </div>
           </div><footer>

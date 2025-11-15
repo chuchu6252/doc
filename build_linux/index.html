@@ -256,9 +256,14 @@ Corlib not in sync with this runtime: expected corlib version 149, found 1051600
 </code></pre></div></p>
 <div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>Setup.sh
 chmod<span class="w"> </span>+x<span class="w"> </span>Engine/Build/BatchFiles/Linux/GitDependencies.sh
-sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>mono-complete
-git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenHUTB/engine.git<span class="w"> </span>~/UnrealEngine_4.26
 </code></pre></div>
+<p><div class="highlight"><pre><span></span><code>Engine/Build/BatchFiles/Linux/GitDependencies.sh:<span class="w"> </span>行<span class="w"> </span><span class="m">25</span>:<span class="w"> </span>/newhome/humanoid02/UnrealEngine_4.26/Engine/Build/BatchFiles/Linux/../../../Binaries/ThirdParty/Mono/Linux/bin/mono:<span class="w"> </span>权限不够
+Result:<span class="w"> </span><span class="m">126</span>
+</code></pre></div>
+解决：<code>sudo apt-get install mono-complete</code></p>
+<div class="highlight"><pre><span></span><code>Corlib<span class="w"> </span>not<span class="w"> </span><span class="k">in</span><span class="w"> </span>sync<span class="w"> </span>with<span class="w"> </span>this<span class="w"> </span>runtime:<span class="w"> </span>expected<span class="w"> </span>corlib<span class="w"> </span>string<span class="w"> </span><span class="o">(</span>ABB721D6-116A-4555-B4FD-9248146D2051<span class="o">)</span><span class="w"> </span>but<span class="w"> </span>not<span class="w"> </span>found<span class="w"> </span>or<span class="w"> </span>not<span class="w"> </span>string
+</code></pre></div>
+<p>解决：</p>
 <p><strong>4.</strong> 打开编辑器检查虚幻引擎是否已正确安装。
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/UnrealEngine_4.26/Engine/Binaries/Linux<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./UE4Editor
 </code></pre></div></p>

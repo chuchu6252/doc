@@ -473,71 +473,105 @@ make: *** [Util/BuildTools/Windows.mk:62: PythonAPI] Error 1
 where<span class="w"> </span>python<span class="w"> </span><span class="m">1</span>&gt;nul
 <span class="k">if</span><span class="w"> </span>%errorlevel%<span class="w"> </span>neq<span class="w"> </span><span class="m">0</span><span class="w"> </span>goto<span class="w"> </span>error_py
 </code></pre></div></p>
-<h3 id="_9">系统</h3>
-<p>Win11专业版 <a href="https://www.orcy.net.cn/1802.html">激活方法</a> 。</p>
-<h2 id="_10">报错 <span id="error"></span></h2>
+<h2 id="_9">报错 <span id="error"></span></h2>
+<p>当执行 make 相关命令报错时，可以顺着 bat 脚本的<strong>构建流程</strong>，在可能报错的地方加上 <code>echo</code> 语句输出所需查看变量的值是否正确，并加上 <code>pause</code> 命令暂停执行。</p>
+<p><img alt="" src="../img/tuto_D_windows_debug/file_specification_build_tools.png" /></p>
+<p>以下为一些常见的报错信息和解决办法：</p>
 <ul>
-<li>执行<code>make osm2odr</code>报错：
-<div class="highlight"><pre><span></span><code>CMake Error: The source directory &quot;D:/work/workspace/carla/Build/osm2odr-visualstudio/x64&quot; does not appear to contain CMakeLists.txt.
+<li>
+<p>执行 <code>make PythonAPI</code>报错：
+    &gt; <div class="highlight"><pre><span></span><code>Cmake Error: The source directory &quot;XX/Build/**-source&quot; does not exist
+</code></pre></div>
+    &gt; 解决：Build目录下的对应依赖的源代码不存在，可能因为网络问题没下载好，或者手动下载。保证有这个源码后然后再继续编译。</p>
+</li>
+<li>
+<p>执行<code>make osm2odr</code>报错：
+    &gt; <div class="highlight"><pre><span></span><code>CMake Error: The source directory &quot;D:/work/workspace/carla/Build/osm2odr-visualstudio/x64&quot; does not appear to contain CMakeLists.txt.
 Specify --help for usage, or press the help button on the CMake GUI.
 Error: could not load cache
 </code></pre></div>
-从其他地方把<code>Build\osm2odr-visualstudio\CMakeCache.txt</code>拷贝过来，修改里面对应的目录为当前工程的目录。</li>
+    &gt; 从其他地方把<code>Build\osm2odr-visualstudio\CMakeCache.txt</code>拷贝过来，修改里面对应的目录为当前工程的目录。</p>
+</li>
 </ul>
 <hr />
 <ul>
 <li>
 <p>执行<code>make PythonAPI</code>报错：
-<div class="highlight"><pre><span></span><code>libcarla.obj : error LNK2001: 无法解析的外部符号 &quot;class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; __cdecl osm2odr::ConvertOSMToOpenDRIVE(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt;,struct osm2odr::OSM2ODRSettings)&quot; (?ConvertOSMToOpenDRIVE@osm2odr@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@UOSM2ODRSettings@1@@Z)
+    &gt; <div class="highlight"><pre><span></span><code>libcarla.obj : error LNK2001: 无法解析的外部符号 &quot;class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; __cdecl osm2odr::ConvertOSMToOpenDRIVE(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt;,struct osm2odr::OSM2ODRSettings)&quot; (?ConvertOSMToOpenDRIVE@osm2odr@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V23@UOSM2ODRSettings@1@@Z)
 </code></pre></div>
-从其他编译成功的地方将<code>PythonAPI\carla\dependencies\lib\osm2odr.lib</code>拷贝过来。</p>
+    &gt; 从其他编译成功的地方将<code>PythonAPI\carla\dependencies\lib\osm2odr.lib</code>拷贝过来。</p>
 </li>
 <li>
 <p>同一台机器中之前安装过vs，再安装时报错：<code>无法安装  Microsoft.VisualStudio.Debugger.JustInTime.Msi</code>
 和 <code>Could not open key: UNKNOWNComponents Werify that you have sufficient access to that key, or contact your support personnel.</code></p>
-</li>
-</ul>
+<blockquote>
 <p>解决：<a href="https://blog.csdn.net/hsuehgw/article/details/131000227"><code>注册表编辑器无法在当前所选的项及其部分子项上设置安全性</code></a> 。</p>
 <p>注意：使用在线安装文件<code>vs_community__2019.exe</code>进行安装，不要使用离线版的vs2019安装包，否则会出现错误：<code>系统错误：&amp;H8007007E(-2147024770)。 找不到指定的模块</code>。</p>
-<ul>
-<li>执行<code>make launch</code>时报错<code>D:/work/workspace/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Server/CarlaServer.cpp(46): fatal error C1083: 无法打开包括文件: “carla/rpc/BoundingBox.h”: No such file or directory</code></li>
-</ul>
+</blockquote>
+</li>
+<li>
+<p>执行<code>make launch</code>时报错<code>D:/work/workspace/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Server/CarlaServer.cpp(46): fatal error C1083: 无法打开包括文件: “carla/rpc/BoundingBox.h”: No such file or directory</code></p>
+<blockquote>
 <p>换了vs环境，需要重新删除<code>Build/libcarla-visualstudio</code>，删除之前的 cmake 结果目录并再次运行 make launch(cmake) 后问题就消失了。</p>
-<ul>
-<li>或者<code>D:\work\workspace\carla\Build\osm2odr-source\src\utils/geom/GeoConvHelper.h(31,10): fatal error C1083: 无法打开包括文件: “proj_api.h”: No such file or directory</code></li>
-</ul>
+</blockquote>
+</li>
+<li>
+<p>或者<code>D:\work\workspace\carla\Build\osm2odr-source\src\utils/geom/GeoConvHelper.h(31,10): fatal error C1083: 无法打开包括文件: “proj_api.h”: No such file or directory</code></p>
+<blockquote>
 <p>目录<code>Build/proj-install</code>没有生成，尝试从其他电脑中拷贝过来。</p>
-<ul>
-<li>执行<code>make PythonAPI</code>提示成功，但是没生成dist文件夹，前面报错：<code>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xtree(885) : fatal error C1128: 节数超过对象文件格式限制: 请使用 /bigobj 进行编译</code></li>
-</ul>
-<p>原因：文件<code>PythonAPI/carla/setup.cfg</code>中配置了调试选项。
-解决：将<code>debug = 1</code>改为<code>debug = 0</code>。</p>
-<ul>
-<li>执行<code>make PythonAPI</code> 报错：<code>libboost_filesystem-vc142-mt-gd-x64-1_80.lib(path_traits.obj) : error LNK2038: 检测到“_ITERATOR_DEBUG_LEVEL”的不匹配项: 值“2”不匹配值“0”(libcarla.obj 中)</code></li>
-</ul>
-<p>原因：链接的是libboost库的调式版本。
-解决：将<code>PythonAPI\carla\dependencies\lib</code>目录下<code>libboost-*</code>开头的文件中，包含<code>*-gd-*</code>的文件（调试版本）移除，则可编译通过。</p>
-<ul>
-<li>使用<code>make Python</code>编译 Carla 0.9.13 时报错：<code>osm2odr.lib(GeoConvHelper.obj) : error LNK2001: 无法解析的外部符号 proj_create</code>：</li>
-</ul>
+</blockquote>
+</li>
+<li>
+<p>执行<code>make PythonAPI</code>提示成功，但是没生成dist文件夹，前面报错：<code>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xtree(885) : fatal error C1128: 节数超过对象文件格式限制: 请使用 /bigobj 进行编译</code></p>
+<blockquote>
+<p><strong>原因</strong>：文件<code>PythonAPI/carla/setup.cfg</code>中配置了调试选项。</p>
+<p><strong>解决</strong>：将<code>debug = 1</code>改为<code>debug = 0</code>。</p>
+</blockquote>
+</li>
+<li>
+<p>执行<code>make PythonAPI</code> 报错：<code>libboost_filesystem-vc142-mt-gd-x64-1_80.lib(path_traits.obj) : error LNK2038: 检测到“_ITERATOR_DEBUG_LEVEL”的不匹配项: 值“2”不匹配值“0”(libcarla.obj 中)</code></p>
+<blockquote>
+<p><strong>原因</strong>：链接的是libboost库的调式版本。</p>
+<p><strong>解决</strong>：将<code>PythonAPI\carla\dependencies\lib</code>目录下<code>libboost-*</code>开头的文件中，包含<code>*-gd-*</code>的文件（调试版本）移除，则可编译通过。</p>
+</blockquote>
+</li>
+<li>
+<p>使用<code>make Python</code>编译 Carla 0.9.13 时报错：<code>osm2odr.lib(GeoConvHelper.obj) : error LNK2001: 无法解析的外部符号 proj_create</code>：</p>
+<blockquote>
 <p>删除位于Build目录下的proj源代码和安装目录，然后运行下面命令（参数改为对应的Build目录）：
 <div class="highlight"><pre><span></span><code>install_proj.bat<span class="w"> </span>--build-dir<span class="w"> </span>D:<span class="se">\w</span>ork<span class="se">\D</span>ReyeVR<span class="se">\c</span>arla<span class="se">\B</span>uild
 </code></pre></div>
 如果还报错sqlite的错误，需要把<code>sqlite3-install</code>和<code>sqlite3-src</code>删除后重新编译。</p>
-<ul>
-<li>执行<code>make launch-only</code>报错：<code>The following modules are missing or built with a different version</code><blockquote>
-<p>右键 .uproject 文件生成vs 工程，然后使用vs打开，构建项目（点击菜单中的<code>生成</code>-&gt;<code>生成解决方案</code>）。
-注：执行<code>make clean</code>后然后执行<code>make launch-only</code>后会出现这种情况。</p>
 </blockquote>
+</li>
+<li>
+<p>执行<code>make launch-only</code>报错：<code>The following modules are missing or built with a different version</code>
+    &gt; 右键 .uproject 文件生成vs 工程，然后使用vs打开，构建项目（点击菜单中的<code>生成</code>-&gt;<code>生成解决方案</code>）。
+    &gt; 注：执行<code>make clean</code>后然后执行<code>make launch-only</code>后会出现这种情况。</p>
 </li>
 </ul>
 <hr />
-<h2 id="_11">参考</h2>
+<h2 id="_10">参考</h2>
+<ul>
+<li>
 <p><a href="../dev/cicd/">持续集成</a></p>
+</li>
+<li>
 <p><a href="../build_tools/">构建系统</a></p>
+</li>
+<li>
 <p><a href="../dev/bat/">bat脚本说明</a></p>
+</li>
+<li>
 <p><a href="../build/installers_win/">Windows平台下的依赖安装脚本</a></p>
+</li>
+<li>
+<p>Win11专业版 <a href="https://www.orcy.net.cn/1802.html">激活方法</a> 。</p>
+</li>
+<li>
 <p><a href="https://github.com/ZhilingResearch/Libra">车载HUD设计与验证平台文档</a> ：<a href="https://g06o7xylva3.feishu.cn/docx/M4dQdH8saoenDTx1w4Ac07i0nNe">文档</a> 包括：当前驾驶车辆工况、导航路径引导、提示周围环境信息、接管提升和辅助、个性化娱乐功能。。</p>
+</li>
+</ul>
 <hr />
 <p>有关本指南的任何问题， 请阅读 <strong><a href="../build_faq/">常见问题解答</a></strong> 页面或在 <a href="https://github.com/OpenHUTB/hutb/discussions">OpenHUTB 论坛</a> 中发帖。</p>
 <p>现在您已经构建了 HUTB，接下来了解如何更新 HUTB 构建或在模拟中迈出第一步，并学习一些核心概念。</p>
