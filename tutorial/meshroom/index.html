@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>3D 重建入门教程（基于 Meshroom）（英才广场爱因斯坦像） - 人车模拟</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "3D \u91cd\u5efa\u5165\u95e8\u6559\u7a0b\uff08\u57fa\u4e8e Meshroom\uff09\uff08\u82f1\u624d\u5e7f\u573a\u7231\u56e0\u65af\u5766\u50cf\uff09";
+        var mkdocs_page_input_path = "tutorial/meshroom.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">3D 重建入门教程（基于 Meshroom）（英才广场爱因斯坦像）</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/tutorial/meshroom.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="3d-meshroom">3D 重建入门教程（基于 Meshroom）（英才广场爱因斯坦像）</h1>
+<p><strong>作者：</strong> 夏庆森<br />
+<strong>环境：</strong> Windows 11 + NVIDIA RTX 4090 + Meshroom 2023.3.0<br />
+<strong>拍摄设备：</strong> iPhone 14 Pro Max（约 60 张照片）<br />
+<strong>适用对象：</strong> 初学者，研究性学习、重建实验记录</p>
+<hr />
+<h2 id="_1">一、实验环境配置</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>版本 / 说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统</td>
+<td>Windows 11 23H2 (Build 22631.6060)</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>NVIDIA GeForce RTX 4090 Laptop GPU</td>
+</tr>
+<tr>
+<td>驱动版本</td>
+<td>560.78</td>
+</tr>
+<tr>
+<td>CUDA 版本</td>
+<td>12.6</td>
+</tr>
+<tr>
+<td>软件</td>
+<td>Meshroom 2023.3.0</td>
+</tr>
+<tr>
+<td>Python 环境</td>
+<td>内置 3.7.4（仅部分插件使用）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>建议：</strong></p>
+<ul>
+<li>显卡驱动需与 CUDA 兼容  </li>
+<li>安装 Visual C++ Redistributable  </li>
+<li>保证 D:\ 或 C:\ 盘有 ≥ 20GB 空间  </li>
+</ul>
+<hr />
+<h2 id="_2">二、数据采集与拍摄注意事项</h2>
+<h3 id="1">1️⃣ 拍摄设备与模式</h3>
+<ul>
+<li>使用防抖、固定焦距设备  </li>
+<li>若使用手机，开启“专业模式”，固定焦距、ISO、快门  </li>
+<li>保存 <code>.JPG + .DNG（RAW）</code> 双格式更佳  </li>
+</ul>
+<h3 id="2">2️⃣ 拍摄参数一致性</h3>
+<ul>
+<li>固定焦段（26mm–28mm 等效焦距）  </li>
+<li>白平衡固定  </li>
+<li>不混用不同镜头焦段  </li>
+</ul>
+<h3 id="3">3️⃣ 拍摄数量与角度布局</h3>
+<ul>
+<li>建议 ≥ 60 张照片  </li>
+<li>相邻重叠度 ≥ 70%  </li>
+<li>拍摄两圈（水平 + 俯视或仰视）  </li>
+</ul>
+<h3 id="4">4️⃣ 文件整理</h3>
+<ul>
+<li>将所有照片放入 <code>images/</code> 文件夹  </li>
+<li>文件名用英文和数字，避免中文空格  </li>
+</ul>
+<hr />
+<h2 id="meshroom">三、Meshroom 模块与参数说明</h2>
+<h3 id="1-camerainit">1️⃣ CameraInit</h3>
+<ul>
+<li>读取相机参数  </li>
+<li>手机拍摄需确保 EXIF 正确  </li>
+<li>若 Sensor Width 缺失，需手动设置  </li>
+</ul>
+<h3 id="2-featureextraction">2️⃣ FeatureExtraction</h3>
+<ul>
+<li>提取特征点（SIFT）  </li>
+<li>推荐设置：</li>
+<li>Describer Preset: High  </li>
+<li>Max Nb Features: 8000–10000  </li>
+<li>Image Downscale: 1  </li>
+</ul>
+<h3 id="3-imagematching">3️⃣ ImageMatching</h3>
+<ul>
+<li>生成候选图像对  </li>
+<li>参数：</li>
+<li>Geometric Model: Similarity  </li>
+<li>Distance Ratio: 0.8  </li>
+<li>Max Residual Error: 4.0  </li>
+</ul>
+<h3 id="4-featurematching">4️⃣ FeatureMatching</h3>
+<ul>
+<li>匹配特征点  </li>
+<li>可启用 GPU  </li>
+<li>若匹配稀疏，调高 Match Nearest Neighbor Ratio  </li>
+</ul>
+<h3 id="5-structurefrommotion-sfm">5️⃣ StructureFromMotion (SfM)</h3>
+<ul>
+<li>计算相机位姿与稀疏点云  </li>
+<li>参数：</li>
+<li>Describer Types: SIFT  </li>
+<li>Min Observation: 3  </li>
+<li>输出文件：<code>sfm.abc</code>  </li>
+</ul>
+<h3 id="6-preparedensescene">6️⃣ PrepareDenseScene</h3>
+<ul>
+<li>准备稠密点云输入  </li>
+<li>默认即可  </li>
+</ul>
+<h3 id="7-depthmap">7️⃣ DepthMap</h3>
+<ul>
+<li>生成深度图  </li>
+<li>参数：</li>
+<li>Downscale: 2  </li>
+<li>Min Consistent Views: 3  </li>
+<li>使用 GPU  </li>
+</ul>
+<h3 id="8-depthmapfilter">8️⃣ DepthMapFilter</h3>
+<ul>
+<li>滤除噪声  </li>
+<li>参数：</li>
+<li>Sigma: 1.5  </li>
+<li>Nviews: 4  </li>
+</ul>
+<h3 id="9-meshing">9️⃣ Meshing</h3>
+<ul>
+<li>稠密点云 → 三角网格  </li>
+<li>参数：</li>
+<li>Max Input Points: 15,000,000  </li>
+<li>Meshing Method: Multi-View  </li>
+<li>输出 <code>.obj</code>  </li>
+</ul>
+<h3 id="meshfiltering">🔟 MeshFiltering</h3>
+<ul>
+<li>平滑网格  </li>
+<li>Smoothing Iterations: 3–5  </li>
+<li>可启用 Decimation 减小模型  </li>
+</ul>
+<h3 id="texturing">🧩 Texturing</h3>
+<ul>
+<li>生成纹理  </li>
+<li>参数：</li>
+<li>Texture Side: 4096  </li>
+<li>Unwrap Method: Basic  </li>
+<li>输出 <code>.obj + .mtl + .png</code>  </li>
+</ul>
+<hr />
+<h2 id="_3">四、常见问题与优化建议</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决办法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无法读取相机参数</td>
+<td>手动设置 Sensor Width</td>
+</tr>
+<tr>
+<td>特征匹配稀疏</td>
+<td>提高 Describer Preset</td>
+</tr>
+<tr>
+<td>模型噪声多</td>
+<td>调高 DepthMapFilter Sigma</td>
+</tr>
+<tr>
+<td>纹理模糊</td>
+<td>提升 Texture Side 或使用 RAW 图像</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">五、工程文件与成果组织建议</h2>
+<ul>
+<li>Meshroom_Project/</li>
+<li>images/             # 原始照片</li>
+<li>MeshroomCache/      # 中间结果</li>
+<li>3D_Model/           # 输出结果<ul>
+<li>texturedMesh.obj</li>
+<li>texturedMesh.mtl</li>
+<li>texturedMesh.png</li>
+</ul>
+</li>
+<li>project.mg          # 工程文件</li>
+<li>README.md           # 项目说明</li>
+</ul>
+<p><strong>.obj 文件可用软件：</strong><br />
+- MeshLab<br />
+- Blender<br />
+- Windows 3D 查看器  </p>
+<p>```markdown
+<img alt="重建结果" src="..\doc\docs\img\model_preview.png" />
+-<a href="https://pan.quark.cn/s/9d989d5757d9">下载 3D 模型</a></p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../../js/umlconvert.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
