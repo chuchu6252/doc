@@ -3478,7 +3478,7 @@ X-轴旋转角度。  </li>
 </ul>
 </li>
 <li><a name="carla.TrafficManager.set_hybrid_physics_mode"></a><strong><font color="#7fb800">set_hybrid_physics_mode</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>enabled</strong>=False</font>)<br />
-启用或禁用混合物理模式。在此模式下，距离自身车辆超过一定半径的车辆将禁用其物理功能。通过不计算车辆动力学将降低计算成本。车辆将被传送。<ul>
+启用或禁用混合物理模式。在此模式下，距离自身车辆超过一定半径的车辆将禁用其物理功能。通过不计算车辆动力学将降低计算成本。车辆将被传送（场景中部分车辆的速度拿不到）。<ul>
 <li><strong>参数:</strong><ul>
 <li><code>enabled</code> (<em>bool</em>) - 如果为 <strong>True</strong> ，则启用混合物理。</li>
 </ul>
