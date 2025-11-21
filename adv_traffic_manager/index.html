@@ -177,7 +177,7 @@
 <li>将计算分成一系列的<a href="#stages-of-the-control-loop">阶段</a>。</li>
 <li>在阶段之间创建同步墙以保证一致性。所有车辆的计算在任何车辆移动到下一阶段之前完成，确保所有车辆在同一帧中更新。</li>
 <li>协调各<a href="#stages-of-the-control-loop">阶段</a>之间的过渡，使所有计算同步完成。</li>
-<li>当最后一个阶段（<a href="#stage-4-motion-planner-stage">运动规划阶段</a> 和<a href="#stage-5-vehicle-lights-stage">车辆灯光阶段</a>**)完成时，将<a href="#command-array">命令数组</a>发送到服务器，因此在命令计算和命令应用之间没有帧延迟。</li>
+<li>当最后一个阶段（<a href="#stage-4-motion-planner-stage">运动规划阶段</a> 和 <a href="#stage-5-vehicle-lights-stage">车辆灯光阶段</a> )完成时，将<a href="#command-array">命令数组</a>发送到服务器，因此在命令计算和命令应用之间没有帧延迟。</li>
 </ul>
 <p>相关的 C++ 文件: <a href="https://github.com/OpenHUTB/carla/blob/ue4-dev/LibCarla/source/carla/trafficmanager/TrafficManagerLocal.cpp"><code>TrafficManagerLocal.cpp</code></a> 。</p>
 <h3 id="_11">内存地图 <span id="in-memory-map"></span></h3>
