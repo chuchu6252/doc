@@ -77,7 +77,7 @@
 <li><a href="#blueprint"><strong>蓝图</strong></a></li>
 <li><a href="#program"><strong>编程</strong></a></li>
 <li><a href="#misc"><strong>杂项</strong></a></li>
-<li><a href="#src_analysis"><strong>杂项</strong></a></li>
+<li><a href="#src_analysis"><strong>源代码分析</strong></a></li>
 <li><a href="#other"><strong>其他</strong></a></li>
 <li><a href="#speed_up"><strong>加速</strong></a></li>
 <li><a href="#plugin"><strong>插件</strong></a></li>
@@ -264,7 +264,9 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
 <p>在自动测试时，需要在<code>CarlaUE4.exe</code>后面添加一些参数，操作步骤如下：</p>
 <p>1.在编辑器的菜单中：编辑(Edit) -&gt; 编辑器偏好设置(Editor Preferences) -&gt; 播放(Play) -&gt; 在独立进程游戏中运行(Play in Standalone game)，有一个文本框<code>附加启动参数</code>，可以在这里添加启动所需的参数（比如：<code>--carla-rpc-port=3654 --carla-streaming-port=0 -nosound</code>）</p>
 <p>2.点<code>运行</code>中的三角下拉菜单中的<code>独立进程游戏</code>启动场景（直接点运行附带的参数不生效）</p>
-<h2 id="_15">参考链接 <span id="ref_link"></span></h2>
+<h6 id="_15">有风时叶子闪烁</h6>
+<p>编辑<code>Content/Carla/Static/Vegetation/Trees/Materials/FanPalm/MexicanFanPalm_Main_Leaf</code>（对所有树都有效），并进入<code>MF_SimpleGrassWind</code>，将<code>VisualTime</code>和<code>Input WindSpeed (Scalar)</code>后的第二个 <code>Multiply</code>中B的输入由<code>-0.5</code>改为<code>-1</code>（使其可抖动的范围更大，避免闪烁）。</p>
+<h2 id="_16">参考链接 <span id="ref_link"></span></h2>
 <ul>
 <li>
 <p><a href="https://bbs.huaweicloud.com/blogs/310592"><strong>UE 4 C++ 教程</strong></a></p>

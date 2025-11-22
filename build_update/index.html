@@ -171,12 +171,10 @@ git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/ca
 </code></pre></div>
 <hr />
 <h2 id="_6">获取开发版的资产 <span id="get_development_assets"></span></h2>
-<p>Carla 团队使用仍在开发中的资产。这些模型和地图有一个 <a href="https://bitbucket.org/carla-simulator/carla-content">公共 git 存储库</a>，Carla 团队定期在其中推送最新更新。资产尚未完成，仅建议开发人员使用它们。</p>
+<p>HUTB 团队使用仍在开发中的资产。这些模型和地图有一个 <a href="https://git.code.tencent.com/OpenHUTB/Content">git 仓库</a> （基于<a href="https://bitbucket.org/carla-simulator/carla-content">Carla 仓库</a>），HUTB 团队定期在其中推送最新更新。资产尚未完成，仅建议开发人员使用它们。</p>
 <p>为了处理这个存储库，建议安装 <a href="https://github.com/git-lfs/git-lfs/wiki/Installation">git-lfs</a>。存储库会定期修改，并且 <a href="https://blog.csdn.net/xun527/article/details/132207700">git-lfs 处理大型二进制文件</a> 的速度更快。</p>
-<p>要克隆存储库，请 <strong>转到主 Carla 目录</strong> 并运行以下命令。</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>http://172.20.46.154:8090/traffic/Content.git
-<span class="nb">cd</span><span class="w"> </span>Content
-git<span class="w"> </span>lfs<span class="w"> </span>pull<span class="w">  </span><span class="c1"># 拉取大文件资产</span>
+<p>要克隆存储库，请 <strong>转到 hutb/Unreal/CarlaUE4/ 目录</strong> 并运行以下命令。</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://OpenHUTB:T8w6TYB_r71gGTP3A02B@git.code.tencent.com/OpenHUTB/Content.git<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w">  </span><span class="nb">cd</span><span class="w"> </span>Content<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div>
 <p>原始 Carla 资产的获取方法：
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/carla-simulator/carla-content<span class="w"> </span>Unreal/CarlaUE4/Content/Carla
