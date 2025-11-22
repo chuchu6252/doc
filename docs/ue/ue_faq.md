@@ -5,7 +5,7 @@
 - [__蓝图__](#blueprint)
 - [__编程__](#program)
 - [__杂项__](#misc)
-- [__杂项__](#src_analysis)
+- [__源代码分析__](#src_analysis)
 - [__其他__](#other)
 - [__加速__](#speed_up)
 - [__插件__](#plugin)
@@ -270,6 +270,9 @@ C:\Users\Administrator\AppData\Local\CarlaUE4\Saved\Crashes
 
 2.点`运行`中的三角下拉菜单中的`独立进程游戏`启动场景（直接点运行附带的参数不生效）
 
+###### 有风时叶子闪烁
+
+编辑`Content/Carla/Static/Vegetation/Trees/Materials/FanPalm/MexicanFanPalm_Main_Leaf`（对所有树都有效），并进入`MF_SimpleGrassWind`，将`VisualTime`和`Input WindSpeed (Scalar)`后的第二个 `Multiply`中B的输入由`-0.5`改为`-1`（使其可抖动的范围更大，避免闪烁）。
 
 
 ## 参考链接 <span id="ref_link"></span>
