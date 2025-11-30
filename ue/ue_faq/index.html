@@ -161,6 +161,13 @@ Total execution time: 2.38 seconds
 <p>什么是仿真就绪（SimReady）素材</p>
 <p>仿真就绪（SimReady）素材是虚拟世界的基础模块，SimReady 素材不仅仅是 3D 物件，它们包含基于 Universal Scene Description (USD) 构建的准确物理属性、行为和连接的数据流。</p>
 <h2 id="_12">编译  <span id="compilation"></span></h2>
+<h6 id="make-launch">make launch启动引擎编辑器时报错</h6>
+<p>报错信息：
+<div class="highlight"><pre><span></span><code>无法启动D:/hutb/Build/engine/Engine/Binaries/Win64/ShaderCompileWorker.exe
+需要编译ShaderCompileWorker。
+</code></pre></div>
+原因：<code>D:\hutb\Build\engine\Engine\Binaries\Win64</code>目录下没有编译出<code>ShaderCompileWorker.exe</code>。</p>
+<p>因为没有VS2019，导致Build.bat中执行<code>call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\MSBuild.exe" UE4.sln  /p:Configuration="Development Editor" /p:Platform="Win64" /p:Project="UnrealBuildTool" /p:OutputPath=.\</code>没有成功</p>
 <h6 id="ueoverride">编译UE时报错：使用“override”声明的成员函数不能重写基类成员</h6>
 <p>出错位置：<code>D:\work\workspace\UnrealEngine\Engine\Source\Runtime\CoreUObject\Public\UObject\CoreNet.h</code> 345 行
 <div class="highlight"><pre><span></span><code><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">FArchive</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">FSoftObjectPath</span><span class="o">&amp;</span><span class="w"> </span><span class="n">Value</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
