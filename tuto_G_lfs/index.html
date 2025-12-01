@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>tuto G lfs - 人车模拟</title>
+    <title>大文件支持 - 人车模拟</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "tuto G lfs";
+        var mkdocs_page_name = "\u5927\u6587\u4ef6\u652f\u6301";
         var mkdocs_page_input_path = "tuto_G_lfs.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">tuto G lfs</li>
+      <li class="breadcrumb-item active">大文件支持</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/tuto_G_lfs.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,7 +68,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h2 id="_1">大文件支持</h2>
+                <h1 id="_1">大文件支持</h1>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>init<span class="w"> </span>.
 <span class="c1"># 让仓库支持LFS</span>
 git<span class="w"> </span>lfs<span class="w"> </span>install
@@ -93,7 +93,22 @@ git<span class="w"> </span>checkout<span class="w"> </span>--<span class="w"> </
 <span class="c1"># 放弃暂存区的更改</span>
 git<span class="w"> </span>reset<span class="w"> </span>HEAD
 </code></pre></div></p>
-<h2 id="_2">参考</h2>
+<h2 id="_2">资产仓库</h2>
+<p>目前使用的是腾讯工蜂社区版 git lfs 进行资产管理</p>
+<h6 id="_3">查看仓库的容量</h6>
+<p>进入 <a href="https://git.code.tencent.com/OpenHUTB/Content">项目首页</a> （如果没有权限访问，则注册后发送用户名到 <a href="whd@hutb.edu.cn">whd@hutb.edu.cn</a> ），打开左侧的<code>设置-&gt;高级设置</code>，在页面中选择<code>版本库设置</code>。该产品的版本库为5GB，LFS储存为500GB。</p>
+<h6 id="_4">注册网络回调钩子</h6>
+<p>按照上一步中的操作，进入<code>设置-&gt;高级设置-&gt;网络回调钩子</code>，设置 Url 和秘密令牌，当有推送事件时候触发 hutb 仓库的编译。</p>
+<h2 id="_5">常见问题</h2>
+<h6 id="smudge-filter-lfs-failed">拉取时候出现错误：smudge filter lfs failed</h6>
+<p>设置以下命令后再拉取
+<div class="highlight"><pre><span></span><code><span class="c1"># 跳过污点：稍后会以更快的速度批量下载二进制文件。</span>
+<span class="nb">set</span><span class="w"> </span><span class="nv">GIT_LFS_SKIP_SMUDGE</span><span class="o">=</span><span class="m">1</span>
+git<span class="w"> </span>pull
+<span class="c1"># 获取二进制文件</span>
+git<span class="w"> </span>lfs<span class="w"> </span>pull
+</code></pre></div></p>
+<h2 id="_6">参考</h2>
 <ul>
 <li>
 <p><a href="https://www.cnblogs.com/88223100/p/How-do-I-store-large-Git-files.html">如何存储 Git 大文件？</a> </p>
