@@ -76,20 +76,101 @@
 <li>
 <p>使用CMake配置chrono</p>
 <p>设置好<code>Where is the source code</code>为<code>C:/workspace/chrono</code>；<code>Where to build the binarys:</code>为<code>C:/Packages/chrono_build</code></p>
-<p>依此点击<code>Configure</code>按钮，选择合适的平台，比如x64。</p>
+<p>依此点击<code>Configure</code>按钮，选择合适的平台，比如<code>x64</code>。</p>
 <p>点击<code>Generate</code>。</p>
 </li>
 </ol>
 <div class="admonition 注意">
 <p class="admonition-title">注意</p>
 </div>
-<p>如果点击<code>Configure</code>报没有Eigen的错误，则运行<code>chrono\contrib\build-scripts\windows\buildEigen.bat</code>进行Eigen安装。</p>
+<p>如果点击<code>Configure</code>报没有Eigen的错误，则运行<code>chrono\contrib\build-scripts\windows\buildEigen.bat</code>进行Eigen安装。然后再点击<code>Configure</code>。</p>
 <ol>
-<li>使用VS2019双击打开<code>C:\Packages\chrono_build\Chrono.sln</code>。选择<code>Release</code>进行构建。</li>
+<li>使用VS2019双击打开<code>C:\Packages\chrono_build\Chrono.sln</code>。选择<code>Release</code>或<code>Debug</code>进行构建。</li>
 </ol>
-<h2 id="_1">参考</h2>
+<h2 id="buildchronobat">运行 buildChrono.bat</h2>
+<p>安装相关依赖：</p>
+<p><a href="https://developer.nvidia.com/designworks/optix/downloads/legacy">OptiX SDK 7.5.0</a></p>
+<p><a href="https://sourceforge.net/projects/swig/files/swigwin/">swigwin</a></p>
+<p><a href="https://dev.opencascade.org/release/previous#node-88166">occt-vc14-64</a></p>
+<p><a href="https://github.com/eProsima/Fast-DDS/releases?page=8">fastrtps 2.14.5</a></p>
+<p><a href="https://api.projectchrono.org/module_mkl_installation.html">MKL</a></p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/eProsima/Fast-DDS.git<span class="w"> </span>Fast-DDS-2.14.5
+<span class="nb">cd</span><span class="w"> </span>Fast-DDS-2.14.5
+<span class="c1"># 注意：编译v2.4.0代码到编译Fast-DDS时会报错：error c3861:“ Mtx init”: 找不到标识符</span>
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>v2.14.5<span class="w"> </span>v2.14.5
+<span class="c1"># 拉取子模块android-ifaddrs,asio,fascdr,tinyxml2</span>
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init
+<span class="c1">#需要添加一个子模块</span>
+git<span class="w"> </span>submodule<span class="w"> </span>add<span class="w"> </span>https://github.com/foonathan/memory.git<span class="w"> </span>thirdparty/foonathan-memory
+
+
+<span class="c1"># 编译 fastcdr</span>
+<span class="nb">cd</span><span class="w"> </span>thirdparty/fastcdr
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>../<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>C:<span class="se">\P</span>ackages<span class="se">\e</span>Prosima<span class="se">\F</span>ast-DDS-2.14.5<span class="se">\t</span>hirdparty<span class="se">\i</span>nstall
+<span class="c1">#如果在ubuntu下因为cmake的版本低导致camke失败，可以直接在源码中修改cmake最低要求版本号</span>
+<span class="c1"># 使用vs打开build目录下生成的sln工程文件，编译，安装（右键INSTALL工程，在弹出的菜单中选择“仅用于项目-&gt;仅生成INSTALL”，会安装编译产物）；</span>
+<span class="c1"># 如果是linux，则使用命令 make &amp;&amp; make install</span>
+call<span class="w"> </span><span class="s2">&quot;%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\bin\MSBuild.exe&quot;</span><span class="w"> </span>fastcdr.sln
+
+
+<span class="c1"># 编译tinyxml2</span>
+<span class="nb">cd</span><span class="w"> </span>thirdparty/tinyxml2
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>../<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>C:<span class="se">\P</span>ackages<span class="se">\e</span>Prosima<span class="se">\F</span>ast-DDS-2.14.5<span class="se">\t</span>hirdparty<span class="se">\i</span>nstall
+<span class="c1"># 使用vs打开sln工程，编译，安装；</span>
+<span class="c1"># 如果是linux，则使用命令 make &amp;&amp; make install</span>
+
+
+
+<span class="c1"># 编译 foonathan-memory</span>
+<span class="nb">cd</span><span class="w"> </span>thirdparty/foonathan-memory
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>../<span class="w"> </span>-DFOONATHAN_MEMORY_BUILD_EXAMPLES<span class="o">=</span>OFF<span class="w"> </span>-DFOONATHAN_MEMORY_BUILD_TESTS<span class="o">=</span>OFF<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>C:<span class="se">\P</span>ackages<span class="se">\e</span>Prosima<span class="se">\F</span>ast-DDS-2.14.5<span class="se">\t</span>hirdparty<span class="se">\i</span>nstall
+<span class="c1"># 使用vs打开sln工程，编译，安装；如果是linux，则使用命令 make &amp;&amp; make install</span>
+
+
+<span class="c1"># 编译Fast-DDS和调试</span>
+<span class="nb">cd</span><span class="w"> </span>Fast-DDS-2.14.5
+mkdir<span class="w"> </span>build<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>../<span class="w"> </span>-DCMAKE_PREFIX_PATH<span class="o">=</span><span class="s2">&quot;C:\Packages\eProsima\Fast-DDS-2.14.5\thirdparty\asio\asio;C:\Packages\eProsima\Fast-DDS-2.14.5\thirdparty\install&quot;</span><span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>C:<span class="se">\P</span>ackages<span class="se">\e</span>Prosima<span class="se">\F</span>ast-DDS-2.14.5_install<span class="w"> </span>-DNO_TLS<span class="o">=</span>ON<span class="w"> </span>-DCOMPILE_EXAMPLES<span class="o">=</span>ON
+<span class="c1"># 在目录 C:\Packages\eProsima\Fast-DDS-2.14.5\build\examples\cpp\dds\DiscoveryServerExample 打开 DiscoveryServerExample.sln，编译 fastrtps 和 DiscoveryServerExample</span>
+<span class="c1"># 然后再使用vs打开build/fastrtps.sln工程，编译，安装</span>
+</code></pre></div>
+<h2 id="_1">问题</h2>
+<ul>
+<li>运行<code>chrono\contrib\build-scripts\windows\buildVSG.bat</code>出现Vulkan找不到的错误：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>Could NOT find Vulkan: (Required is at least version &quot;1.1.70.0&quot;)
+</code></pre></div>
+<p>解决：<a href="https://vulkan.lunarg.com/sdk/home#windows">下载 vulkan</a> ；解决不了可以暂时关闭报错的模块</p>
+<ul>
+<li>eigen3找不到，报错：<code>ERROR: cannot find Eigen3 version information</code></li>
+</ul>
+<p>解决（需要包含后面的<code>include/eigen3</code>）：
+<div class="highlight"><pre><span></span><code><span class="nb">set</span><span class="w"> </span><span class="nv">EIGEN3_INSTALL_DIR</span><span class="o">=</span><span class="s2">&quot;C:/Packages/eigen/include/eigen3&quot;</span>
+</code></pre></div></p>
+<ul>
+<li>
+<p>编译2.4.0时，fastrtps 中的 “ _Mtx_init”:identifier not found</p>
+</li>
+<li>
+<p>构建blaze时候报错
+<div class="highlight"><pre><span></span><code>Could NOT find BLAS (missing: BLAS_LIBRARIES)
+</code></pre></div></p>
+</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code>configure_file<span class="o">(</span>&lt;input&gt;<span class="w"> </span>&lt;output&gt;
+<span class="w">               </span><span class="o">[</span>COPYONLY<span class="o">]</span><span class="w"> </span><span class="o">[</span>ESCAPE_QUOTES<span class="o">]</span><span class="w"> </span><span class="o">[</span>@ONLY<span class="o">]</span>
+<span class="w">               </span><span class="o">[</span>NEWLINE_STYLE<span class="w"> </span><span class="o">[</span>UNIX<span class="p">|</span>DOS<span class="p">|</span>WIN32<span class="p">|</span>LF<span class="p">|</span>CRLF<span class="o">]</span><span class="w"> </span><span class="o">])</span>
+</code></pre></div>
+将文件复制到另一个位置并修改其内容。</p>
+<p>当然，这里的修改其内容也不是任意地修改，也是遵循一定的规则：将input文件复制到output文件，并在输入文件内容中的变量，替换引用为@VAR@或${VAR}的变量值。每个变量引用将替换为该变量的当前值，如果未定义该变量，则为空字符串。</p>
+<h2 id="_2">参考</h2>
 <ul>
 <li><a href="https://api.projectchrono.org/tutorial_install_chrono.html#scripts">安装Chrono教程</a></li>
+<li><a href="https://blog.csdn.net/loveoobaby/article/details/133954891">cmake生成Visual Studio工程后的INSTALL项目使用</a></li>
+<li><a href="https://www.cnblogs.com/shawn-meng/p/18856436">windows编译调试FastDDS</a></li>
 </ul>
               
             </div>
