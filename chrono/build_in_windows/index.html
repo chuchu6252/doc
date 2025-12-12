@@ -139,6 +139,41 @@ cmake<span class="w"> </span>../<span class="w"> </span>-DCMAKE_PREFIX_PATH<span
 </code></pre></div>
 <h2 id="_1">问题</h2>
 <ul>
+<li>
+<p>编译完成后，运行<code>demo_PARSER_OpenSim</code>报错
+<div class="highlight"><pre><span></span><code>由于找不到 `Irrlicht.dll`，无法继续执行代码
+</code></pre></div>
+解决：将<code>C:\Packages\irrlicht-1.8.5\bin\Win64-VisualStudio\Irrlicht.dll</code>拷贝到<code>D:\Build\chrono\bin\Release</code>目录下，再重新运行。</p>
+</li>
+<li>
+<p>编译 Debug 版本报错：
+<div class="highlight"><pre><span></span><code>无法打开文件“python311_d.lib”
+无法打开文件“..\..\..\lib\Debug\Chrono_parsers_d.lib”
+</code></pre></div></p>
+</li>
+</ul>
+<p>原因：缺少<code>python311_d.lib</code>是因为使用的是python发布版，而不是debug版本。</p>
+<p>缺少<code>Chrono_parsers_d.lib</code>是因为需要编译 Chrono_parsers。</p>
+<p>C++中Debug模式下 #include <Python.h> 会提示链接错误信息 无法打开文件“python311_d.lib”</p>
+<p>解决：参考<a href="https://www.cnblogs.com/Jeffxu/p/17965842">链接</a> ，在 <a href="https://github.com/OpenHUTB/chrono/blob/hutb/src/chrono_parsers/ChParserPython.cpp">chrono/src/chrono_parsers
+/ChParserPython.cpp包含头文件时</a> ，临时去掉 Debug 模式，待后面再恢复之前的模式，操作方式如下：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifdef _DEBUG</span>
+<span class="cp">#undef _DEBUG</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Python.h&gt;</span>
+<span class="cp">#define _DEBUG</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Python.h&gt;</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<ul>
+<li>编译错误：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>无法打开包括文件: “cuda_runtime.h”: No such file or directory
+无法打开输入文件“Chrono_modal.lib”
+无法打开输入文件“..\..\..\lib\Release\Chrono_parsers.lib”
+</code></pre></div>
+<p>解决：移除需要CUDA的sensor模块的编译。</p>
+<ul>
 <li>运行<code>chrono\contrib\build-scripts\windows\buildVSG.bat</code>出现Vulkan找不到的错误：</li>
 </ul>
 <div class="highlight"><pre><span></span><code>Could NOT find Vulkan: (Required is at least version &quot;1.1.70.0&quot;)
