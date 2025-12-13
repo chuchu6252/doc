@@ -1,18 +1,19 @@
-# [Docker 中的 Carla](https://carla.readthedocs.io/en/latest/build_docker/) 
+# [Docker 中的 HUTB](https://carla.readthedocs.io/en/latest/build_docker/) 
 
-用户可以拉取基于 Carla 版本的映像以在 Docker 容器中运行。这对于以下用户很有用：
+用户可以拉取基于 HUTB 版本的映像以在 Docker 容器中运行。这对于以下用户很有用：
 
-- 想要运行 Carla 而不需要安装所有依赖项
-- 运行多个 Carla 服务器并执行 GPU 映射
-- 在没有显示的情况下运行 Carla 服务器
+- 想要运行 HUTB 而不需要安装所有依赖项
+- 运行多个 HUTB 服务器并执行 GPU 映射
+- 在没有显示的情况下运行 HUTB 服务器
 
 
-本教程介绍了运行 Carla 图像的要求以及如何使用 OpenGL 和 Vulkan 图形 API 运行图像。
+本教程介绍了运行 HUTB 镜像的要求，以及如何在有显示器或没有显示器的情况下运行它。
 
 - [__在你开始之前__](#before_you_begin)
-- [__在容器中运行 Carla__](#running_carla_in_a_container)
+- [__在容器中运行 HUTB__](#running_carla_in_a_container)
 - [__离屏模式__](#off_screen_mode)
 - [__开发容器__](#Devcontainer)
+- [__在 devcontainer 中运行 HUTB__](#running-hutb-in-a-devcontainer)
 - [__拉取国内镜像__](#china_image)
 
 
@@ -23,7 +24,7 @@
 您需要安装：
 
 - __Docker:__ 按照 [此处](https://docs.docker.com/engine/install/) 的安装说明进行操作。
-- __NVIDIA Container Toolkit:__ NVIDIA 容器工具包是一个库和工具集，可将 NVIDIA 图形设备公开给 Linux 容器。它专为在 Linux 主机系统或适用于 Linux 的 Windows 子系统版本 2 下的 Linux 发行版中运行的 Linux 容器而设计。`nvidia-docker2`按照 [此处](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#installation-guide) 的说明安装该软件包。
+- __NVIDIA Container Toolkit:__ NVIDIA 容器工具包是一个库和工具集，可将 NVIDIA 图形设备公开给 Linux 容器。它专为在 Linux 主机系统上运行的 Linux 容器而设计。请按照 [此处](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#installation-guide) 的说明安装`nvidia-container-toolkit`软件包。
 
 CentOS安装Docker：
 ```shell
@@ -56,54 +57,77 @@ nvidia-ctk runtime configure --runtime=docker
 
 
 ---
-## 在容器中运行 Carla <span id="running_carla_in_a_container"></span>
+## 在容器中运行 HUTB <span id="running_carla_in_a_container"></span>
 
-__1. 拉取 Carla 镜像。__
+__1. 拉取 HUTB 镜像。__
 
-您可以提取最新的 Carla 映像或特定的发行版本。最新镜像是指 [最新的打包版本](https://github.com/carla-simulator/carla/releases) 。要拉取映像，请运行以下命令之一：
+您可以提取最新的 HUTB 映像或特定的发行版本。最新镜像是指 [最新的打包版本](https://github.com/carla-simulator/carla/releases) 。要拉取映像，请运行以下命令之一：
 
 ```sh
 # 拉取最新的镜像
 docker pull carlasim/carla:latest
 
 # 拉取特定的版本
-docker pull carlasim/carla:0.9.12
+docker pull carlasim/carla:0.9.16
 ```
 
-__2. 运行 Carla 容器。__
+__2. 运行 HUTB 容器。__
 
-不同版本的 Carla 支持不同的图形 API，这可能会影响 Docker 镜像的运行条件：
+不同版本的 HUTB 支持不同的图形 API，这可能会影响 Docker 镜像的运行条件：
 
 - 0.9.12 仅支持 Vulkan
 - 0.9.7+ 同时支持 Vulkan 和 OpenGL。
 
+!!! 注意
+    HUTB 在 Docker 容器内的执行方式随着时间推移而发生了变化。如果您使用的是早于 `0.9.16` 的版本，请参阅该特定版本的文档。
 
-__Carla 0.9.12__
+没有显示运行 HUTB：
 
-要使用显示运行 Carla：
-
+```shell
+docker run \
+    --runtime=nvidia \
+    --net=host \
+    --env=NVIDIA_VISIBLE_DEVICES=all \
+    --env=NVIDIA_DRIVER_CAPABILITIES=all \
+    carlasim/carla:0.9.16 bash CarlaUE4.sh -RenderOffScreen -nosound
 ```
-sudo docker run --privileged --gpus all --net=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.12 /bin/bash ./CarlaUE4.sh
-```
 
-要在离屏模式下运行 Carla：
+要在离屏模式下运行 HUTB：
 
 ```
 sudo docker run --privileged --gpus all --net=host -v /tmp/.X11-unix:/tmp/.X11-unix:rw carlasim/carla:0.9.12 /bin/bash ./CarlaUE4.sh -RenderOffScreen
 ```
 
-__Carla 0.9.7 至 0.9.11__
+带显示运行 HUTB：
 
-要使用 Vulkan 运行 Carla：
+!!! 注意
+    要运行带有显示的 Docker 镜像，您需要 `x11` 显示协议。
+
+```shell
+docker run \
+    --runtime=nvidia \
+    --net=host \
+    --user=$(id -u):$(id -g) \
+    --env=DISPLAY=$DISPLAY \
+    --env=NVIDIA_VISIBLE_DEVICES=all \
+    --env=NVIDIA_DRIVER_CAPABILITIES=all \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    carlasim/carla:0.9.16 bash CarlaUE4.sh -nosound
+```
+
+
+__HUTB 0.9.7 至 0.9.11__
+
+要使用 Vulkan 运行 HUTB：
 
 ```sh
 sudo docker run --privileged --gpus all --net=host -e DISPLAY=$DISPLAY -e SDL_VIDEODRIVER=x11 -v /tmp/.X11-unix:/tmp/.X11-unix:rw carlasim/carla:0.9.11 /bin/bash ./CarlaUE4.sh -vulkan <-additonal-carla-flags>
 ```
 
 !!! 笔记
-    只要您的计算机有显示器，此命令将允许您使用 Vulkan 运行 Carla 映像。有关在离屏模式下运行 Vulkan 的信息，请参阅 [渲染文档](adv_rendering_options.md#off-screen-mode) 。
+    只要您的计算机有显示器，此命令将允许您使用 Vulkan 运行 HUTB 镜像。有关在离屏模式下运行 Vulkan 的信息，请参阅 [渲染文档](adv_rendering_options.md#off-screen-mode) 。
 
-要使用 OpenGL 运行 Carla：
+要使用 OpenGL 运行 HUTB：
 
 ```sh
 docker run -e DISPLAY=$DISPLAY --net=host --gpus all --runtime=nvidia carlasim/carla:<version> /bin/bash CarlaUE4.sh -opengl <-additonal-carla-flags>
@@ -120,7 +144,7 @@ __3. （可选）配置 Docker 标志。__
 
 ## 离屏模式 <span id="off_screen_mode"></span>
 
-如果您在没有显示器的计算机上运行 Carla，则 OpenGL 不需要配置，但是您需要执行一些额外的步骤才能使用 Carla 0.9.12 之前的 Vulkan 执行相同的操作。有关信息，请参阅[渲染文档](adv_rendering_options.md#off-screen-mode) 。
+如果您在没有显示器的计算机上运行 HUTB，则 OpenGL 不需要配置，但是您需要执行一些额外的步骤才能使用 HUTB 0.9.12 之前的 Vulkan 执行相同的操作。有关信息，请参阅[渲染文档](adv_rendering_options.md#off-screen-mode) 。
 
 ---
 
@@ -140,9 +164,9 @@ HUTB 论坛</a>
 
 _这些说明已在 **Ubuntu 24.04** 中测试过。_
 
-以下文档旨在解释如何构建使用 **Ubuntu 22.04** 编译 Carla 的 Docker 镜像。 
+以下文档旨在解释如何构建使用 **Ubuntu 22.04** 编译 HUTB 的 Docker 镜像。 
 
-- [CARLA Docker 开发环境 (Ubuntu 22.04)](build/build_docker_ubuntu22.md)
+- [HUTB Docker 开发环境 (Ubuntu 22.04)](build/build_docker_ubuntu22.md)
 
 
 ## 拉取国内镜像  <span id="china_image"></span>
@@ -156,9 +180,9 @@ sudo docker images
 # YOUR_IMAGE_ID 替换为 docker immages 中的输出字段 IMAGE ID
 docker run --privileged --name {your_container_name} --gpus all --net host -e DISPLAY=$DISPLAY -e SDL_VIDEODRIVER=x11 -it {YOUR_IMAGE_ID} /bin/bash
 docker run --privileged --name hutb_2.9.16_test --gpus all --net host -e DISPLAY=$DISPLAY -e SDL_VIDEODRIVER=x11 -it a77a7620cf26 /bin/bash
-# 在容器中启动CARLA的服务端程序
+# 在容器中启动HUTB的服务端程序
 ./CarlaUE4.sh
-# 在主机中运行 CARLA 的客户端程序
+# 在主机中运行 HUTB 的客户端程序
 # conda create -n hutb_dev python=3.8 -y
 # conda activate hutb_dev
 python automatic_control.py
@@ -169,5 +193,5 @@ python automatic_control.py
 
 ## 参考
 
-* [Docker 版 CARLA 快速部署指南（附阿里云稳定镜像）](https://mp.weixin.qq.com/s/1CvvEE6-vip_yfFZt3TGsA)
+* [Docker 版 HUTB 快速部署指南（附阿里云稳定镜像）](https://mp.weixin.qq.com/s/1CvvEE6-vip_yfFZt3TGsA)
 

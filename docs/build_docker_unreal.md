@@ -49,7 +49,8 @@ git clone https://github.com/carla-simulator/carla
 
 ## 构建镜像 <span id="building-the-images"></span>
 
-以下步骤将花费很长时间。
+!!! 注意 
+    如果您使用的是早于 `0.9.16` 的版本，请参阅该特定版本的文档。`0.9.16` 的版本请参考[devcontainer](./build_devcontainer.md)。
 
 __1. 构建 Carla 先决条件镜像。__
 
