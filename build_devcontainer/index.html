@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>HUTB Docker 开发环境 - 人车模拟</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "HUTB Docker \u5f00\u53d1\u73af\u5883";
+        var mkdocs_page_input_path = "build_devcontainer.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">HUTB Docker 开发环境</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/build_devcontainer.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="hutb-docker">HUTB Docker 开发环境</h1>
+<p>HUTB 可以完全在 Docker 容器内构建和开发。这种方法消除了对依赖项、Python 版本或系统配置的担忧——一切都已在 Dockerfile 中设置完毕。例如，Dockerfile 支持多个 Python 版本，并预装了所有必需的库。</p>
+<p>我们提供两种基于 Docker 的 HUTB 构建方法：<strong>单体模式</strong>和<strong>轻量级模式</strong>。</p>
+<p><strong>单体模式</strong>和<strong>轻量级模式</strong>之间的选择取决于您的预期用途，以及磁盘空间、构建时间等因素，以及您更喜欢完全独立的环境（单体架构）还是重用本地编译的引擎（轻量级架构）。</p>
+<h2 id="_1">单体模式</h2>
+<p>此 Docker 镜像旨在与 <code>docker_tools.py</code> 脚本一起使用。有关更多信息，请参阅<a href="../build_docker_unreal/">在 Docker 中构建 Unreal Engine 和 CARLA</a> 。</p>
+<ul>
+<li>将 <a href="https://github.com/OpenHUTB/engine">模拟引擎</a> 和 <a href="https://github.com/OpenHUTB/hutb">HUTB</a> 打包到一个 Docker 镜像中。  </li>
+<li>需要较长的构建过程，并生成一个较大的最终镜像（通常超过 100 GB）。 </li>
+<li>提供一个完全独立的环境，所有内容都在 Docker 中编译完成。</li>
+</ul>
+<h2 id="_2">轻量模式（推荐）</h2>
+<p>此 Docker 镜像专为开发用途而设计，是构建软件包和使用 HUTB 的推荐方式。与单体模式相比，它提供了更高的灵活性和更快的迭代速度。</p>
+<ul>
+<li>仅安装构建和运行 HUTB 所需的依赖项（以及 NVIDIA 支持）。</li>
+<li>需要将主机上现有的 <a href="https://github.com/OpenHUTB/engine">模拟引擎</a> 构建版本挂载到容器中。</li>
+<li>构建速度快得多，但依赖于本地编译的模拟引擎文件夹。</li>
+</ul>
+<hr />
+<h2 id="docker">构建 Docker 镜像</h2>
+<h3 id="_3">单体模式</h3>
+<p>如前所述，单体构建会将 <a href="https://github.com/OpenHUTB/engine">模拟引擎</a> 和 HUTB 打包到一个 Docker 镜像中。此过程可能需要几个小时，生成的镜像大小可能超过 200 GB。</p>
+<p>由于此版本克隆了 Epic Games 私有 GitHub 代码库中的模拟引擎，因此您必须拥有已关联到 GitHub 帐户的有效 Epic 凭据。<strong>如果您尚未进行此设置，请在继续操作之前按照 <a href="https://www.unrealengine.com/en-US/ue4-on-github">此指南</a> 进行操作</strong>。</p>
+<p>要构建单体镜像，请运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>Util/Docker/build.sh<span class="w"> </span>--monolith<span class="w"> </span>--epic-user<span class="w"> </span>&lt;GITHUB_USERNAME&gt;<span class="w"> </span>--epic-token<span class="w"> </span>&lt;GITHUB_ACCESS_TOKEN&gt;
+
+<span class="c1"># 或者为指定 HUTB 分支构建单体镜像</span>
+Util/Docker/build.sh<span class="w"> </span>--monolith<span class="w"> </span>--epic-user<span class="w"> </span>&lt;GITHUB_USERNAME&gt;<span class="w"> </span>--epic-token<span class="w"> </span>&lt;GITHUB_ACCESS_TOKEN&gt;<span class="w"> </span>--branch<span class="w"> </span>&lt;BRANCH_NAME_OR_TAG&gt;
+</code></pre></div>
+<p>这将创建一个名为 <code>carla-monolith:&lt;branch&gt;</code> 的 Docker 镜像</p>
+<h3 id="_4">轻量模式（开发）</h3>
+<p>轻量级版本仅安装 HUTB 的依赖项，因此在此阶段无需进行其他设置：</p>
+<h2 id="utildockerbuildsh-dev"><div class="highlight"><pre><span></span><code>Util/Docker/build.sh<span class="w"> </span>--dev
+</code></pre></div></h2>
+<h2 id="docker_1">运行 Docker 镜像</h2>
+<h3 id="_5">单体模式</h3>
+<p>此镜像不能直接运行，而是通过 docker_tools.py 脚本调用。更多信息请参阅 <a href="../build_docker_unreal/">在 Docker 中构建 Unreal Engine 和 CARLA</a> 。</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 构建 HUTB 包</span>
+<span class="c1"># 注意：该软件包将使用用于构建镜像的分支创建。</span>
+./docker_tools.py
+
+<span class="c1"># 导入一些资产</span>
+./docker_tools.py<span class="w"> </span>--input<span class="w"> </span>/assets/to/import/path<span class="w"> </span>--output<span class="w"> </span>/output/path
+</code></pre></div>
+<h3 id="_6">轻量模式</h3>
+<p>轻量模式/开发工作流程要求主机上存在一个符合 HUTB 要求的已编译的模拟引擎文件夹。该文件夹将保留在主机上并挂载到容器中。您可以按照 HUTB 官方文档进行本地构建，也可以使用轻量模式容器在 Docker 中编译：</p>
+<div class="admonition 注意">
+<p class="admonition-title">注意</p>
+<p>在尝试克隆之前，请确保您的 GitHub 帐户已链接到 Epic 的 UnrealEngine 存储库。</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Clone a Carla-specific Unreal Engine repository</span>
+git<span class="w"> </span>clone<span class="w"> </span>git@github.com:wambitz/CarlaUnrealEngine.git<span class="w"> </span>CarlaUE4
+
+<span class="c1"># Export UE4_ROOT so it can be mounted inside the dev container</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">UE4_ROOT</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/CarlaUE4
+
+<span class="c1"># From the CARLA root, start the lightweight container</span>
+Util/Docker/run.sh<span class="w"> </span>--dev
+
+<span class="c1"># Inside the container, build UE4.26 following the official steps:</span>
+<span class="nb">cd</span><span class="w"> </span>/workspace/unreal-engine
+./Setup.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./GenerateProjectFiles.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make
+
+<span class="c1"># Exit the container</span>
+<span class="nb">exit</span>
+</code></pre></div>
+<p>构建完模拟引擎后，您可以再次运行轻量模式容器：</p>
+<div class="admonition 注意">
+<p class="admonition-title">注意</p>
+<p>请确保 <code>UE4_ROOT</code> 环境变量指向已编译的模拟引擎构建的根目录。</p>
+</div>
+<p><div class="highlight"><pre><span></span><code>Util/Docker/run.sh<span class="w"> </span>--dev
+</code></pre></div>
+进入容器后，您可以继续执行正常的 HUTB 构建步骤：</p>
+<div class="highlight"><pre><span></span><code>./Update.sh
+make<span class="w"> </span>PythonAPI
+make<span class="w"> </span>CarlaUE4Editor
+make<span class="w"> </span>package<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--python-version=3.10,3.11,3.12&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="devcontainer-hutb">使用 Devcontainer 进行 HUTB 服务器/客户端开发</h2>
+<p>您可以使用轻量模式方案的<strong>Visual Studio Code devcontainer</strong>。此设置会将主机上的目录（包括 UE4）挂载到 Docker 环境中。请注意，单体镜像不太适合 devcontainers，因为它将所有内容都存储在镜像内部。</p>
+<p>在您的 HUTB 存储库中创建一个<code>.devcontainer/devcontainer.json</code>，包含以下内容的文件：</p>
+<h2 id="name-carla-ue4-dev-image-carla-developmentue4-2004-initializecommand-utildockerbuildsh-dev-ubuntu-distro-2004-we-do-not-need-to-set-remoteuser-if-the-dockerfiles-default-user-is-already-correct-but-you-can-if-you-want-to-be-explicit-also-updateremoteuseruid-can-be-false-since-our-dockerfile-already-set-the-user-to-our-exact-uidgid-updateremoteuseruid-false-customizations-vscode-settings-terminalintegrateddefaultprofilelinux-bash-extensions-ms-vscodecpptools-note1-do-not-pass-user-here-we-want-the-dockerfile-default-user-not-an-override-note3-ensure-ue4_root-environment-variable-is-defined-in-host-runargs-rm-runtime-nvidia-name-carla-ue4-development-2004-env-nvidia_visible_devicesall-env-nvidia_driver_capabilitiesall-env-ue4_rootworkspacesunreal-engine-env-carla_ue4_rootworkspacescarla-env-displaylocalenvdisplay-volume-tmpx11-unixtmpx11-unix-volume-varrundockersockvarrundockersock-volume-localenvue4_rootworkspacesunreal-engine-mount-sourcecarla-development-ue4-2004targethomecarla-gpus-all"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CARLA UE4 Dev&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carla-development:ue4-20.04&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;initializeCommand&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./Util/Docker/build.sh --dev --ubuntu-distro 20.04&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// We do NOT need to set &quot;remoteUser&quot; if the Dockerfile&#39;s default user is already correct</span>
+<span class="w">    </span><span class="c1">// but you can if you want to be explicit. Also &quot;updateRemoteUserUID&quot; can be false, since</span>
+<span class="w">    </span><span class="c1">// our Dockerfile already set the user to our exact UID/GID.</span>
+<span class="w">    </span><span class="nt">&quot;updateRemoteUserUID&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;customizations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;vscode&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;terminal.integrated.defaultProfile.linux&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bash&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nt">&quot;extensions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">&quot;ms-vscode.cpptools&quot;</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="c1">// NOTE1: DO NOT pass --user here (we want the Dockerfile default user, not an override)</span>
+<span class="w">    </span><span class="c1">// NOTE3: Ensure UE4_ROOT environment variable is defined in host</span>
+<span class="w">    </span><span class="nt">&quot;runArgs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;--rm&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--runtime&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;nvidia&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;carla-ue4-development-20.04&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--env&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;NVIDIA_VISIBLE_DEVICES=all&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--env&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;NVIDIA_DRIVER_CAPABILITIES=all&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--env&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;UE4_ROOT=/workspaces/unreal-engine&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--env&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CARLA_UE4_ROOT=/workspaces/carla&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--env&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;DISPLAY=${localEnv:DISPLAY}&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--volume&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/tmp/.X11-unix:/tmp/.X11-unix&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--volume&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/var/run/docker.sock:/var/run/docker.sock&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--volume&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;${localEnv:UE4_ROOT}:/workspaces/unreal-engine&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--mount&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;source=carla-development-ue4-20.04,target=/home/carla&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;--gpus&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;all&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></h2>
+<h2 id="_7">提示与已知问题</h2>
+<ol>
+<li>
+<p><strong>在主机上运行二进制文件</strong><br />
+<strong>请勿</strong>在容器内构建完成后直接在主机上运行 <code>make launch</code>或<code>make launch-only</code>，因为容器内部路径（例如 <code>/workspaces/unreal-engine</code>）与主机环境不匹配。 如果您需要通过主机访问 HUTB 二进制文件，请先构建一个交付包（<code>make package</code> ），然后在主机上从<code>Dist/</code>中生成的文件运行它们。</p>
+</li>
+<li>
+<p><strong><code>./Update.sh</code> 中截断输出</strong><br />
+   有时，在 HUTB 代码库中运行 <code>./Update.sh</code> 可能会截断日志输出。一种解决方法是将输出重定向到一个文件，然后使用 tail 命令查看该文件。</p>
+</li>
+<li>
+<p><strong>音频支持</strong><br />
+   ALSA 和 PulseAudio 未预先配置，因此在容器内执行某些脚本时可能会看到音频警告。</p>
+</li>
+</ol>
+<hr />
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../js/umlconvert.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
