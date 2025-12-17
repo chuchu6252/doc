@@ -72,20 +72,80 @@
 <p>Carla 模式主要关注行人和自动驾驶车辆的场景模拟，VR 模式针对智能驾驶舱的行为和交互虚拟现实模拟，AIR 模式重点解决低空无人机的模拟，该页面的文档主要解决它们三者之间的切换问题。</p>
 <h2 id="_1">使用方法</h2>
 <p>下载 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的<code>software/hutb/hutb_car_vr_air_mujoco.zip</code>，<code>CarlaUE4.exe</code>启动场景的默认游戏模式为 Carla。
-使用 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 切换到 <a href="interbehavior.md">VR 模式</a> ：
+使用 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 切换到 <a href="../../interbehavior/">VR 模式</a> ：
 <div class="highlight"><pre><span></span><code>config.py<span class="w"> </span>--map<span class="w"> </span>Town10HD?GAME<span class="o">=</span>VR
 </code></pre></div>
-切换到无人机模式：
+<img alt="" src="../../img/pedestrian/VR_demo.gif" /></p>
+<p>切换到 <a href="https://openhutb.github.io/air_doc/">无人机模式</a> ：
 <div class="highlight"><pre><span></span><code>config.py<span class="w"> </span>--map<span class="w"> </span>Town10HD?GAME<span class="o">=</span>AIR
 </code></pre></div>
-参数中的<code>Town10HD</code>为所要切换的地图名，<code>GAME=</code>后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。</p>
-<h2 id="_2">增加切换游戏模式的实现分析</h2>
+<img alt="" src="https://openhutb.github.io/air_doc/images/dev/HUTB_simulation.gif" /></p>
+<p>参数中的<code>Town10HD</code>为所要切换的地图名，<code>GAME=</code>后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。</p>
+<h2 id="_2">切换地图的实现分析</h2>
+<p><img alt="HUTB_Modules" src="../../img/build_modules.jpg" /></p>
 <p>调用 config.py 切换地图时 Carla 模式的 <code>--map</code> 参数不支持游戏模式的切换，为了支持游戏模式的切换，先分析已有实现的调用过程：</p>
 <ol>
-<li>脚本 config.py 使用  load_world() 函数实现世界的加载，该功能的实现位于 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/PythonAPI/carla/source/libcarla/Client.cpp#L227">PythonAPI\carla\source\libcarla\Client.cpp</a>
+<li>
+<p>脚本 config.py 使用  <code>load_world()</code> 函数实现世界的加载，然后调用<code>LoadWorld</code>，该功能的实现位于 <strong>PythonAPI</strong> 中的客户端 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/source/libcarla/Client.cpp#L227">PythonAPI\carla\source\libcarla\Client.cpp</a>
 <div class="highlight"><pre><span></span><code><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;load_world&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CONST_CALL_WITHOUT_GIL_3</span><span class="p">(</span><span class="n">cc</span><span class="o">::</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">LoadWorld</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;map_name&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;reset_settings&quot;</span><span class="p">)</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;map_layers&quot;</span><span class="p">)</span><span class="o">=</span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="o">::</span><span class="n">All</span><span class="p">))</span>
-</code></pre></div></li>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>客户端</strong> 的 LoadWorld 实现位于 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/LibCarla/source/carla/client/Client.h#L75">LibCarla\source\carla\client\Client.h</a> ，</p>
+</li>
 </ol>
+<div class="highlight"><pre><span></span><code><span class="n">World</span><span class="w"> </span><span class="nf">LoadWorld</span><span class="p">(</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">map_name</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">reset_settings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="w"> </span><span class="n">map_layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="o">::</span><span class="n">All</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">World</span><span class="p">{</span><span class="n">_simulator</span><span class="o">-&gt;</span><span class="n">LoadEpisode</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">map_name</span><span class="p">),</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">,</span><span class="w"> </span><span class="n">map_layers</span><span class="p">)};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>再调用了 LibCarla client\detail 的模拟器 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/LibCarla/source/carla/client/detail/Simulator.cpp#L87">LibCarla\source\carla\client\detail\Simulator.cpp</a> 的 LoadEpisode </p>
+<div class="highlight"><pre><span></span><code><span class="n">EpisodeProxy</span><span class="w"> </span><span class="nf">Simulator::LoadEpisode</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">map_name</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">,</span><span class="w"> </span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="w"> </span><span class="n">map_layers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">_client</span><span class="p">.</span><span class="n">LoadEpisode</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">map_name</span><span class="p">),</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">,</span><span class="w"> </span><span class="n">map_layers</span><span class="p">);</span>
+</code></pre></div>
+<p>然后调用了 LibCarla client\detail 的客户端 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/LibCarla/source/carla/client/detail/Client.cpp#L147">LibCarla\source\carla\client\detail\Client.cpp</a></p>
+<p><div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">Client::LoadEpisode</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">map_name</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">,</span><span class="w"> </span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="w"> </span><span class="n">map_layer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">_pimpl</span><span class="o">-&gt;</span><span class="n">CallAndWait</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;load_new_episode&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">map_name</span><span class="p">),</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">,</span><span class="w"> </span><span class="n">map_layer</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+最后异步调用服务端的 <code>load_new_episode</code>。</p>
+<ol>
+<li><strong>服务端</strong> 的 load_new_episode 位于 Server 模块的 Carla 服务器 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Server/CarlaServer.cpp#L319">Unreal\CarlaUE4\Plugins\Carla\Source\Carla\Server\CarlaServer.cpp</a> ，</li>
+</ol>
+<p><div class="highlight"><pre><span></span><code><span class="n">BIND_SYNC</span><span class="p">(</span><span class="n">load_new_episode</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">map_name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">,</span><span class="w"> </span><span class="n">cr</span><span class="o">::</span><span class="n">MapLayer</span><span class="w"> </span><span class="n">MapLayers</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">R</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">Episode</span><span class="o">-&gt;</span><span class="n">LoadNewEpisode</span><span class="p">(</span><span class="n">cr</span><span class="o">::</span><span class="n">ToFString</span><span class="p">(</span><span class="n">map_name</span><span class="p">),</span><span class="w"> </span><span class="n">reset_settings</span><span class="p">))</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div>
+调用了 Game 模块中 轮次的 LoadNewEpisode 函数（位于 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Game/CarlaEpisode.cpp#L122">Unreal\CarlaUE4\Plugins\Carla\Source\Carla\Game\CarlaEpisode.cpp</a> ） </p>
+<div class="highlight"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">UCarlaEpisode::LoadNewEpisode</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">FString</span><span class="w"> </span><span class="o">&amp;</span><span class="n">MapString</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ResetSettings</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="n">UGameplayStatics</span><span class="o">::</span><span class="n">OpenLevel</span><span class="p">(</span><span class="n">GetWorld</span><span class="p">(),</span><span class="w"> </span><span class="o">*</span><span class="n">FinalPath</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">    </span><span class="p">...</span>
+</code></pre></div>
+<p>由此可以看出切换地图调用了模拟引擎的 <code>UGameplayStatics::OpenLevel()</code>。 </p>
+<h2 id="_3">增加动态切换游戏模式</h2>
+<p>一般来讲，设置游戏模式（GameMode）都是在 WorldSettings 里面。
+然而，该方法都只能在编辑器内提前配置好将要使用的 GameMode，无法在游戏时动态决定 GameMode。
+下面的方法可以在运行游戏时决定 Map 使用哪一个 GameMode。</p>
+<ol>
+<li>在 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/Unreal/CarlaUE4/Config/DefaultEngine.ini#L29">Unreal\CarlaUE4\Config\DefaultEngine.ini</a> 中设置游戏模式类的别名</li>
+<li>调用 <code>UGameplayStatics::OpenLevel()</code> 函数，传入Options参数"Game=XXX"，或者直接在LevelName里面拼接好"LevelName?Game=XXX"，其中XXX是GameMode别名</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="na">+GameModeClassAliases</span><span class="o">=</span><span class="s">(Name=&quot;CARLA&quot;,GameMode=&quot;/Game/Carla/Blueprints/Game/CarlaGameMode.CarlaGameMode_C&quot;)</span>
+<span class="na">+GameModeClassAliases</span><span class="o">=</span><span class="s">(Name=&quot;VR&quot;,GameMode=&quot;/Script/CarlaUE4.DReyeVRGameMode&quot;)</span>
+<span class="na">+GameModeClassAliases</span><span class="o">=</span><span class="s">(Name=&quot;AIR&quot;,GameMode=&quot;/Script/AirSim.AirSimGameMode&quot;)</span>
+</code></pre></div>
+<h2 id="_4">参考</h2>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/660795062?share_code=1kQREJgxnStpH&amp;utm_psn=1953537310399370643">绕开 WorldSetting 切换 GameMode 的详细分析</a></li>
+</ul>
               
             </div>
           </div><footer>
