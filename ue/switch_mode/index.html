@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Carla、虚拟现实、无人机模式之间的切换 - 人车模拟</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Carla\u3001\u865a\u62df\u73b0\u5b9e\u3001\u65e0\u4eba\u673a\u6a21\u5f0f\u4e4b\u95f4\u7684\u5207\u6362";
+        var mkdocs_page_input_path = "ue/switch_mode.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Carla、虚拟现实、无人机模式之间的切换</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/ue/switch_mode.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="carla">Carla、虚拟现实、无人机模式之间的切换</h1>
+<p>Carla 模式主要关注行人和自动驾驶车辆的场景模拟，VR 模式针对智能驾驶舱的行为和交互虚拟现实模拟，AIR 模式重点解决低空无人机的模拟，该页面的文档主要解决它们三者之间的切换问题。</p>
+<h2 id="_1">使用方法</h2>
+<p>下载 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的<code>software/hutb/hutb_car_vr_air_mujoco.zip</code>，<code>CarlaUE4.exe</code>启动场景的默认游戏模式为 Carla。
+使用 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 切换到 <a href="interbehavior.md">VR 模式</a> ：
+<div class="highlight"><pre><span></span><code>config.py<span class="w"> </span>--map<span class="w"> </span>Town10HD?GAME<span class="o">=</span>VR
+</code></pre></div>
+切换到无人机模式：
+<div class="highlight"><pre><span></span><code>config.py<span class="w"> </span>--map<span class="w"> </span>Town10HD?GAME<span class="o">=</span>AIR
+</code></pre></div>
+参数中的<code>Town10HD</code>为所要切换的地图名，<code>GAME=</code>后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。</p>
+<h2 id="_2">增加切换游戏模式的实现分析</h2>
+<p>调用 config.py 切换地图时 Carla 模式的 <code>--map</code> 参数不支持游戏模式的切换，为了支持游戏模式的切换，先分析已有实现的调用过程：</p>
+<ol>
+<li>脚本 config.py 使用  load_world() 函数实现世界的加载，该功能的实现位于 <a href="https://github.com/OpenHUTB/hutb/blob/f32283bd214907196de92f98b0e7ffe583b45bf4/PythonAPI/carla/source/libcarla/Client.cpp#L227">PythonAPI\carla\source\libcarla\Client.cpp</a>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;load_world&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CONST_CALL_WITHOUT_GIL_3</span><span class="p">(</span><span class="n">cc</span><span class="o">::</span><span class="n">Client</span><span class="p">,</span><span class="w"> </span><span class="n">LoadWorld</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;map_name&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;reset_settings&quot;</span><span class="p">)</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;map_layers&quot;</span><span class="p">)</span><span class="o">=</span><span class="n">rpc</span><span class="o">::</span><span class="n">MapLayer</span><span class="o">::</span><span class="n">All</span><span class="p">))</span>
+</code></pre></div></li>
+</ol>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../../js/umlconvert.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

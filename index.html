@@ -47,9 +47,9 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#_3">基础 </a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_4">车 </a>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">人 </a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_5">人 </a>
+    <li class="toctree-l3"><a class="reference internal" href="#_5">车 </a>
     </li>
         </ul>
     </li>
@@ -117,8 +117,8 @@
 <ul>
 <li><a href="#primary"><strong>简介</strong></a>  <ul>
 <li><a href="#introduction">入门</a></li>
-<li><a href="#vehicle">车辆</a>  </li>
-<li><a href="#pedestrian">行人</a>  </li>
+<li><a href="#pedestrian">行人</a> </li>
+<li><a href="#vehicle">车辆</a></li>
 </ul>
 </li>
 <li><a href="#simulator"><strong>模拟</strong></a><ul>
@@ -149,12 +149,13 @@
 <p>下载 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的<code>software/hutb/hutb_car_vr_air_mujoco.zip</code>并解压运行<code>WindowsNoEditor</code>文件夹下的<code>CarlaUE4.exe</code>启动场景，按<code>W</code>、<code>S</code>、<code>A</code>、<code>D</code> 进行场景浏览；</p>
 </li>
 <li>
-<p>使用<code>pip install hutb</code> 安装 Python 功能包（或者使用 pip 安装特定版本的<code>PythonAPI/carla/dist/hutb-*.whl</code>），然后运行<code>PythonAPI/examples</code>中的脚本：</p>
-</li>
-<li><a href="https://github.com/OpenHUTB/doc/blob/master/src/examples/manual_control.py">manual_control.py</a> 生成一辆键盘控制的车，<code>manual_control.py  --filter walker.pedestrian.*</code>生成键盘控制的人</li>
-<li><a href="https://github.com/OpenHUTB/doc/blob/master/src/examples/generate_traffic.py">generate_traffic.py</a> 生成人车流</li>
+<p>使用<code>pip install hutb</code> 安装 Python 功能包（或者使用 pip 安装特定版本的<code>PythonAPI/carla/dist/hutb-*.whl</code>），然后运行<code>PythonAPI/examples</code>中的脚本（如果运行报错，请参考 <a href="faq/use_faq/">解决方法</a>）：</p>
+<ul>
+<li>运行 <a href="https://github.com/OpenHUTB/doc/blob/master/src/examples/manual_control.py">manual_control.py</a> 生成一辆键盘控制的车，运行 <code>manual_control.py  --filter walker.pedestrian.*</code> 生成键盘控制的人</li>
+<li>运行 <a href="https://github.com/OpenHUTB/doc/blob/master/src/examples/generate_traffic.py">generate_traffic.py</a> 生成人车流</li>
 <li>切换到 <a href="interbehavior/">VR 模式</a> ：<a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> --map Town10HD?GAME=VR ；切换到<a href="https://openhutb.github.io/air_doc/">无人机模式</a> ：<code>config.py --map Town10HD?GAME=AIR</code></li>
-<li>如果运行报错，请参考 <a href="faq/use_faq/">解决方法</a>。</li>
+</ul>
+</li>
 </ol>
 <h3 id="_3">基础 <span id="primary"></span></h3>
 <p><a href="start_introduction/"><strong>介绍</strong></a> — 对 HUTB 的期望</p>
@@ -172,20 +173,7 @@
 <p><a href="tuto_G_retrieve_data/"><strong>检索模拟数据</strong></a> — 使用记录器正确收集数据的分步指南</p>
 <p><a href="tuto_G_bounding_boxes/"><strong>边界框</strong></a> — 将 HUTB 对象的边界框投影到相机中</p>
 <p><a href="faq/use_faq/"><strong>使用常见问题</strong></a> — 解决最常见的使用问题</p>
-<h3 id="_4">车 <span id="vehicle"></span></h3>
-<!-- 车辆代理：单个 -> 多个 -->
-
-<p><a href="tuto_G_pygame/"><strong>手动控制车辆</strong></a> — 使用 PyGame 显示相机传感器的输出</p>
-<p><a href="adv_agents/"><strong>车辆代理</strong></a> — 代理脚本允许单个车辆在地图上漫游或开车到设定的目的地</p>
-<p><a href="ecosys_iss/"><strong>智能驾驶</strong></a> — 包含用于自动驾驶相关任务的传统和深度学习算法</p>
-<p><a href="vehicle/wheeled_vehicle/"><strong>车辆实现</strong></a> — 车辆模型</p>
-<p><a href="ts_traffic_simulation_overview/"><strong>交通模拟概述</strong></a> — 可用于使用交通填充场景的不同选项的概述</p>
-<p><a href="adv_traffic_manager/"><strong>交通管理器</strong></a> — 通过将车辆设置为自动驾驶模式来模拟城市交通</p>
-<p><a href="scenario_runner/"><strong>交通场景</strong></a> — 基于 HUTB 交通场景定义和执行引擎</p>
-<p><a href="tuto_G_scenic/"><strong>交通场景定义</strong></a> — 遵循使用 Scenic 库定义不同场景的示例</p>
-<p><a href="adv_sumo/"><strong>和 SUMO 协同模拟</strong></a> — 在 HUTB 和 SUMO 之间运行协同模拟</p>
-<p><a href="tuto_G_chrono/"><strong>Chrono 集成</strong></a> — 整合 Chrono 来进行物理模拟</p>
-<h3 id="_5">人 <span id="pedestrian"></span></h3>
+<h3 id="_4">人 <span id="pedestrian"></span></h3>
 <!-- 行人代理 -->
 
 <p><a href="interbehavior/"><strong>行为交互</strong></a> — 基于 DReyeVR 的针对行为和交互研究的虚拟现实驾驶仿真模块</p>
@@ -198,6 +186,19 @@
 <p><a href="pedestrian/humanoid/"><strong>具身人模拟示例</strong></a> - 提供具身人 Mujoco、肌肉骨骼<a href="pedestrian/OpenSim/">OpenSim</a> 的仿真环境相关示例</p>
 <p><a href="https://github.com/OpenHUTB/mujoco_plugin"><strong>Mujoco插件</strong></a> - 提供 Mujoco和 HUTB 模拟器之间的协同仿真</p>
 <p><a href="pedestrian/tuto_content_chrono_opensim/"><strong>行人物理场模拟</strong></a> — Chrono OpenSim 解析器</p>
+<h3 id="_5">车 <span id="vehicle"></span></h3>
+<!-- 车辆代理：单个 -> 多个 -->
+
+<p><a href="tuto_G_pygame/"><strong>手动控制车辆</strong></a> — 使用 PyGame 显示相机传感器的输出</p>
+<p><a href="adv_agents/"><strong>车辆代理</strong></a> — 代理脚本允许单个车辆在地图上漫游或开车到设定的目的地</p>
+<p><a href="ecosys_iss/"><strong>智能驾驶</strong></a> — 包含用于自动驾驶相关任务的传统和深度学习算法</p>
+<p><a href="vehicle/wheeled_vehicle/"><strong>车辆实现</strong></a> — 车辆模型</p>
+<p><a href="ts_traffic_simulation_overview/"><strong>交通模拟概述</strong></a> — 可用于使用交通填充场景的不同选项的概述</p>
+<p><a href="adv_traffic_manager/"><strong>交通管理器</strong></a> — 通过将车辆设置为自动驾驶模式来模拟城市交通</p>
+<p><a href="scenario_runner/"><strong>交通场景</strong></a> — 基于 HUTB 交通场景定义和执行引擎</p>
+<p><a href="tuto_G_scenic/"><strong>交通场景定义</strong></a> — 遵循使用 Scenic 库定义不同场景的示例</p>
+<p><a href="adv_sumo/"><strong>和 SUMO 协同模拟</strong></a> — 在 HUTB 和 SUMO 之间运行协同模拟</p>
+<p><a href="tuto_G_chrono/"><strong>Chrono 集成</strong></a> — 整合 Chrono 来进行物理模拟</p>
 <hr />
 <h2 id="_6">模拟 <span id="simulator"></span></h2>
 <h3 id="_7">概念 <span id="concept"></span></h3>
@@ -379,5 +380,5 @@
 
 <!--
 MkDocs version : 1.5.3
-Build Date UTC : 2025-12-17 03:22:08.306555+00:00
+Build Date UTC : 2025-12-17 03:58:36.548773+00:00
 -->
