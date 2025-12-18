@@ -1,15 +1,45 @@
 # Carla 中的 Chrono 实现
 
+这是一个 UE4 车辆运动组件，用 Chrono 物理引擎（专业多体动力学库）替代 UE4 的 PhysX，提供更精确的车辆动力学、悬挂、轮胎和地形交互模拟。
+
 Chrono 需要在虚幻引擎端启用 RTTI（RTTI（Run-Time Type Information），从而支持动态类型识别和异常处理等功能。
 文件 [`Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Carla.Build.cs`](https://github.com/OpenHUTB/carla/blob/1b453d00cbf5e0afa00f3e993799c36c9286d75c/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Carla.Build.cs#L214) 中增加`bUseRTTI = true;`。
 
 !!! 笔记
     每个.Build.cs文件声明派生自ModuleRules基类的类，并设置属性控制器从构造函数进行编译的方式。由虚幻编译工具编译，并被构造来确定整体编译环境。使用C#语法。
 
+## 流程
+
+1. 初始化阶段 ([CreateChronoMovementComponent](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L21) + [BeginPlay](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L142) )
+
+    1.1 [创建组件并配置 JSON 参数（车辆、动力总成、轮胎配置）](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L31)
+    
+    1.2 [BeginPlay：初始化 Chrono 系统](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L142) ：
+    设置重力、求解器（Barzilai -Borwein 方法是一种迭代梯度下降法）、迭代次数
+    
+    1.3 [InitializeChronoVehicle：从 JSON 文件加载车辆模型（底盘、悬挂、动力系统、轮胎）](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L167)
+    
+    1.4. [创建地形交互层（光线投射到 UE4 碰撞）](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L157)
+
+2. Carla -> Chrono：每帧更新 ( [TickComponent](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L235) )
+
+    2.1 时间子步处理：
+
+    如果单帧时间 > MaxSubstepDeltaTime（默认 0.01s），分解为多个小步进行精确计算。否则直接用该帧时间步
+
+    2.2 物理仿真：[AdvanceChronoSimulation(StepSize)](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L292) ：同步时间、控制（转向、油门、刹车）、地形 到 chrono
+
+
+3. Chrono -> Carla：[位置/旋转同步回 UE4](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L275) ：
+
+    坐标系转换：Chrono（右手系，米）↔ UE4（左手系，厘米）
+
+    地形交互 (UERayCastTerrain)：Chrono 需要知道地形 [高度](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L114) 、[法线](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L125) 、[摩擦系数](https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L137) 来计算轮胎力。本实现通过光线投射到 UE4
+
 
 ## 提交历史
 
-在[commit页面](https://github.com/OpenHUTB/hutb/commits/hutb/?author=Axel1092&after=3225f8cfb1920f4ebf8a98a658385b379a04541b+174)按用户名[`Axel1092`](https://github.com/Axel1092)过滤。
+在 [commit页面](https://github.com/OpenHUTB/hutb/commits/hutb/?author=Axel1092&after=3225f8cfb1920f4ebf8a98a658385b379a04541b+174) 按用户名 [`Axel1092`](https://github.com/Axel1092) 过滤。
 
 
 * Support custom chrono (#9182)
@@ -59,4 +89,5 @@ Chrono 需要在虚幻引擎端启用 RTTI（RTTI（Run-Time Type Information）
 
 ## 参考
 
+* [CARLA0.9.16与Chrono联合仿真--源代码解读](https://www.bilibili.com/video/BV1hb1FBYEGc/)
 * [Unreal 插件](https://www.jianshu.com/p/e41a810b10ca)

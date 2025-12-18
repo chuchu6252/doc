@@ -10,7 +10,9 @@ python manual_control.py --filter walker.pedestrian.*
 ## 打开车门
 当按`o`时，调用`world.player.open_door(carla.VehicleDoor.All)`打开离行人10cm以内车辆的门。
 
+## 相机挂载
 
+在人双眼的位置挂载两个相机，该功能还未实现。
 
 ## [行人控制](https://paperswithcode.com/task/humanoid-control) 
 

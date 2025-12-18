@@ -17,9 +17,10 @@ config.py --map Town10HD?GAME=VR
 ```shell
 config.py --map Town10HD?GAME=AIR
 ```
+参数中的`Town10HD`为所要切换的地图名，`GAME=`后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。
+
 ![](https://openhutb.github.io/air_doc/images/dev/HUTB_simulation.gif)
 
-参数中的`Town10HD`为所要切换的地图名，`GAME=`后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。
 
 ## 切换地图的实现分析
 
