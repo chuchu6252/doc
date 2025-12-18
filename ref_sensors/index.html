@@ -79,13 +79,14 @@
 <li><a href="#obstacle-detector"><strong>障碍物检测器</strong></a></li>
 <li><a href="#radar-sensor"><strong>雷达传感器</strong></a></li>
 <li><a href="#rgb-camera"><strong>RGB相机</strong></a></li>
+<li><a href="#wide-angle-cameras"><strong>广角相机</strong></a></li>
+<li><a href="#fisheye-camera"><strong>鱼眼相机</strong></a></li>
 <li><a href="#rss-sensor"><strong>责任敏感安全传感器</strong></a></li>
 <li><a href="#semantic-lidar-sensor"><strong>语义激光雷达传感器</strong></a></li>
 <li><a href="#semantic-segmentation-camera"><strong>语义分割相机</strong></a></li>
 <li><a href="#instance-segmentation-camera"><strong>实例分割相机</strong></a></li>
 <li><a href="#dvs-camera"><strong>动态视觉传感器相机</strong></a></li>
 <li><a href="#optical-flow-camera"><strong>光流相机</strong></a></li>
-<li><a href="#fisheye-camera"><strong>鱼眼相机</strong></a></li>
 <li><a href="#v2x-sensor"><strong>V2X 传感器</strong></a><ul>
 <li><a href="#cooperative-awareness-message">协同感知</a></li>
 <li><a href="#custom-v2x-message">自定义消息</a></li>
@@ -1327,7 +1328,268 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h2 id="_27">责任敏感安全传感器 <span id="rss-sensor"></span></h2>
+<h2 id="_27">广角相机</h2>
+<ul>
+<li><strong>RGB 蓝图:</strong> sensor.camera.rgb.wide_angle_lens</li>
+<li><strong>深度蓝图:</strong> sensor.camera.depth.wide_angle_lens</li>
+<li><strong>语义分割蓝图:</strong> sensor.camera.semantic_segmentation.wide_angle_lens</li>
+<li><strong>实例分割蓝图:</strong> sensor.camera.instance_segmentation.wide_angle_lens</li>
+<li><strong>输出：</strong> 每步 <a href="../python_api/#carla.Image">carla.Image</a> (除非 <code>sensor_tick</code> 另有说明).</li>
+</ul>
+<p>广角相机模型涵盖多种专用相机，例如标准广角相机、360度相机和鱼眼镜头。该模型提供标准 RGB 输出，并支持深度、语义分割和实例分割。此外，还提供多种投影模型，包括透视投影、立体投影、等距投影、等积投影、正交投影和 Kannala-Brandt 投影。</p>
+<p>所使用的 <a href="https://www.researchgate.net/publication/6899685_A_Generic_Camera_Model_and_Calibration_Method_for_Conventional_Wide-Angle_and_Fish-Eye_Lenses">Kannala-Brandt</a> 模型与 <a href="https://docs.opencv.org/3.4/db/d58/group__calib3d__fisheye.html">OpenCV中使用的实现</a> 相匹配。</p>
+<table>
+<thead>
+<tr>
+<th>蓝图属性</th>
+<th>类型</th>
+<th>默认</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>camera_model</code></td>
+<td>str</td>
+<td><code>perspective</code></td>
+<td>选项: <br><code>perspective</code>,<br><code>stereographic</code>,<br><code>equidistant</code>,<br><code>equisolid</code>,<br><code>orthographic</code>,<br><code>kannala-brandt</code></td>
+</tr>
+<tr>
+<td><code>fov</code></td>
+<td>float</td>
+<td>90.0</td>
+<td>水平视场角（度）</td>
+</tr>
+<tr>
+<td><code>image_size_x</code></td>
+<td>int</td>
+<td>800</td>
+<td>图片宽度（以像素为单位）</td>
+</tr>
+<tr>
+<td><code>image_size_y</code></td>
+<td>int</td>
+<td>600</td>
+<td>图片高度（以像素为单位）</td>
+</tr>
+<tr>
+<td><code>k0</code></td>
+<td>float</td>
+<td>0.0831</td>
+<td>Kannala-Brandt K0 参数</td>
+</tr>
+<tr>
+<td><code>k1</code></td>
+<td>float</td>
+<td>0.0111</td>
+<td>Kannala-Brandt K1 参数</td>
+</tr>
+<tr>
+<td><code>k2</code></td>
+<td>float</td>
+<td>0.00858</td>
+<td>Kannala-Brandt K2 参数</td>
+</tr>
+<tr>
+<td><code>k3</code></td>
+<td>float</td>
+<td>0.000854</td>
+<td>Kannala-Brandt K3 参数</td>
+</tr>
+<tr>
+<td><code>sensor_tick</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>传感器捕获之间的模拟秒数（节拍数）。</td>
+</tr>
+<tr>
+<td><code>fov_mask</code></td>
+<td>bool</td>
+<td>false</td>
+<td>掩膜视野范围外的像素</td>
+</tr>
+<tr>
+<td><code>fov_fade_size</code></td>
+<td>float</td>
+<td>0.0</td>
+<td><code>fov_mask</code> 边缘的模糊程度</td>
+</tr>
+<tr>
+<td><code>perspective</code></td>
+<td>bool</td>
+<td>false</td>
+<td>启用透视模式</td>
+</tr>
+<tr>
+<td><code>equirectangular</code></td>
+<td>bool</td>
+<td>false</td>
+<td>启用等距柱状投影。</td>
+</tr>
+<tr>
+<td><code>longitude_offset</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>将等距柱状投影模型的视角中心移动一定角度</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_28">输出属性</h4>
+<table>
+<thead>
+<tr>
+<th>传感器数据属性</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frame</code></td>
+<td>int</td>
+<td>测量发生时的帧号</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td>double</td>
+<td>自轮次开始以来，测量模拟时间（以秒为单位）。</td>
+</tr>
+<tr>
+<td><code>transform</code></td>
+<td><a href="../python_api#carlatransform">carla.Transform</a></td>
+<td>测量时传感器在世界坐标系中的位置和旋转。</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td>int</td>
+<td>图片宽度（以像素为单位）</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>int</td>
+<td>图片高度（以像素为单位）</td>
+</tr>
+<tr>
+<td><code>fov</code></td>
+<td>float</td>
+<td>水平视场角（度）</td>
+</tr>
+<tr>
+<td><code>raw_data</code></td>
+<td>bytes</td>
+<td>BGRA 32 位像素阵列</td>
+</tr>
+</tbody>
+</table>
+<p>具体效果请参考 <a href="https://mp.weixin.qq.com/s/GsEzR-R0xvIyUzSor6j6XQ">广角相机模拟效果及代码分析</a> 。</p>
+<hr />
+<h2 id="_29"><a href="https://github.com/carla-simulator/carla/pull/3755/files">鱼眼相机</a> <span id="fisheye-camera"></span></h2>
+<p><a href="https://zhuanlan.zhihu.com/p/340751380">鱼眼相机镜头</a> 是由十几个不同的透镜组合而成，在成像的过程中，入射光线经过不同程度的折射，投影到尺寸有限的成像平面上，使得鱼眼镜头拥有更大的视野范围。
+与针孔相机原理不同，鱼眼镜头采用非相似成像，在成像过程中引入畸变，通过对直径空间的压缩，突破成像视角的局限，从而达到广角成像。
+所以鱼眼镜头是一种极端的广角镜头，通常焦距小于等于16mm并且视角接近或等于180°（在工程上视角超过140°的镜头即统称为鱼眼镜头）。进入 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">网盘</a> 的目录 <code>software/car/fisheye-camera</code> 下载包含鱼眼相机的可执行场景，其实现步骤和原理参考 <a href="../sensor/fisheye_camera/">链接</a> 。</p>
+<ul>
+<li><strong>蓝图：</strong> sensor.camera.fisheye</li>
+<li><strong>输出：</strong> 每一步一个 <a href="../python_api/#carla.ImageCube">carla.ImageCube</a> (除非<code>sensor_tick</code>另有说明)。</li>
+</ul>
+<p>Fisheye 相机充当常规鱼眼相机，从场景中捕捉图像。
+<a href="../python_api/#carla.ColorConverter">carla.colorConverter</a> 定义可用于 carla.ImageCube 的转换模式的类，以显示 <a href="../python_api/#carla.Sensor">carla.Sensor</a> 提供的信息。</p>
+<p>这里的 <code>sensor_tick</code> 表示我们希望传感器以多快的速度捕获数据。值为 1.5 表示我们希望传感器每 1.5 秒捕获一次数据。默认情况下，值为 0.0 表示尽可能快。</p>
+<p><img alt="FisheyeImage" src="../img/sensor/ref_sensors_fisheye.png" /></p>
+<h4 id="_30">基本相机属性</h4>
+<table>
+<thead>
+<tr>
+<th>蓝图属性</th>
+<th>类型</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_angle</code></td>
+<td>float</td>
+<td>200.0</td>
+<td>最大角度（以度为单位）。</td>
+</tr>
+<tr>
+<td><code>x_size</code></td>
+<td>float</td>
+<td>1000.0</td>
+<td>图像宽度（以像素为单位）。</td>
+</tr>
+<tr>
+<td><code>y_size</code></td>
+<td>float</td>
+<td>900.0</td>
+<td>图像高度（以像素为单位）。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_31">相机镜头畸变属性</h4>
+<table>
+<thead>
+<tr>
+<th>蓝图属性</th>
+<th>类型</th>
+<th>默认</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f_x</code></td>
+<td>float</td>
+<td>300.0</td>
+<td>焦距的 x 长度（以像素为单位）。</td>
+</tr>
+<tr>
+<td><code>f_y</code></td>
+<td>float</td>
+<td>300.0</td>
+<td>焦距在的 y 长度（以像素为单位）。</td>
+</tr>
+<tr>
+<td><code>c_x</code></td>
+<td>float</td>
+<td>600.0</td>
+<td>光学中心的 x 坐标（主点），以像素为单位。</td>
+</tr>
+<tr>
+<td><code>c_y</code></td>
+<td>float</td>
+<td>400.0</td>
+<td>光学中心的 y 坐标（主点），以像素为单位。</td>
+</tr>
+<tr>
+<td><code>d_1</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>畸变系数。</td>
+</tr>
+<tr>
+<td><code>d_2</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>畸变系数。</td>
+</tr>
+<tr>
+<td><code>d_3</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>畸变系数。</td>
+</tr>
+<tr>
+<td><code>d_4</code></td>
+<td>float</td>
+<td>0.0</td>
+<td>畸变系数。</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr />
+<h2 id="_32">责任敏感安全传感器 <span id="rss-sensor"></span></h2>
 <ul>
 <li><strong>蓝图：</strong> sensor.other.rss</li>
 <li><strong>输出：</strong> 每一步 <a href="../python_api/#carla.RssResponse">carla.RssResponse</a> （除非<code>sensor_tick</code>另有说明）。</li>
@@ -1449,7 +1711,7 @@ in_meters = 1000 * normalized
 <p class="admonition-title">笔记</p>
 <p>如果未定义路由目标，则会创建随机路由。</p>
 </div>
-<h4 id="_28">输出属性</h4>
+<h4 id="_33">输出属性</h4>
 <table>
 <thead>
 <tr>
@@ -1517,7 +1779,7 @@ in_meters = 1000 * normalized
     <span class="k">return</span> <span class="n">actor_constellation_result</span>
 </code></pre></div>
 <hr />
-<h2 id="_29">语义激光雷达传感器 <span id="semantic-lidar-sensor"></span></h2>
+<h2 id="_34">语义激光雷达传感器 <span id="semantic-lidar-sensor"></span></h2>
 <ul>
 <li><strong>蓝图：</strong> sensor.lidar.ray_cast_semantic</li>
 <li><strong>输出：</strong> 每步 <a href="../python_api/#carla.SemanticLidarMeasurement">carla.SemanticLidarMeasurement</a> （除非<code>sensor_tick</code>另有说明）。</li>
@@ -1544,7 +1806,7 @@ in_meters = 1000 * normalized
 <strong>1.</strong> 设置传感器的频率 <code>sensors_bp['lidar'][0].set_attribute('rotation_frequency','10')</code>。 <br>
 <strong>2.</strong> 使用 <code>python3 config.py --fps=10</code> 运行模拟。</p>
 <p><img alt="LidarPointCloud" src="../img/semantic_lidar_point_cloud.jpg" /></p>
-<h4 id="_30">语义激光雷达属性</h4>
+<h4 id="_35">语义激光雷达属性</h4>
 <p><br></p>
 <table>
 <thead>
@@ -1606,7 +1868,7 @@ in_meters = 1000 * normalized
 </tr>
 </tbody>
 </table>
-<h4 id="_31">输出属性</h4>
+<h4 id="_36">输出属性</h4>
 <table>
 <thead>
 <tr>
@@ -1653,7 +1915,7 @@ in_meters = 1000 * normalized
 </tr>
 </tbody>
 </table>
-<h2 id="_32">语义分割相机 <span id="semantic-segmentation-camera"></span></h2>
+<h2 id="_37">语义分割相机 <span id="semantic-segmentation-camera"></span></h2>
 <ul>
 <li><strong>蓝图：</strong> sensor.camera.semantic_segmentation</li>
 <li><strong>输出：</strong> 每步 <a href="../python_api/#carla.Image">carla.Image</a> （除非 <code>sensor_tick</code> 另有说明）。</li>
@@ -1856,7 +2118,7 @@ in_meters = 1000 * normalized
 <p class="admonition-title">笔记</p>
 <p>阅读 <a href="../tuto_D_create_semantic_tags/">本</a> 教程以创建新的语义标签。</p>
 </div>
-<h4 id="_33">相机基本属性</h4>
+<h4 id="_38">相机基本属性</h4>
 <table>
 <thead>
 <tr>
@@ -1894,7 +2156,7 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h4 id="_34">相机镜头畸变属性</h4>
+<h4 id="_39">相机镜头畸变属性</h4>
 <table>
 <thead>
 <tr>
@@ -1944,7 +2206,7 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h4 id="_35">输出属性</h4>
+<h4 id="_40">输出属性</h4>
 <table>
 <thead>
 <tr>
@@ -1992,7 +2254,7 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h2 id="_36">实例分割相机 <span id="instance-segmentation-camera"></span></h2>
+<h2 id="_41">实例分割相机 <span id="instance-segmentation-camera"></span></h2>
 <ul>
 <li><strong>蓝图：</strong> sensor.camera.instance_segmentation</li>
 <li><strong>输出：</strong> 每一步一个 <a href="../python_api/#carla.Image">carla.Image</a> （除非 <code>sensor_tick</code> 另有说明）。</li>
@@ -2000,7 +2262,7 @@ in_meters = 1000 * normalized
 <p>该相机根据类别和实例 ID 对视野中的每个对象进行分类。当模拟开始时，场景中的每个元素都会被创建为一个标签。因此，当生成一个参与者时就会发生这种情况。对象根据其在项目中的相对文件路径进行分类。例如，存储在 <code>Unreal/CarlaUE4/Content/Static/Pedestrians</code> 中的网格被标记为行人 <code>Pedestrian</code>。</p>
 <p><img alt="ImageInstanceSegmentation" src="../img/instance_segmentation.png" /></p>
 <p>服务器提供一张 <strong>在红色通道中编码了</strong> 标签信息的图像：红色值为 <code>x</code> 的像素属于带有标签 <code>x</code> 的对象。像素的绿色和蓝色值定义对象的唯一 ID。例如，8 位 RGB 值为 [10, 20, 55] 的像素是一辆具有唯一实例 ID <code>20-55</code> 的车辆（语义标签为 10）。</p>
-<h4 id="_37">基本相机属性</h4>
+<h4 id="_42">基本相机属性</h4>
 <table>
 <thead>
 <tr>
@@ -2038,7 +2300,7 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h4 id="_38">相机镜头畸变属性</h4>
+<h4 id="_43">相机镜头畸变属性</h4>
 <table>
 <thead>
 <tr>
@@ -2088,7 +2350,7 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h4 id="_39">输出属性</h4>
+<h4 id="_44">输出属性</h4>
 <table>
 <thead>
 <tr>
@@ -2136,7 +2398,7 @@ in_meters = 1000 * normalized
 </tbody>
 </table>
 <hr />
-<h2 id="_40">动态视觉传感器相机 <span id="dvs-camera"></span></h2>
+<h2 id="_45">动态视觉传感器相机 <span id="dvs-camera"></span></h2>
 <ul>
 <li><strong>蓝图：</strong> sensor.camera.dvs</li>
 <li><strong>输出：</strong> 每步 <a href="../python_api/#carla.DVSEventArray">carla.DVSEventArray</a> （除非<code>sensor_tick</code>另有说明）。</li>
@@ -2156,7 +2418,7 @@ L(x,y,t) - L(x,y, t-\delta t) = pol C
 <p>请注意，由于动态视觉传感器摄像机的采样方法，如果两个连续同步帧之间没有像素差异，摄像机将不会返回图像。这总是发生在第一帧中，因为没有前一帧可供比较，并且在帧之间没有移动的情况下也是如此。</p>
 <p><img alt="DVSCameraWorkingPrinciple" src="../img/sensor_dvs.gif" /></p>
 <p>动态视觉传感器是一个相机，因此具有 RGB 相机中可用的所有属性。然而，事件摄像机的工作原理几乎没有什么独有的属性。</p>
-<h4 id="_41">动态视觉传感器相机属性</h4>
+<h4 id="_46">动态视觉传感器相机属性</h4>
 <table>
 <thead>
 <tr>
@@ -2214,10 +2476,10 @@ L(x,y,t) - L(x,y, t-\delta t) = pol C
 <p>对动态视觉传感器（DVS）模块生成的事件数据进行系统性仿真到真实差距 <a href="https://mp.weixin.qq.com/s/WjRkfObSu6cb2S2sQJbXcg">评估</a> 。</p>
 <p><br></p>
 <hr />
-<h2 id="_42">光流相机 <span id="optical-flow-camera"></span></h2>
+<h2 id="_47">光流相机 <span id="optical-flow-camera"></span></h2>
 <p>光流相机捕捉从相机的角度感知的运动。该传感器记录的每个像素都对投影到图像平面的该点的速度进行编码。像素的速度在 [-2,2] 范围内编码。为了获得以像素为单位的运动，可以将该信息与图像大小一起缩放至[-2 * image_size, 2 * image_size]。</p>
 <p><img alt="optical_flow" src="../img/optical_flow.png" /></p>
-<h4 id="_43">光流相机属性</h4>
+<h4 id="_48">光流相机属性</h4>
 <table>
 <thead>
 <tr>
@@ -2254,7 +2516,7 @@ L(x,y,t) - L(x,y, t-\delta t) = pol C
 </tr>
 </tbody>
 </table>
-<h4 id="_44">光流相机镜头畸变属性</h4>
+<h4 id="_49">光流相机镜头畸变属性</h4>
 <table>
 <thead>
 <tr>
@@ -2303,7 +2565,7 @@ L(x,y,t) - L(x,y, t-\delta t) = pol C
 </tr>
 </tbody>
 </table>
-<h4 id="_45">输出属性</h4>
+<h4 id="_50">输出属性</h4>
 <table>
 <thead>
 <tr>
@@ -2352,112 +2614,6 @@ L(x,y,t) - L(x,y, t-\delta t) = pol C
 </table>
 <p><br></p>
 <hr />
-<h2 id="_46"><a href="https://github.com/carla-simulator/carla/pull/3755/files">鱼眼相机</a> <span id="fisheye-camera"></span></h2>
-<p><a href="https://zhuanlan.zhihu.com/p/340751380">鱼眼相机镜头</a> 是由十几个不同的透镜组合而成，在成像的过程中，入射光线经过不同程度的折射，投影到尺寸有限的成像平面上，使得鱼眼镜头拥有更大的视野范围。
-与针孔相机原理不同，鱼眼镜头采用非相似成像，在成像过程中引入畸变，通过对直径空间的压缩，突破成像视角的局限，从而达到广角成像。
-所以鱼眼镜头是一种极端的广角镜头，通常焦距小于等于16mm并且视角接近或等于180°（在工程上视角超过140°的镜头即统称为鱼眼镜头）。进入 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">网盘</a> 的目录 <code>software/car/fisheye-camera</code> 下载包含鱼眼相机的可执行场景，其实现步骤和原理参考 <a href="../sensor/fisheye_camera/">链接</a> 。</p>
-<ul>
-<li><strong>蓝图：</strong> sensor.camera.fisheye</li>
-<li><strong>输出：</strong> 每一步一个 <a href="../python_api/#carla.ImageCube">carla.ImageCube</a> (除非<code>sensor_tick</code>另有说明)。</li>
-</ul>
-<p>Fisheye 相机充当常规鱼眼相机，从场景中捕捉图像。
-<a href="../python_api/#carla.ColorConverter">carla.colorConverter</a> 定义可用于 carla.ImageCube 的转换模式的类，以显示 <a href="../python_api/#carla.Sensor">carla.Sensor</a> 提供的信息。</p>
-<p>这里的 <code>sensor_tick</code> 表示我们希望传感器以多快的速度捕获数据。值为 1.5 表示我们希望传感器每 1.5 秒捕获一次数据。默认情况下，值为 0.0 表示尽可能快。</p>
-<p><img alt="FisheyeImage" src="../img/sensor/ref_sensors_fisheye.png" /></p>
-<h4 id="_47">基本相机属性</h4>
-<table>
-<thead>
-<tr>
-<th>蓝图属性</th>
-<th>类型</th>
-<th>默认</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>max_angle</code></td>
-<td>float</td>
-<td>200.0</td>
-<td>最大角度（以度为单位）。</td>
-</tr>
-<tr>
-<td><code>x_size</code></td>
-<td>float</td>
-<td>1000.0</td>
-<td>图像宽度（以像素为单位）。</td>
-</tr>
-<tr>
-<td><code>y_size</code></td>
-<td>float</td>
-<td>900.0</td>
-<td>图像高度（以像素为单位）。</td>
-</tr>
-</tbody>
-</table>
-<h4 id="_48">相机镜头畸变属性</h4>
-<table>
-<thead>
-<tr>
-<th>蓝图属性</th>
-<th>类型</th>
-<th>默认</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>f_x</code></td>
-<td>float</td>
-<td>300.0</td>
-<td>焦距的 x 长度（以像素为单位）。</td>
-</tr>
-<tr>
-<td><code>f_y</code></td>
-<td>float</td>
-<td>300.0</td>
-<td>焦距在的 y 长度（以像素为单位）。</td>
-</tr>
-<tr>
-<td><code>c_x</code></td>
-<td>float</td>
-<td>600.0</td>
-<td>光学中心的 x 坐标（主点），以像素为单位。</td>
-</tr>
-<tr>
-<td><code>c_y</code></td>
-<td>float</td>
-<td>400.0</td>
-<td>光学中心的 y 坐标（主点），以像素为单位。</td>
-</tr>
-<tr>
-<td><code>d_1</code></td>
-<td>float</td>
-<td>0.0</td>
-<td>畸变系数。</td>
-</tr>
-<tr>
-<td><code>d_2</code></td>
-<td>float</td>
-<td>0.0</td>
-<td>畸变系数。</td>
-</tr>
-<tr>
-<td><code>d_3</code></td>
-<td>float</td>
-<td>0.0</td>
-<td>畸变系数。</td>
-</tr>
-<tr>
-<td><code>d_4</code></td>
-<td>float</td>
-<td>0.0</td>
-<td>畸变系数。</td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<hr />
 <h2 id="v2x">V2X 传感器 <span id="v2x-sensor"></span></h2>
 <p>车联万物 (Vehicle-to-everything, V2X) 通信是未来协作智能交通系统应用的一个重要方面。在实际车辆中，这需要每辆车上都有一个专用的车载单元 (onboard unit, OBU)，能够通过无线信道发送和接收信息。根据地区（欧洲、中国、美国），使用不同的物理技术、协议和应用程序消息格式。</p>
 <p>Carla 目前支持模拟简单的广播无线信道和两条应用消息。尚不支持网络访问和转发协议。两条实现的消息分别是符合欧洲标准 ETSI 的 <a href="#cooperative-awareness-message"><em>协作感知消息</em></a> 和 <a href="#custom-v2x-message"><em>自定义消息</em></a> 类型，可用于传输任意字符串数据（例如 JSON）。V2X 通信有两种不同的传感器，可以单独使用，每种应用消息类型各一个。实现原理请参考<a href="../pdf/V2X_sensor.pdf">论文</a> 。</p>
@@ -2478,8 +2634,8 @@ IF (ReceivedPower &gt;= receiver_sensitivity)
 </li>
 </ul>
 <p>虽然在 Carla 中模拟了可见性，但用户可以配置场景（参见 <a href="#v2x-sensors-blueprint-attributes">蓝图属性</a> ），以及无线信道的其他几个属性。</p>
-<h3 id="_49">传感器（子）类型</h3>
-<h4 id="_50">协同感知消息 <span id="cooperative-awareness-message"></span></h4>
+<h3 id="_51">传感器（子）类型</h3>
+<h4 id="_52">协同感知消息 <span id="cooperative-awareness-message"></span></h4>
 <ul>
 <li><strong>蓝图：</strong> sensor.other.v2x</li>
 <li><strong>输出：</strong> <a href="../python_api/#carla.CAMData">carla.CAMData</a>, 根据 ETSI CAM (European Telecommunications Standards Institute , Cooperative Awareness Message，欧洲通信标准协会，<a href="https://fanqienovel.com/reader/7110149289141079072">协作感知消息</a> ) 标准触发，除非另有配置</li>
@@ -2624,7 +2780,7 @@ IF (ReceivedPower &gt;= receiver_sensitivity)
 <li><strong>蓝图：</strong> sensor.other.v2x_custom</li>
 <li><strong>输出：</strong> <a href="../python_api/#carla.CustomV2XData">carla.CustomV2XData</a>，在调用 <em>send()</em> 后触发下一个节拍信息</li>
 </ul>
-<h5 id="_51">方法</h5>
+<h5 id="_53">方法</h5>
 <ul>
 <li><a name="carla.Sensor.send"></a><strong><font color="#7fb800">send</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>callback</strong></font>)
 用户每次发送消息时必须调用的函数。此函数需要一个包含对象类型 <a href="#carla.SensorData">carla.SensorData</a> 的参数来处理。<ul>

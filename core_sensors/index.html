@@ -108,14 +108,18 @@
 <span class="n">blueprint</span><span class="o">.</span><span class="n">set_attribute</span><span class="p">(</span><span class="s1">&#39;sensor_tick&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="_4">生成 <span id="spawning"></span></h3>
+<p>传感器可以放置在地图上的任何位置。通常情况下，它们会附加到父级 Actor（例如车辆）上，以便在模拟环境中移动，就像物理安装在车辆上的传感器一样。<code>spawn_actor()</code> 方法需要一个从蓝图库中选择的传感器蓝图和一个变换参数。对于未附加的传感器，变换参数将定义其在 CARLA 世界中的绝对位置。<code>attach_to</code> 参数定义了要将传感器附加到的 Actor。对于附加到 Actor 的传感器，变换参数定义了其在 Actor 坐标系中相对于 Actor 的相对位置。</p>
+<div class="highlight"><pre><span></span><code><span class="n">my_vehicle</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">vehicle_blueprint</span><span class="p">,</span> <span class="n">spawn_point</span><span class="p">)</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.7</span><span class="p">))</span>
+<span class="n">sensor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">sensor_blueprint</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">attach_to</span><span class="o">=</span><span class="n">my_vehicle</span><span class="p">)</span>
+</code></pre></div>
 <p><code>attachment_to</code> 和 <code>attachment_type</code> 至关重要。传感器应连接到父参与者（通常是车辆）上，以跟踪它并收集信息。附件类型将确定其关于所述车辆的位置如何更新。</p>
 <ul>
 <li><strong>刚性附件(Rigid attachment)。</strong> 动对于其父位置是严格的。这是从模拟中检索数据的合适附件。</li>
 <li><strong>弹簧臂附件(SpringArm attachment)。</strong> 运动变得轻松，几乎没有加速和减速。仅建议使用此附件来记录模拟视频。更新摄像机位置时，移动平滑并且避免“跳跃”。</li>
 <li><strong>弹簧臂幽灵附件(SpringArmGhost attachment)。</strong> 与前一个类似，但没有进行碰撞测试，因此相机或传感器可以穿过墙壁或其他几何形状。</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">transform</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.7</span><span class="p">))</span>
-<span class="n">sensor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">blueprint</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">attach_to</span><span class="o">=</span><span class="n">my_vehicle</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">sensor</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">sensor_blueprint</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">attach_to</span><span class="o">=</span><span class="n">my_vehicle</span><span class="p">,</span> <span class="n">attachment_type</span><span class="o">=</span><span class="n">carla</span><span class="o">.</span><span class="n">AttachmentType</span><span class="o">.</span><span class="n">SpringArm</span><span class="p">)</span>
 </code></pre></div>
 <div class="admonition 重要">
 <p class="admonition-title">重要</p>
@@ -188,14 +192,19 @@
 </thead>
 <tbody>
 <tr>
+<td>RGB</td>
+<td><a href="../python_api#carlaimage">carla.Image</a></td>
+<td>提供清晰的周围环境视野。看起来就像一张正常的现场照片。</td>
+</tr>
+<tr>
 <td>深度</td>
 <td><a href="../python_api#carlaimage">carla.Image</a></td>
 <td>在灰度图中渲染视野中元素的深度。</td>
 </tr>
 <tr>
-<td>RGB</td>
+<td><a href="../ref_sensors/#wide-angle-cameras">广角</a></td>
 <td><a href="../python_api#carlaimage">carla.Image</a></td>
-<td>提供清晰的周围环境视野。看起来就像一张正常的现场照片。</td>
+<td>可选的相机模型包括广角相机、鱼眼镜头和 360 度相机。</td>
 </tr>
 <tr>
 <td>光流</td>
