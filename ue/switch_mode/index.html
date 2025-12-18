@@ -79,8 +79,8 @@
 <p>切换到 <a href="https://openhutb.github.io/air_doc/">无人机模式</a> ：
 <div class="highlight"><pre><span></span><code>config.py<span class="w"> </span>--map<span class="w"> </span>Town10HD?GAME<span class="o">=</span>AIR
 </code></pre></div>
-<img alt="" src="https://openhutb.github.io/air_doc/images/dev/HUTB_simulation.gif" /></p>
-<p>参数中的<code>Town10HD</code>为所要切换的地图名，<code>GAME=</code>后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。</p>
+参数中的<code>Town10HD</code>为所要切换的地图名，<code>GAME=</code>后面为所需要切到到的游戏模式名，目前支持：CARLA、VR、AIR 三种模式。</p>
+<p><img alt="" src="https://openhutb.github.io/air_doc/images/dev/HUTB_simulation.gif" /></p>
 <h2 id="_2">切换地图的实现分析</h2>
 <p><img alt="HUTB_Modules" src="../../img/build_modules.jpg" /></p>
 <p>调用 config.py 切换地图时 Carla 模式的 <code>--map</code> 参数不支持游戏模式的切换，为了支持游戏模式的切换，先分析已有实现的调用过程：</p>

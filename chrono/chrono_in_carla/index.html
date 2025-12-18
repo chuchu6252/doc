@@ -69,14 +69,37 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="carla-chrono">Carla 中的 Chrono 实现</h1>
+<p>这是一个 UE4 车辆运动组件，用 Chrono 物理引擎（专业多体动力学库）替代 UE4 的 PhysX，提供更精确的车辆动力学、悬挂、轮胎和地形交互模拟。</p>
 <p>Chrono 需要在虚幻引擎端启用 RTTI（RTTI（Run-Time Type Information），从而支持动态类型识别和异常处理等功能。
 文件 <a href="https://github.com/OpenHUTB/carla/blob/1b453d00cbf5e0afa00f3e993799c36c9286d75c/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Carla.Build.cs#L214"><code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Carla.Build.cs</code></a> 中增加<code>bUseRTTI = true;</code>。</p>
 <div class="admonition 笔记">
 <p class="admonition-title">笔记</p>
 <p>每个.Build.cs文件声明派生自ModuleRules基类的类，并设置属性控制器从构造函数进行编译的方式。由虚幻编译工具编译，并被构造来确定整体编译环境。使用C#语法。</p>
 </div>
-<h2 id="_1">提交历史</h2>
-<p>在<a href="https://github.com/OpenHUTB/hutb/commits/hutb/?author=Axel1092&amp;after=3225f8cfb1920f4ebf8a98a658385b379a04541b+174">commit页面</a>按用户名<a href="https://github.com/Axel1092"><code>Axel1092</code></a>过滤。</p>
+<h2 id="_1">流程</h2>
+<ol>
+<li>
+<p>初始化阶段 (<a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L21">CreateChronoMovementComponent</a> + <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L142">BeginPlay</a> )</p>
+<p>1.1 <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L31">创建组件并配置 JSON 参数（车辆、动力总成、轮胎配置）</a></p>
+<p>1.2 <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L142">BeginPlay：初始化 Chrono 系统</a> ：
+设置重力、求解器（Barzilai -Borwein 方法是一种迭代梯度下降法）、迭代次数</p>
+<p>1.3 <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L167">InitializeChronoVehicle：从 JSON 文件加载车辆模型（底盘、悬挂、动力系统、轮胎）</a></p>
+<p>1.4. <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L157">创建地形交互层（光线投射到 UE4 碰撞）</a></p>
+</li>
+<li>
+<p>Carla -&gt; Chrono：每帧更新 ( <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L235">TickComponent</a> )</p>
+<p>2.1 时间子步处理：</p>
+<p>如果单帧时间 &gt; MaxSubstepDeltaTime（默认 0.01s），分解为多个小步进行精确计算。否则直接用该帧时间步</p>
+<p>2.2 物理仿真：<a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L292">AdvanceChronoSimulation(StepSize)</a> ：同步时间、控制（转向、油门、刹车）、地形 到 chrono</p>
+</li>
+<li>
+<p>Chrono -&gt; Carla：<a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L275">位置/旋转同步回 UE4</a> ：</p>
+<p>坐标系转换：Chrono（右手系，米）↔ UE4（左手系，厘米）</p>
+<p>地形交互 (UERayCastTerrain)：Chrono 需要知道地形 <a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L114">高度</a> 、<a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L125">法线</a> 、<a href="https://github.com/OpenHUTB/hutb/blob/f96c0e068a023d01fcf761894b142d09ab42ab84/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/MovementComponents/ChronoMovementComponent.cpp#L137">摩擦系数</a> 来计算轮胎力。本实现通过光线投射到 UE4</p>
+</li>
+</ol>
+<h2 id="_2">提交历史</h2>
+<p>在 <a href="https://github.com/OpenHUTB/hutb/commits/hutb/?author=Axel1092&amp;after=3225f8cfb1920f4ebf8a98a658385b379a04541b+174">commit页面</a> 按用户名 <a href="https://github.com/Axel1092"><code>Axel1092</code></a> 过滤。</p>
 <ul>
 <li>Support custom chrono (#9182)</li>
 <li>lower COM Z-height to 0.52 m for realistic sedan dynamics (#9126)</li>
@@ -121,8 +144,9 @@
 <li><a href="https://github.com/OpenHUTB/hutb/commit/2117794dd7989b276317743b99430468628f5baa">Created base chrono implementation</a></li>
 <li><a href="https://github.com/OpenHUTB/hutb/commit/7c3367325fad6310202d40490081f946b5f363c9">Added chrono library</a></li>
 </ul>
-<h2 id="_2">参考</h2>
+<h2 id="_3">参考</h2>
 <ul>
+<li><a href="https://www.bilibili.com/video/BV1hb1FBYEGc/">CARLA0.9.16与Chrono联合仿真--源代码解读</a></li>
 <li><a href="https://www.jianshu.com/p/e41a810b10ca">Unreal 插件</a></li>
 </ul>
               
