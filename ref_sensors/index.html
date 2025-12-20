@@ -1336,7 +1336,7 @@ in_meters = 1000 * normalized
 <li><strong>实例分割蓝图:</strong> sensor.camera.instance_segmentation.wide_angle_lens</li>
 <li><strong>输出：</strong> 每步 <a href="../python_api/#carla.Image">carla.Image</a> (除非 <code>sensor_tick</code> 另有说明).</li>
 </ul>
-<p>广角相机模型涵盖多种专用相机，例如标准广角相机、360度相机和鱼眼镜头。该模型提供标准 RGB 输出，并支持深度、语义分割和实例分割。此外，还提供多种投影模型，包括透视投影、立体投影、等距投影、等积投影、正交投影和 Kannala-Brandt 投影。</p>
+<p>广角相机模型涵盖多种专用相机，例如标准广角相机、360度相机和鱼眼镜头。该模型提供标准 RGB 输出，并支持深度、语义分割和实例分割。此外，还提供多种投影模型，包括透视投影、立体投影、等距投影、等积投影、正交投影和 Kannala-Brandt 投影。实现原理请参考 <a href="../sensor/wide_angle/">广角相机代码分析</a> 。</p>
 <p>所使用的 <a href="https://www.researchgate.net/publication/6899685_A_Generic_Camera_Model_and_Calibration_Method_for_Conventional_Wide-Angle_and_Fish-Eye_Lenses">Kannala-Brandt</a> 模型与 <a href="https://docs.opencv.org/3.4/db/d58/group__calib3d__fisheye.html">OpenCV中使用的实现</a> 相匹配。</p>
 <table>
 <thead>
