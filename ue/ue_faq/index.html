@@ -238,7 +238,11 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
   c1xx: error C3859: 未能创建 PCH 的虚拟内存
   c1xx: note: 系统返回代码 1455: The paging file is too small for this operation to complete.
 </code></pre></div></p>
-<h2 id="_13">源代码管理  <span id="src_management"></span></h2>
+<h6 id="_13">打包时候报错：</h6>
+<p><div class="highlight"><pre><span></span><code>Package ../../../../../Unreal/CarlaUE4/Content/Carla/Content/Matrials/HutbCity/BeiMen/Default_Material.uasset has malformed tag
+</code></pre></div>
+检查是否没有拉取大文件。</p>
+<h2 id="_14">源代码管理  <span id="src_management"></span></h2>
 <h6 id="openhutb"><a href="https://www.cnblogs.com/gjmhome/p/14061090.html">从原来的仓库迁移到OpenHUTB的引擎仓库</a></h6>
 <p>1.修改文件<code>.git/config</code>远端的仓库地址
 <div class="highlight"><pre><span></span><code><span class="o">[</span>remote<span class="w"> </span><span class="s2">&quot;origin&quot;</span><span class="o">]</span>
@@ -251,12 +255,15 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
 <p>3.丢弃本地提交，强制回到线上最新版本：
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/hutb
 </code></pre></div></p>
-<h2 id="_14">常见问题  <span id="faq"></span></h2>
+<h2 id="_15">常见问题  <span id="faq"></span></h2>
 <h6 id="carlaue4exe">CarlaUE4.exe 崩溃的日志保存目录</h6>
 <p>.dmp 文件分析要求本机中有崩溃发生版本对应的符号表文件（CarlaUE4.pdb 文件），使用 VS 2022 （VS 2019 的步骤类似）分析 .dmp 文件步骤如下：</p>
-<p><div class="highlight"><pre><span></span><code>C:\Users\Administrator\AppData\Local\CarlaUE4\Saved\Crashes
+<p><div class="highlight"><pre><span></span><code><span class="c1"># CarlaUE4.exe崩溃后的日志目录</span>
+C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\A</span>ppData<span class="se">\L</span>ocal<span class="se">\C</span>arlaUE4<span class="se">\S</span>aved<span class="se">\C</span>rashes
+<span class="c1"># 启动引擎编辑器时崩溃的日志目录</span>
+hutb<span class="se">\U</span>nreal<span class="se">\C</span>arlaUE4<span class="se">\S</span>aved<span class="se">\C</span>rashes<span class="se">\U</span>E4CC-Windows-<span class="o">{</span>ID<span class="o">}</span><span class="se">\C</span>arlaUE4.log
 </code></pre></div>
-附：崩溃日志的保存目录和项目名有关：C:\Users[Your Windows Username]\AppData\Local[Project Name]\Saved\Crashes</p>
+附：崩溃日志的保存目录和项目名有关：<code>C:\Users\{Your Windows Username}\AppData\Local{Project Name}\Saved\Crashes\</code></p>
 <h6 id="minidump">引擎 MiniDump 崩溃现场的恢复</h6>
 <p>1.找到崩溃时生成的 .dmp 文件，使用 VS 2022 打开，如下图所示：
 <img alt="" src="../../img/tuto_D_windows_debug/open_dump.jpg" /></p>
@@ -271,9 +278,9 @@ LIN110 无法打开文件“D:\work\workspace\UnrealEngine\Engine\Binaries\Win64
 <p>在自动测试时，需要在<code>CarlaUE4.exe</code>后面添加一些参数，操作步骤如下：</p>
 <p>1.在编辑器的菜单中：编辑(Edit) -&gt; 编辑器偏好设置(Editor Preferences) -&gt; 播放(Play) -&gt; 在独立进程游戏中运行(Play in Standalone game)，有一个文本框<code>附加启动参数</code>，可以在这里添加启动所需的参数（比如：<code>--carla-rpc-port=3654 --carla-streaming-port=0 -nosound</code>）</p>
 <p>2.点<code>运行</code>中的三角下拉菜单中的<code>独立进程游戏</code>启动场景（直接点运行附带的参数不生效）</p>
-<h6 id="_15">有风时叶子闪烁</h6>
+<h6 id="_16">有风时叶子闪烁</h6>
 <p>编辑<code>Content/Carla/Static/Vegetation/Trees/Materials/FanPalm/MexicanFanPalm_Main_Leaf</code>（对所有树都有效），并进入<code>MF_SimpleGrassWind</code>，将<code>VisualTime</code>和<code>Input WindSpeed (Scalar)</code>后的第二个 <code>Multiply</code>中B的输入由<code>-0.5</code>改为<code>-1</code>（使其可抖动的范围更大，避免闪烁）。</p>
-<h2 id="_16">参考链接 <span id="ref_link"></span></h2>
+<h2 id="_17">参考链接 <span id="ref_link"></span></h2>
 <ul>
 <li>
 <p><a href="https://bbs.huaweicloud.com/blogs/310592"><strong>UE 4 C++ 教程</strong></a></p>
