@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>坐标和转换 - 人车模拟</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u5750\u6807\u548c\u8f6c\u6362";
+        var mkdocs_page_input_path = "coordinates.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">坐标和转换</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/coordinates.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="_1">坐标和转换</h1>
+<p>本页详细介绍了 HUTB 中使用的坐标约定以及如何通过 HUTB Python API 处理坐标。</p>
+<ul>
+<li><strong><a href="#global-coordinates">全局坐标</a></strong></li>
+<li><strong><a href="#actor-coordinates">Actor 坐标</a></strong></li>
+<li><strong><a href="#handling-coordinates-through-the-carla-api">通过 HUTB API 处理坐标：</a></strong><ul>
+<li><a href="#location">位置</a></li>
+<li><a href="#rotation">旋转</a></li>
+<li><a href="#transform">变换</a></li>
+</ul>
+</li>
+<li><strong><a href="#actor-coordinates">地理坐标 Geocoordinates</a></strong></li>
+</ul>
+<hr />
+<h2 id="_2">全局坐标</h2>
+<p>HUTB 基于虚幻引擎 4.26 版本构建，并采用相同的<strong>左手坐标系</strong>。您可以在 <a href="https://openhutb.github.io/engine_doc/zh-CN/Basics/CoordinateSpace/index.html">模拟引擎文档</a> 中了解更多关于 <a href="https://dev.epicgames.com/documentation/en-us/unreal-engine/coordinate-system-and-spaces-in-unreal-engine">虚幻引擎坐标系</a> 的详细信息。</p>
+<p>对于站在原点、面向 X 轴正方向的观察者，适用以下关系：</p>
+<ul>
+<li><strong>X</strong> - <strong>前</strong></li>
+<li><strong>Y</strong> - <strong>右</strong></li>
+<li><strong>Z</strong> - <strong>上</strong></li>
+</ul>
+<p><img alt="carla_lh_coordinates" src="../img/carla_left_handed_coordinates.png" /></p>
+<p><img alt="" src="./img/ue/left_hand_rule.png" /></p>
+<p>在 HUTB API 中，距离以米为单位测量，角度以度为单位测量。因此，当 HUTB 与其他可能使用<strong>右手坐标系</strong>、角度使用弧度、距离使用厘米或英制单位的应用程序交互时，进行相关的单位转换至关重要。</p>
+<hr />
+<h2 id="actor">Actor 坐标</h2>
+<p>车辆和其他 actors（如行人）都有自己的局部坐标系，以帮助保持局部一致的坐标关系，例如传感器位置。</p>
+<p>按照惯例，HUTB 车辆的设置方式为：车头指向 X 轴正方向，车身右侧指向 Y 轴正方向，车顶指向 Z 轴正方向。车辆坐标系的中心通常靠近 X 轴和 Y 轴方向的边界框中心，并且非常靠近 Z 轴方向边界框的最低面。</p>
+<p><img alt="carla_vehicle_coordinates" src="../img/carla_vehicle_axes.png" /></p>
+<p>HUTB 行人模型的设置方式也类似，行人面向 X 轴正方向，右臂指向 Y 轴正方向，头部指向 Z 轴正方向。通常情况下，行人模型的坐标中心在静止状态下位于边界框的中心。</p>
+<h2 id="hutb-api">通过 HUTB API 处理坐标：</h2>
+<p>HUTB API 具有多个用于处理坐标和坐标变换的实用对象。</p>
+<h3 id="location">位置 Location</h3>
+<p><a href="../python_api/#carlalocation">Location 对象</a> 用于定义坐标，并在变换中或在生成或移动对象和 Actor 时检索或应用这些坐标。 </p>
+<p>以下代码展示了如何创建一个位置对象，表示 X=10m、Y=10m、Z=1m 处的坐标：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 带位置参数的默认构造函数</span>
+<span class="n">location</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 使用关键字参数</span>
+<span class="n">location</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h3 id="_3">旋转</h3>
+<p><a href="../python_api/#carlarotation">Rotation 对象</a> 用于定义 HUTB 坐标系中的旋转。旋转以欧拉角形式定义，包括横滚角、俯仰角和偏航角。欧拉角的单位为度。</p>
+<p>以下代码展示了如何创建一个旋转对象，使其横滚角为 10 度，俯仰角为 10 度，偏航角为 90 度：</p>
+<div class="highlight"><pre><span></span><code><span class="n">rotation</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="n">roll</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pitch</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">yaw</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+</code></pre></div>
+<p>关键字参数可以省略，相应的角度将被设置为零。旋转动作<strong>默认</strong>按<strong>俯仰(pitch)</strong>、<strong>偏航(yaw)</strong>、<strong>橫滾(rall)</strong> 的顺序进行。</p>
+<hr />
+<h3 id="transform">变换 Transform</h3>
+<p>HUTB <a href="../python_api/#carlatransform">Transform 对象</a> 用于包含有关对象姿态的所有信息，包括其 3D 位置和旋转。可以使用 Location 和 Rotation 创建一个新的 Transform 对象：</p>
+<div class="highlight"><pre><span></span><code><span class="n">location</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">rotation</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="n">yaw</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation</span><span class="p">)</span>
+</code></pre></div>
+<p>此变换可用于生成诸如车辆之类的 actor：</p>
+<div class="highlight"><pre><span></span><code><span class="n">vehicle</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">vehicle_bp</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+</code></pre></div>
+<p>可以使用 <code>get_transform()</code> 方法查询 actor 的变换，并访问其关联的位置和旋转属性：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_transform</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">get_transform</span><span class="p">()</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span><span class="n">Transform</span><span class="p">(</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">Rotation</span><span class="p">(</span><span class="n">pitch</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">yaw</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mf">0.0</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">Rotation</span><span class="p">(</span><span class="n">pitch</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">yaw</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</code></pre></div>
+<p>transform 对象提供了一些实用函数，用于将变换应用于其他坐标。可以使用 <code>transform()</code> 方法将与变换关联的平移和旋转应用于 Location 或 Vector：</p>
+<div class="highlight"><pre><span></span><code>location = carla.Location(1,0,0)
+vehicle_transform = vehicle.get_transform()
+transformed_location = vehicle_transform.transform(location)
+
+&gt;&gt;&gt;Vector3D(x=10.0, y=11.0, z=1.0)
+</code></pre></div>
+<p>Transform 对象还有一个 <code>inverse_transform()</code> 方法，可用于查找世界对象在 Actor 的局部坐标系中的坐标：</p>
+<div class="highlight"><pre><span></span><code>location = carla.Location(1,0,0)
+vehicle_transform = vehicle.get_transform()
+transformed_location = vehicle_transform.inverse_transform(location)
+</code></pre></div>
+<p>这对于向自动驾驶感知堆栈交换附近车辆或物体的数据非常重要，因为它需要车辆自身坐标系中的数据。</p>
+<hr />
+<h2 id="geocoordinates">地理坐标 Geocoordinates</h2>
+<p>地理坐标是以<strong>纬度</strong>、<strong>经度</strong>和<strong>海拔高度</strong>格式表示的大地坐标，用于表示地球表面上的位置。OpenDRIVE 对 HUTB 地图（<code>.xodr</code> 文件）的定义允许在其元数据中包含地理参考信息。有关 OpenDRIVE 标准中地理参考的更多信息，请参阅 <a href="https://releases.asam.net/OpenDRIVE/1.6.0/ASAM_OpenDRIVE_BS_V1-6-0.html#_georeferencing_in_opendrive">此文档</a> 。</p>
+<p>在 OpenDRIVE 文件中，地理参考信息将以 <geoReference> 标签的形式在文件头信息中提供：</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;OpenDRIVE&gt;</span>
+<span class="w">    </span><span class="nt">&lt;header</span><span class="w"> </span><span class="na">revMajor=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">revMinor=</span><span class="s">&quot;4&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">date=</span><span class="s">&quot;2020-07-28T22:34:58&quot;</span><span class="w"> </span><span class="na">north=</span><span class="s">&quot;9.9112975471922624e+1&quot;</span><span class="w"> </span><span class="na">south=</span><span class="s">&quot;-1.7159821787367417e+2&quot;</span><span class="w"> </span><span class="na">east=</span><span class="s">&quot;1.4036590163241959e+2&quot;</span><span class="w"> </span><span class="na">west=</span><span class="s">&quot;-1.4497769211633769e+2&quot;</span><span class="w"> </span><span class="na">vendor=</span><span class="s">&quot;VectorZero&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;geoReference&gt;</span><span class="cp">&lt;![CDATA[+proj=tmerc +lat_0=0 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +geoidgrids=egm96_15.gtx +vunits=m +no_defs ]]&gt;</span><span class="nt">&lt;/geoReference&gt;</span>
+<span class="w">        </span><span class="nt">&lt;userData&gt;</span>
+<span class="w">            </span><span class="nt">&lt;vectorScene</span><span class="w"> </span><span class="na">program=</span><span class="s">&quot;RoadRunner&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;2019.2.12 (build 5161c1572)&quot;</span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/userData&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/header&gt;</span>
+
+<span class="w">    </span>...
+</code></pre></div>
+<p>OpenDRIVE 文件中提供的地理参考信息由 HUTB <a href="../python_api/#carlamap">地图 Map 对象</a> 用于在 HUTB 的世界坐标系和地理坐标系之间进行转换。提供的地理坐标系是 HUTB 地图坐标中心的位置，即 X=0、Y=0、Z=0。<strong>HUTB 使用 <a href="https://en.wikipedia.org/wiki/Transverse_Mercator_projection">横轴墨卡托投影</a> 进行地理位置转换</strong> 。</p>
+<p>要将 HUTB 坐标转换为地理坐标，请使用 Map 对象的 <code>transform_to_geolocation()</code> 方法：</p>
+<div class="highlight"><pre><span></span><code><span class="n">carla_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span>
+
+<span class="n">location</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Location</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">carla_map</span><span class="o">.</span><span class="n">transform_to_geolocation</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+
+<span class="o">&gt;&gt;&gt;</span><span class="n">GeoLocation</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="mf">0.000099</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="mf">0.000090</span><span class="p">,</span> <span class="n">altitude</span><span class="o">=</span><span class="mf">1.000000</span><span class="p">)</span>
+</code></pre></div>
+<p>也可以使用 Map 对象的 <code>geolocation_to_transform()</code> 方法将地理坐标转换为 HUTB 坐标：</p>
+<div class="highlight"><pre><span></span><code><span class="n">geolocation</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">GeoLocation</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="mf">0.000099</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="mf">0.000090</span><span class="p">,</span> <span class="n">altitude</span><span class="o">=</span><span class="mf">1.000000</span><span class="p">)</span>
+<span class="n">carla_map</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">carla_map</span><span class="o">.</span><span class="n">geolocation_to_transform</span><span class="p">(</span><span class="n">geolocation</span><span class="p">))</span>
+
+<span class="o">&gt;&gt;&gt;</span><span class="n">Location</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">10.014747</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">11.016221</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">1.000000</span><span class="p">)</span>
+</code></pre></div>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../js/umlconvert.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
