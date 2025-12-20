@@ -81,7 +81,7 @@
 </ul>
 </li>
 <li><strong><a href="#using-the-carla-x-cosmos-transfer-client">使用 Carla x Cosmos Transfer 客户端</a></strong><ul>
-<li><a href="#installing-dependencies">依赖项安装</a></li>
+<li><a href="#install-dependencies">依赖项安装</a></li>
 <li><a href="#generating-cosmos-transfer-control-inputs">生成 Cosmos-Transfer 控制输入</a></li>
 <li><a href="#generating-style-transfer-variations-using-cosmos-transfer">使用 Cosmos Transfer 生成风格迁移变体</a></li>
 <li><a href="#understainding-the-cosmos-transfer-configuration">Understanding the Cosmos-Transfer configuration</a></li>
@@ -93,39 +93,51 @@
 <p>Cosmos Transfer 需要高性能数据中心 GPU，例如 NVIDIA H100。我们创建了多种轻松部署 Cosmos Transfer 服务器的方法。</p>
 <h2 id="1-nvidia-brev">方案 1：在 NVIDIA Brev 上一键部署</h2>
 <p>Carla 团队创建了一个 Brev 启动器，使用户能够轻松创建自己的 Cosmos Transfer 服务器。为此：</p>
-<p><strong>1.</strong> 点击 <a href="https://login.brev.nvidia.com/signin">此处</a> 注册Brev账号。</p>
-<p><strong>2.</strong> 请按照网站上的说明为您的账户充值。</p>
-<p><strong>3.</strong> 请访问链接 <a href="https://brev.nvidia.com/launchable/deploy/now?launchableID=env-32CoARmRgbQdxkQeHHkWfvRj87T">carla-x-cosmos-transfer1-lambda</a> 。</p>
-<p><strong>4.</strong> 点击“部署可启动项(Deploy Launchable)”。
+<p><strong>1.</strong> 点击 <a href="https://login.brev.nvidia.com/signin">此处</a> 注册Brev账号。请按照网站上的说明为您的账户充值。</p>
+<p><strong>2.</strong> 请访问链接 <a href="https://brev.nvidia.com/launchable/deploy/now?launchableID=env-32CoARmRgbQdxkQeHHkWfvRj87T">carla-x-cosmos-transfer1-lambda</a> 。点击“部署可启动项(Deploy Launchable)”。
 <img alt="Brev launchable" src="../img/cosmos_transfer/brev_01.png" /></p>
-<p><strong>5.</strong> 点击“前往实例页面(Go to Instance Page)”。
+<p><strong>3.</strong> 点击“前往实例页面(Go to Instance Page)”。
 <img alt="Go to Instance Page" src="../img/cosmos_transfer/brev_02.png" /></p>
-<p><strong>6.</strong> 等待实例启动。
+<p><strong>4.</strong> 等待实例启动。
 <img alt="Started instance" src="../img/cosmos_transfer/brev_05.png" /></p>
-<p><strong>7.</strong> 将 URL 公开。
-<img alt="Edit URL" src="../img/cosmos_transfer/brev_06.png" /></p>
+<p><strong>5.</strong> 将 URL 公开。</p>
+<blockquote>
+<p>点击“编辑访问权限(Edit Access)”（记下共享网址(<em>Shareable URL</em>)和端口）：</p>
+</blockquote>
+<p><img alt="Edit URL" src="../img/cosmos_transfer/brev_06.png" /></p>
 <p><img alt="Public URL" src="../img/cosmos_transfer/brev_07.png" /></p>
-<p><strong>7.</strong> 您的 Cosmos Transfer 服务已准备就绪！</p>
+<p><strong>6.</strong> 您的 Cosmos Transfer 服务已准备就绪！</p>
 <div class="admonition 注意">
 <p class="admonition-title">注意</p>
 <p>您可能会遇到特定云服务商提供的 GPU 实例数量有限的情况。在这种情况下，请尝试按以下步骤切换到其他云服务商： 
-<img alt="Edit compute" src="../img/cosmos_transfer/brev_03.png" />{ style="padding:1rem;" }
-<img alt="Select new cloud" src="../img/cosmos_transfer/brev_04.png" />{ style="padding:1rem;" }</p>
+<img alt="Edit compute" src="../img/cosmos_transfer/brev_03.png" />
+<img alt="Select new cloud" src="../img/cosmos_transfer/brev_04.png" /></p>
 </div>
 <hr />
 <h2 id="2">方案 2：将您自己的服务部署到其他地方</h2>
-<p>如果您拥有合适的硬件，可以将 Cosmos Transfer 部署在 Docker 容器中。构建服务器镜像所需的文件位于 Carla 安装目录或软件包根目录下的 <code>PythonAPI/examples/nvidia/cosmos/server</code> 目录中。</p>
+<p>如果您拥有合适的硬件，可以将 Cosmos Transfer 部署在 Docker 容器中。构建服务器镜像所需的文件位于 Carla 安装目录或软件包根目录下的 <code>PythonAPI/examples/nvidia/cosmos/server</code> 目录中。请按照以下步骤构建和部署 Cosmos Transfer 服务器：</p>
 <p><strong>1.</strong> <strong>安装 Docker</strong>: 如果您的系统上尚未安装 Docker，<a href="https://docs.docker.com/engine/install/">请安装它</a> 。</p>
 <p><strong>2.</strong> <strong>安装 Conda</strong>: 请按照 <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html">这些说明</a> 安装 Conda。</p>
-<p><strong>3.</strong> <strong>构建服务器</strong>: 在 <code>PythonAPI/examples/nvidia/cosmos/server</code> 目录下打开终端，并运行 <code>make_docker.sh</code> 脚本：</p>
+<p><strong>3.</strong> <strong>构建服务器</strong></p>
+<blockquote>
+<p>在 <code>PythonAPI/examples/nvidia/cosmos/server</code> 目录下打开终端，并运行 <code>make_docker.sh</code> 脚本：</p>
+</blockquote>
 <div class="highlight"><pre><span></span><code>./make_docker.sh
 </code></pre></div>
+<blockquote>
 <p>这一步骤可能需要 1-2 小时。</p>
-<p><strong>4.</strong> <strong>部署</strong>: 在您选择的环境中部署 Docker 镜像。我们建议使用至少配备 8 个 H100 GPU 的集群。对于较低的工作负载，单个 H100 GPU 就足够了。使用以下命令运行 Docker 镜像：</p>
+</blockquote>
+<p><strong>4.</strong> <strong>部署</strong></p>
+<blockquote>
+<p>在您选择的环境中部署 Docker 镜像。我们建议使用至少配备 8 个 H100 GPU 的集群。对于较低的工作负载，单个 H100 GPU 就足够了。使用以下命令运行 Docker 镜像：</p>
+</blockquote>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--shm-size<span class="w"> </span>96g<span class="w"> </span>--gpus<span class="o">=</span>all<span class="w"> </span>--ipc<span class="o">=</span>host<span class="w"> </span>-p<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span>cosmos-transfer1-carla
 </code></pre></div>
-<p><strong>5.</strong> <strong>使用客户端发起请求</strong>: 部署好 Cosmos 服务器后，您可以使用 <code>cosmos_client.py</code> 脚本向其发出请求，并为 <code>endpoint</code> 参数提供相应的 IP 地址和端口。</p>
+<p><strong>5.</strong> <strong>使用客户端发起请求</strong></p>
+<blockquote>
+<p>部署好 Cosmos 服务器后，您可以使用 <code>cosmos_client.py</code> 脚本向其发出请求，并为 <code>endpoint</code> 参数提供相应的 IP 地址和端口。</p>
 <p>例如，对于本地部署在 8080 端口的服务器：</p>
+</blockquote>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>cosmos_client.py<span class="w"> </span>http://localhost:8080<span class="w"> </span>example_data/prompts/rain.toml
 </code></pre></div>
 <hr />
@@ -152,7 +164,7 @@
 <h2 id="_1">依赖项安装</h2>
 <p><strong>1.</strong> 下载 Carla <a href="https://github.com/carla-simulator/carla/releases/tag/0.9.16">0.9.16</a> 或者 <a href="https://carla.readthedocs.io/en/latest/download/#nightly-build">最新的夜晚构建</a></p>
 <p><strong>2.</strong> 下载完成后，解压缩文件：</p>
-<div class="highlight"><pre><span></span><code>tar<span class="w"> </span>-xzvf<span class="w">  </span>CARLA_0.9.16.tar.gz
+<div class="highlight"><pre><span></span><code>tar<span class="w"> </span>-xzvf<span class="w"> </span>CARLA_0.9.16.tar.gz
 </code></pre></div>
 <p><strong>3.</strong> 请按照 <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html">这些说明</a> 安装 <code>conda</code>。如果您的系统已安装 conda，则可以跳过此步骤。</p>
 <p><strong>4.</strong> 创建一个 conda 环境（例如 <code>carla-cosmos-client</code>），并安装所有依赖项：</p>
@@ -206,6 +218,7 @@ python<span class="w"> </span>carla_cosmos_gen.py<span class="w"> </span>-f<span
 <span class="c1"># 将 https://url_to_server 替换为您的 CARLA-Cosmos-Transfer 服务器的 URL</span>
 python<span class="w"> </span>cosmos_client.py<span class="w"> </span>http://url_to_server:port<span class="w"> </span>example_data/prompts/rain.toml
 </code></pre></div>
+<p>第一个参数是 Cosmos Transfer 服务器的 URL 和端口。如果您是从 Docker 容器运行本地服务器，则可以是 <code>localhost</code> 或服务器的网络 IP 地址。如果您使用的是 NVIDIA Brev，则相应的 URL 和端口在 Brev 实例的详细信息中给出。</p>
 <p>您可以通过编辑 <code>rain.toml</code> 配置文件中的文本提示和控制参数来进行实验并查看效果。同一目录下还提供了许多其他示例，您可以在 <a href="#understainding-the-cosmos-transfer-configuration">下一节</a> 中了解更多关于这些参数的信息。</p>
 <p>您可以通过命令行选择性地覆盖 TOML 中的某些字段，并选择输出的保存位置：<em>http://localhost:8000/ts_traffic_simulation_overview/</em></p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>cosmos_client.py<span class="w"> </span>http://url_to_server:port<span class="w"> </span><span class="se">\</span>
