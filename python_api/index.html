@@ -147,7 +147,16 @@
 <li><a name="carla.Actor.add_force"></a><strong><font color="#7fb800">add_force</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>force</strong></font>)<br />
 在参与者的质心处施加力。此方法适用于在一定时间内施加的力。使用 <strong><font color="#7fb800">add_impulse()</font></strong> 施加仅持续瞬间的冲量。  <ul>
 <li><strong>参数:</strong><ul>
-<li><code>force</code> (<em><a href="#carla.Vector3D">carla.Vector3D</a><small> - N</small></em>) - 全局坐标中的力向量。  </li>
+<li><code>force</code> (<em><a href="#carla.Vector3D">carla.Vector3D</a><small> - N</small></em>) - 全局坐标中的力向量。 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a name="carla.Actor.add_force_at_location"></a><strong><font color="#7fb800">add_force_at_location</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>force</strong></font>, <font color="#00a6ed"><strong>location</strong></font>)<br />
+在指定位置施加力。此方法适用于持续一段时间的力。要施加仅持续一瞬间的力，请使用 <strong><font color="#7fb800">add_force()</font></strong> 函数。<ul>
+<li><strong>Parameters:</strong><ul>
+<li><code>force</code> (<em><a href="#carla.Vector3D">carla.Vector3D</a><small> - N</small></em>) - 全局坐标系中的力矢量。</li>
+<li><code>location</code> (<em><a href="#carla.Location">carla.Location</a><small> - meters</small></em>) - 给定力在全局坐标系中的作用中心。</li>
 </ul>
 </li>
 </ul>
@@ -156,6 +165,15 @@
 在参与者的质心处施加冲量。此方法适用于瞬时力，通常应用一次。使用 <strong><font color="#7fb800">add_force()</font></strong> 在一段时间内施加力。  <ul>
 <li><strong>参数:</strong><ul>
 <li><code>impulse</code> (<em><a href="#carla.Vector3D">carla.Vector3D</a><small> - N*s</small></em>) - 全局坐标中的冲量向量。 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a name="carla.Actor.add_impulse_at_location"></a><strong><font color="#7fb800">add_impulse_at_location</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>impulse</strong></font>, <font color="#00a6ed"><strong>impulse</strong></font>)<br />
+在指定位置处施加一个冲量。此方法适用于持续一段时间的力。要施加仅一瞬间的冲量，请使用 <strong><font color="#7fb800">add_impulse()</font></strong> 函数。<ul>
+<li><strong>Parameters:</strong><ul>
+<li><code>impulse</code> (<em><a href="#carla.Vector3D">carla.Vector3D</a><small> - N*s</small></em>) - 全局坐标系中的冲量矢量。</li>
+<li><code>location</code> (<em><a href="#carla.Location">carla.Location</a><small> - meters</small></em>) - 给定力在全局坐标系中的作用中心。</li>
 </ul>
 </li>
 </ul>
@@ -3573,6 +3591,14 @@ X-轴旋转角度。  </li>
 <li><strong>参数:</strong><ul>
 <li><code>location</code> (<em><a href="#carla.Location">carla.Location</a></em>)  </li>
 <li><code>rotation</code> (<em><a href="#carla.Rotation">carla.Rotation</a><small> - 度数（俯仰、偏航、翻滚）</small></em>)  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a name="carla.Transform.inverse_transform"></a><strong><font color="#7fb800">inverse_transform</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>in_point</strong></font>)<br />
+使用当前变换作为参考系，将 3D 点从全局坐标系转换到局部坐标系。  <ul>
+<li><strong>参数：</strong><ul>
+<li><code>in_point</code> (<em><a href="#carla.Location">carla.Location</a></em>) - 将应用逆变换的全局位置。</li>
 </ul>
 </li>
 </ul>

@@ -86,6 +86,7 @@
 <li><a href="#set-unreal-engine-environment-variable">设置虚幻引擎环境变量</a></li>
 <li><a href="#build-carla">构建 Carla</a></li>
 <li><a href="#other-make-commands">其他 make 命令</a></li>
+<li><a href="#running-tests">运行测试</a></li>
 <li><a href="#other">其他</a></li>
 </ul>
 </li>
@@ -335,6 +336,10 @@ gedit<span class="w"> </span>~/.profile
 <p>以下命令编译 Python API 客户端：</p>
 <div class="highlight"><pre><span></span><code>make<span class="w"> </span>PythonAPI
 </code></pre></div>
+<div class="admonition 注意">
+<p class="admonition-title">注意</p>
+<p><strong>NumPy 2 错误</strong>: 如果您用于构建 CARLA 的 Python 安装或环境中安装了 <em>numpy&gt;=2.0.0</em> ，则会由于依赖冲突而在构建过程中导致错误。遇到与 Boost 相关的错误时，这应该是首先要检查的地方。使用 <code>python3 -m pip show numpy</code> 命令检查您的 NumPy 版本。</p>
+</div>
 <p><strong>为特定 Python 版本构建 Python API</strong></p>
 <p>上述命令将为系统 Python 版本构建 Python API。您可以按照以下说明将目标版本定位到 Python 3.11 及更高版本：</p>
 <ul>
@@ -409,6 +414,10 @@ pip<span class="w"> </span>install<span class="w"> </span>&lt;path/to/wheel&gt;.
 </code></pre></div>
 <p>首次启动时，编辑器可能会显示有关着色器和网格距离场的警告。这些警告需要一些时间加载，在此之前地图无法正常显示。后续启动编辑器的速度会更快。</p>
 <p><img alt="ue4_editor_open" src="../img/ue4_editor_open.png" /></p>
+<div class="admonition 注意">
+<p class="admonition-title">注意</p>
+<p><strong>NumPy 2 错误</strong>: <code>make launch</code> 命令可能会受到 NumPy 2 版本冲突的影响，请使用 PIP 命令检查 Python 安装中的 NumPy 版本：<code>python3 -m pip show numpy</code>。如果版本为 2.0.0 或更高，则需要降级到 <em>numpy&lt;2.0.0</em> 版本。 </p>
+</div>
 <p><strong>3.</strong> <strong>开始模拟</strong>：</p>
 <p>按“运行”开始服务器模拟。可以使用<code>WASD</code>键移动相机，并通过在移动鼠标的同时单击场景来旋转相机。</p>
 <p>使用<code>PythonAPI\examples</code>里面的示例脚本测试模拟器。在模拟器运行的情况下，为每个脚本打开一个新终端并运行以下命令以在城镇中产生一些生命并创建天气循环：</p>
@@ -470,9 +479,26 @@ python3<span class="w"> </span>dynamic_weather.py<span class="w"> </span>
 </tbody>
 </table>
 <hr />
-<h3 id="_7">其他 <span id="other"></span></h3>
+<h3 id="_7">运行测试</h3>
+<p>CARLA 的代码自带一套测试用例，旨在检测新代码变更可能引入的基本功能回归问题。CARLA 的 CI/CD 系统会在每次每日构建和发布前运行这些测试，然后再上传新软件包。如果您自行管理构建，我们建议您至少定期运行测试套件，以便检测破坏性变更。</p>
+<p>首先，根据您最新的更改创建一个 CARLA 包：</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>package
+</code></pre></div>
+<p>该软件包将在 Dist 文件夹中创建，其名称取决于最后一次提交，请从新构建的软件包运行模拟器。请替换为相应的软件包 ID，该 ID 取决于最新的提交：</p>
+<div class="highlight"><pre><span></span><code>./Dist/CARLA_&lt;package_id&gt;/LinuxNoEditor/CarlaUE4.sh<span class="w"> </span>--ros2<span class="w"> </span>-RenderOffScreen<span class="w"> </span>--carla-rpc-port<span class="o">=</span>&lt;port&gt;<span class="w"> </span>--carla-streaming-port<span class="o">=</span><span class="m">0</span><span class="w"> </span>-nosound
+</code></pre></div>
+<p>模拟器运行后，运行冒烟测试：</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>smoke_tests<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--xml --python-version=&lt;python_version&gt; --target-wheel-platform=manylinux_2_31_x86_64</span>
+</code></pre></div>
+<p>最后，运行示例：</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>run-examples<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;localhost &lt;port&gt;&quot;</span>
+</code></pre></div>
+<p>如果任何测试失败，您将在命令行收到警报。您可以在 <code>${CARLA_ROOT}/PythonAPI/test/smoke</code> 中找到冒烟测试。</p>
+<p>You will be alerted on the command line if any tests fail. You can find the smoke tests in <code>${CARLA_ROOT}/PythonAPI/test/smoke</code>. </p>
+<hr />
+<h3 id="_8">其他 <span id="other"></span></h3>
 <p>v2ray 的版本不能太高，比如可以使用 <a href="https://github.com/v2fly/v2ray-core/releases/tag/v4.45.2">v4.45.2</a> ，图形界面使用<a href="https://github.com/Qv2ray/Qv2ray/releases">Qv2ray 2.7.0</a> 。</p>
-<h2 id="_8">问题</h2>
+<h2 id="_9">问题</h2>
 <ul>
 <li>执行<code>make Python</code>时报错：</li>
 </ul>
