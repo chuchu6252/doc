@@ -135,6 +135,7 @@ D:/work/workspace/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/Fishey
 > * __下载资产。__ 如果没有视觉内容，服务器将无法运行。此步骤是强制性的。
 > * __UE4_ROOT 未定义。__ 境变量未设置。请记住通过将其添加到 `~/.bashrc` 或 `~/.profile` 来使其在会话范围内持久存在。否则，需要为每个新 shell 进行设置。运行`export UE4_ROOT=<path_to_unreal_4-26>`设置这次的变量。
 > * __检查依赖。__ 确保一切都安装正确。也许其中一个命令被跳过、不成功或者依赖项不适合系统。
+> * __Numpy 2 冲突__. NumPy 2 与用于构建 CARLA 的工具存在冲突。这是导致 Boost 相关错误的最常见原因之一。请使用 `python3 -m pip show numpy` 命令检查您的 NumPy 版本。如果版本为 2.0.0 或更高，则必须降级到 *numpy<2.0.0* 的版本。
 > * __删除 Carla 并再次克隆它。__ 以防万一出了问题。删除 Carla 并重新克隆或下载。
 > * __满足系统要求。__ Ubuntu 版本应为 16.04 或更高版本。Carla 需要大约 170GB 的磁盘空间和一个专用 GPU（或至少一个 6GB）才能运行。
 > 

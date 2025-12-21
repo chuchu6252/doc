@@ -14,6 +14,7 @@
     - [设置虚幻引擎环境变量](#set-unreal-engine-environment-variable)
     - [构建 Carla](#build-carla)
     - [其他 make 命令](#other-make-commands)
+    - [运行测试](#running-tests)
     - [其他](#other)
 
 ---
@@ -349,6 +350,10 @@ Python API 客户端授予对模拟的控制权。首次构建 HUTB 时以及执
 make PythonAPI
 ```
 
+!!! 注意
+    **NumPy 2 错误**: 如果您用于构建 CARLA 的 Python 安装或环境中安装了 *numpy>=2.0.0* ，则会由于依赖冲突而在构建过程中导致错误。遇到与 Boost 相关的错误时，这应该是首先要检查的地方。使用 `python3 -m pip show numpy` 命令检查您的 NumPy 版本。
+
+
 **为特定 Python 版本构建 Python API**
 
 上述命令将为系统 Python 版本构建 Python API。您可以按照以下说明将目标版本定位到 Python 3.11 及更高版本：
@@ -442,6 +447,9 @@ __2.__ __编译服务器__：
 ![ue4_editor_open](img/ue4_editor_open.png)
 
 
+!!! 注意
+    **NumPy 2 错误**: `make launch` 命令可能会受到 NumPy 2 版本冲突的影响，请使用 PIP 命令检查 Python 安装中的 NumPy 版本：`python3 -m pip show numpy`。如果版本为 2.0.0 或更高，则需要降级到 *numpy<2.0.0* 版本。 
+
 __3.__ __开始模拟__：
 
 按“运行”开始服务器模拟。可以使用`WASD`键移动相机，并通过在移动鼠标的同时单击场景来旋转相机。
@@ -478,6 +486,40 @@ python3 dynamic_weather.py
 | `make clean`     | 删除构建系统生成的所有二进制文件和临时文件。                  |
 | `make rebuild`   | `make clean` 和 `make launch` 两者都在一个命令中。 |
 | `make check`     | 进行单元测试                                  |
+
+---
+
+### 运行测试
+
+CARLA 的代码自带一套测试用例，旨在检测新代码变更可能引入的基本功能回归问题。CARLA 的 CI/CD 系统会在每次每日构建和发布前运行这些测试，然后再上传新软件包。如果您自行管理构建，我们建议您至少定期运行测试套件，以便检测破坏性变更。
+
+首先，根据您最新的更改创建一个 CARLA 包：
+
+```sh
+make package
+```
+
+该软件包将在 Dist 文件夹中创建，其名称取决于最后一次提交，请从新构建的软件包运行模拟器。请替换为相应的软件包 ID，该 ID 取决于最新的提交：
+
+```sh
+./Dist/CARLA_<package_id>/LinuxNoEditor/CarlaUE4.sh --ros2 -RenderOffScreen --carla-rpc-port=<port> --carla-streaming-port=0 -nosound
+```
+
+模拟器运行后，运行冒烟测试：
+
+```sh
+make smoke_tests ARGS="--xml --python-version=<python_version> --target-wheel-platform=manylinux_2_31_x86_64
+```
+
+最后，运行示例：
+
+```sh
+make run-examples ARGS="localhost <port>"
+```
+
+如果任何测试失败，您将在命令行收到警报。您可以在 `${CARLA_ROOT}/PythonAPI/test/smoke` 中找到冒烟测试。
+
+You will be alerted on the command line if any tests fail. You can find the smoke tests in `${CARLA_ROOT}/PythonAPI/test/smoke`. 
 
 ---
 

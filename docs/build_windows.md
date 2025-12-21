@@ -277,6 +277,9 @@ pip3 install --force-reinstall <path/to/wheel>.whl
 !!! 警告
     使用不同方法安装 HUTB 客户端库以及系统上安装不同版本的 HUTB 可能会出现问题。建议在安装 `.whl` 时使用虚拟环境，并在安装新客户端库之前 [卸载](build_faq.md#how-do-i-uninstall-the-carla-client-library) 任何以前安装的客户端库。
 
+!!! 注意
+    **NumPy 2 错误**: 如果您用于构建 CARLA 的 Python 安装或环境中安装了 *numpy>=2.0.0* ，则会由于依赖冲突而在构建过程中导致错误。遇到与 Boost 相关的错误时，这应该是首先要检查的地方。请使用 `python3 -m pip show numpy` 命令检查您的 NumPy 版本。 
+
 __2.__ __编译服务端__:
 
 以下命令编译并启动虚幻引擎。每次您想要启动服务器或使用虚幻引擎编辑器时运行此命令：
@@ -300,6 +303,11 @@ make launch
     如果编译过程中出现中文乱码，为了便于寻找编译错误，可以使用`chcp 65001`命令将编码方式修改为UTF-8（选择“属性”。在“属性”>>“选项”一栏中，就可以看到当前代码页的编码方式）。
 
 ![](./img/ue/ue4_editor.png)
+
+
+!!! 注意
+    **NumPy 2 错误**: `make launch` 命令可能会受到 NumPy 2 版本冲突的影响，请使用 PIP 命令检查 Python 安装中的 NumPy 版本：`python3 -m pip show numpy`。如果版本为 *2.0.0* 或更高，则需要降级到 *numpy<2.0.0* 版本。 
+
 
 __3.__ __开始模拟__:
 

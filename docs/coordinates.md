@@ -58,21 +58,33 @@ location = carla.Location(10,10,1)
 
 # 使用关键字参数
 location = carla.Location(x=10,y=10, z=1)
+
+# 不带参数的默认构造函数
+location = carla.Location() # x=y=z=0
 ```
+
+可以省略任何或所有关键字参数，相关轴的值将设置为零。
 
 ---
 
 ### 旋转
 
-[Rotation 对象](python_api.md#carlarotation) 用于定义 HUTB 坐标系中的旋转。旋转以欧拉角形式定义，包括横滚角、俯仰角和偏航角。欧拉角的单位为度。
+[Rotation 对象](python_api.md#carlarotation) 用于定义 HUTB 坐标系中的旋转。旋转以欧拉角形式定义，包括**横滚角**、**俯仰角**和**偏航角**。欧拉角的单位为度。固有的旋转是按**偏航、俯仰、横滚**的顺序进行的。
 
 以下代码展示了如何创建一个旋转对象，使其横滚角为 10 度，俯仰角为 10 度，偏航角为 90 度：
 
 ```py
-rotation = carla.Rotation(roll=10, pitch=10, yaw=90)
+# 带位置参数的默认构造函数
+rotation = carla.Rotation(10,90,10) # pitch, yaw, roll
+
+# 使用关键字参数
+rotation = carla.Rotation(pitch=10, yaw=90, roll=10)
+
+# 不带参数的默认构造函数
+rotation = carla.Rotation() # pitch=yaw=roll=0
 ```
 
-关键字参数可以省略，相应的角度将被设置为零。旋转动作**默认**按**俯仰(pitch)**、**偏航(yaw)**、**橫滾(rall)** 的顺序进行。
+可以省略任何或所有关键字参数，相关角度将设置为零。
 
 ---
 
@@ -81,8 +93,11 @@ rotation = carla.Rotation(roll=10, pitch=10, yaw=90)
 HUTB [Transform 对象](python_api.md#carlatransform) 用于包含有关对象姿态的所有信息，包括其 3D 位置和旋转。可以使用 Location 和 Rotation 创建一个新的 Transform 对象：
 
 ```py
+# 设置位置和旋转
 location = carla.Location(10,10,1)
 rotation = carla.Rotation(yaw=90)
+
+# 创建变换
 transform = carla.Transform(location, rotation)
 ```
 
@@ -104,12 +119,12 @@ print(vehicle.get_transform().rotation)
 >>>Rotation(pitch=0.0, yaw=90, roll=0.0)
 ```
 
-transform 对象提供了一些实用函数，用于将变换应用于其他坐标。可以使用 `transform()` 方法将与变换关联的平移和旋转应用于 Location 或 Vector：
+transform 对象提供了一些实用函数，用于将变换应用于其他坐标。可以使用 `transform()` 方法将与变换关联的平移和旋转应用于 Location 或 Vector。此方法用于将变换父对象（例如车辆或其他 actor）局部坐标系中的点转换为全局坐标系中的点。例如，要查找安装在车辆上的传感器在全局坐标系中的位置：
 
 ```
-location = carla.Location(1,0,0)
+sensor_local_coord = carla.Location(1,0,0)
 vehicle_transform = vehicle.get_transform()
-transformed_location = vehicle_transform.transform(location)
+sensor_global_coord = vehicle_transform.transform(sensor_local_coord)
 
 >>>Vector3D(x=10.0, y=11.0, z=1.0)
 ```
