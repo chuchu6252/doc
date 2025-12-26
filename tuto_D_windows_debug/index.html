@@ -71,8 +71,9 @@
                 <h1 id="windows">在 Windows 上进行模拟器的调试</h1>
 <ul>
 <li><a href="#debug_CarlaUE4"><strong>虚幻引擎Carla插件的调试</strong></a></li>
-<li><a href="#cpp_client_debug"><strong>C++客户端调试</strong></a></li>
 <li><a href="#debug_LibCarla"><strong>调试LibCarla</strong></a><ul>
+<li><a href="cpp_client_debug"><strong>使用 C++ 开始调试 LibCarla client</strong></a></li>
+<li><a href="libcarla_server"><strong>从 CarlaUE4 开始调试 LibCarla server</strong></a></li>
 <li><a href="#python_extension"><strong>Python 扩展模块</strong></a></li>
 </ul>
 </li>
@@ -124,7 +125,7 @@
 <p><strong>Debug</strong>: 游戏和引擎全都可以调试，无优化，速度慢，没有Editor相关代码功能，资源需要Cook。</p>
 </li>
 <li>
-<p><strong>Debug Editor</strong>：游戏和引擎全部可以调试，无优化，可以使用Editor相关代码功能，资源不需要Cook，可直接启动编辑器。（用<code>generate_traffic.py</code>调试会崩溃，<code>manual_control.py</code>可以）</p>
+<p><strong>Debug Editor</strong>：游戏和引擎全部可以调试，无优化，可以使用Editor相关代码功能，资源不需要Cook，可直接启动编辑器（用于调试 <a href="#libcarla_server">LibCarla Server</a> ）。</p>
 </li>
 <li>
 <p><strong>DebugGame</strong>：游戏代码可调试无优化，Editor相关代码功能不可使用，引擎不可调试，资源需要Cook。</p>
@@ -145,23 +146,25 @@
 <p><strong>Test</strong>：包含额外的测试代码。</p>
 </li>
 </ul>
-<h2 id="c">C++客户端调试 <span id="cpp_client_debug"></span></h2>
+<h2 id="libcarla">调试 LibCarla <span id="debug_LibCarla"></span></h2>
+<h3 id="c-libcarla-client">使用 C++ 开始调试 LibCarla client <span id="cpp_client_debug"></span></h3>
+<p>未设置时报错：</p>
 <ul>
 <li>错误    LNK2038 检测到“_ITERATOR_DEBUG_LEVEL”的不匹配项: 值“0”不匹配值“2”</li>
 <li>错误    LNK2038 检测到“RuntimeLibrary”的不匹配项: 值“MD_DynamicRelease”不匹配值“MDd_DynamicDebug”</li>
 </ul>
-<p>当前工程是Debug版本（0），而引用的库文件时Release版本（2）。</p>
-<p>需要将其他的.lib文件编译为debug模式：</p>
-<p>0.打开<code>x64 Native Tools Command for VS 2019</code>，并切换到目录<code>Util/Intallers</code>下。</p>
-<p>1.切换到目录<code>Util/InstallersWin</code>，将<a href="https://github.com/OpenHUTB/carla/blob/ue4-dev/Util/InstallersWin/install_boost.bat"><code>install_boost.bat</code></a> 内的b2运行参数改为<code>variant=debug</code>（根据<code>Util/BuildTools/Setup.bat</code>里的安装Boost命令改编），（或者将 <a href="https://github.com/OpenHUTB/doc/blob/master/src/cmake/install_boost_debug.bat">install_boost_debug.bat</a> 拷贝到<code>Util/InstallerWin</code>目录下），然后运行<a href="https://github.com/OpenHUTB/doc/tree/master/src/cmake/install_boost_debug.bat"><code>install_boost_debug.bat</code></a> ：
+<p>原因：当前工程是Debug版本（0），而引用的库文件是 Release 版本（2）。</p>
+<p>解决：需要将其他的.lib文件编译为debug模式：</p>
+<p>1.打开<code>x64 Native Tools Command for VS 2019</code></p>
+<p>1.1 并切换到目录<code>Util/Intallers</code>下，将<a href="https://github.com/OpenHUTB/carla/blob/ue4-dev/Util/InstallersWin/install_boost.bat"><code>install_boost.bat</code></a> 内的b2运行参数改为<code>variant=debug</code>（根据<code>Util/BuildTools/Setup.bat</code>里的安装Boost命令改编），（或者将 <a href="https://github.com/OpenHUTB/doc/blob/master/src/cmake/install_boost_debug.bat">install_boost_debug.bat</a> 拷贝到<code>Util/InstallerWin</code>目录下），然后运行<a href="https://github.com/OpenHUTB/doc/tree/master/src/cmake/install_boost_debug.bat"><code>install_boost_debug.bat</code></a> （或者设置同时编译 debug 和 release 版的 boost <code>variant=debug,release</code>）：
 <div class="highlight"><pre><span></span><code>install_boost_debug.bat<span class="w"> </span>--build-dir<span class="w"> </span>C:<span class="se">\b</span>uf<span class="w"> </span>--toolset<span class="w"> </span>msvc-14.2<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.80.0<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span>
 </code></pre></div>
-会自动将boost的库和头文件安装到目录<code>D:\buffer\boost-1.80.0-install</code>里面。</p>
-<p>将<a href="https://github.com/carla-simulator/carla/blob/dev/Util/InstallersWin/install_recast.bat"><code>install_recast.bat</code></a> 中的<code>Relase</code>改为<code>Debug</code>。
+会自动将 boost 的库（debug 模式会生成带名字 <code>gd</code> 的库文件<code>Build\boost-1.86.0-install_debug\lib\libboost_atomic-vc143-mt-gd-x64-1_86.lib</code>）和头文件安装到目录<code>boost-1.80.0-install</code>里面。</p>
+<p>1.2 将<a href="https://github.com/carla-simulator/carla/blob/dev/Util/InstallersWin/install_recast.bat"><code>install_recast.bat</code></a> 中的<code>Relase</code>改为<code>Debug</code>。
 将<code>-DCMAKE_CXX_FLAGS_RELASE="/MD /MP"</code>改为多线程调试DLL<code>-DCMAKE_CXX_FLAGS_DEBUG="/MDd /MP"</code>，（或者将 <a href="https://github.com/OpenHUTB/doc/blob/master/src/cmake/install_recast_debug.bat">install_recast_debug.bat</a> 拷贝到<code>Util/InstallerWin</code>目录下），然后运行<a href="https://github.com/OpenHUTB/doc/tree/master/src/cmake/install_recast_debug.bat"><code>install_recast_debug.bat</code></a> 。
 <div class="highlight"><pre><span></span><code>install_recast_debug.bat<span class="w"> </span>--build-dir<span class="w"> </span>C:<span class="se">\b</span>uf<span class="w"> </span>--generator<span class="w"> </span><span class="s2">&quot;Visual Studio 16 2019&quot;</span>
 </code></pre></div></p>
-<p>将<a href="https://github.com/carla-simulator/carla/blob/dev/Util/InstallersWin/install_rpclib.bat"><code>install_rpclib.bat</code></a> 中的<code>Relase</code>改为<code>Debug</code>，运行<a href="https://github.com/OpenHUTB/doc/tree/master/src/cmake/install_rpclib.bat"><code>install_rpclib.bat</code></a> 。
+<p>1.3 将<a href="https://github.com/carla-simulator/carla/blob/dev/Util/InstallersWin/install_rpclib.bat"><code>install_rpclib.bat</code></a> 中的<code>Relase</code>改为<code>Debug</code>，运行<a href="https://github.com/OpenHUTB/doc/tree/master/src/cmake/install_rpclib.bat"><code>install_rpclib.bat</code></a> 。
 将<code>-DCMAKE_CXX_FLAGS_RELASE="/MD /MP"</code>改为多线程调试DLL<code>-DCMAKE_CXX_FLAGS_DEBUG="/MDd /MP"</code>。或者将<a href="https://github.com/OpenHUTB/doc/blob/master/src/cmake/install_rpclib_debug.bat">install_rpclib_debug.bat</a> 拷贝到<code>Util/InstallerWin</code>目录下），然后运行：
 <div class="highlight"><pre><span></span><code>install_rpclib_debug.bat<span class="w"> </span>--build-dir<span class="w"> </span>C:<span class="se">\b</span>uf<span class="w"> </span>--generator<span class="w"> </span><span class="s2">&quot;Visual Studio 16 2019&quot;</span>
 </code></pre></div></p>
@@ -180,9 +183,7 @@
 <p class="admonition-title">注意</p>
 <p>需要先启动Town10HT-Opt场景：需要从vs2019中使用调试模式启动虚幻编辑器并运行场景，如果使用编译后的场景执行<code>world.GetBlueprintLibrary()</code>会抛出异常。如果调式报错<code>错误   LNK1169 找到一个或多个多重定义的符号</code>，则表明当前工程有多个主函数的代码，需要删除<code>main.cpp</code>或者在Cmakelist.txt中指定需要编译包含住函数的的源代码<code>main_debug.cpp</code>。</p>
 </div>
-<h2 id="libcarla">调试 LibCarla <span id="debug_LibCarla"></span></h2>
-<h3 id="c_1">使用 C++ 进行调用</h3>
-<p>该功能已经在 <a href="#cpp_client_debug">C++客户端调试</a> 中实现，故不再需要，后面的步骤仅做探索使用。<strong>客户端</strong>向服务端调用实现的功能。</p>
+<p>以下已经在上面 <a href="#cpp_client_debug">C++客户端调试</a> 中实现，故不再需要，后面的步骤仅做探索使用。<strong>客户端</strong>向服务端调用实现的功能。</p>
 <ul>
 <li>脚本<code>BuildLibCarla.bat</code>调用<code>cmake</code>命令进行构建：</li>
 </ul>
@@ -225,8 +226,9 @@
 </div>
 <p>参考 <a href="https://blog.csdn.net/qq_36330274/article/details/128380765">vs调试C++</a> 。</p>
 <p>调试<code>carla_client</code>时，vs报错：<code>boost::python::error_already_set</code>，尝试<a href="https://leonlee.wordpress.com/2018/09/24/%E4%BD%BF%E7%94%A8boostpython%E5%9C%A8c%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E5%B5%8C%E5%85%A5python%EF%BC%9A%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/">捕获具体异常</a> 。</p>
-<h3 id="carlaue4-libcarla-server">从 CarlaUE4 启动调试 LibCarla Server</h3>
+<h3 id="carlaue4-libcarla-server">从 CarlaUE4 开始调试 LibCarla server <span id="libcarla_server"></span></h3>
 <p>需要在 CarlaUE4 项目的菜单栏中选择 <strong>解决方案配置</strong> <code>Debug Editor</code>，然后点击<code>调试-&gt;启动调试</code>打开编辑器，然后启动场景，可以进入 LibCarla Server 代码。</p>
+<p>例如将断点打在 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Game/CarlaGameModeBase.cpp#L471">Carla\Game\CarlaGameModeBase.cpp</a> 的<code>carla::opendrive::OpenDriveParser::Load(opendrive_xml);</code>，从编辑器运行场景后会在这一行停止，点 F11 后进入 LibCarla server 模块。</p>
 <h4 id="_1">其他尝试性配置</h4>
 <p>使用 VS 打开工程<code>hutb\Unreal\CarlaUE4\CarlaUE4.sln</code>，点击<code>调试-&gt;开始执行(不调试)</code>运行 CarlaUE4 来启动编辑器</p>
 <div class="admonition 注意">

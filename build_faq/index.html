@@ -268,6 +268,11 @@ export PYTHONPATH=$PYTHONPATH:${CARLA_ROOT}/PythonAPI/carla
 <h2 id="windows_1">Windows 构建</h2>
 <!-- ======================================================================= -->
 
+<h6 id="recast-could-not-find-sdl2-missing-sdl2_library-sdl2_include_dir">编译 recast 时候报错：Could NOT find SDL2 (missing: SDL2_LIBRARY SDL2_INCLUDE_DIR</h6>
+<p>SDL2_SDLMAIN_LIBRARY)</p>
+<blockquote>
+<p><a href="https://github.com/carla-simulator/carla/issues/6854#issuecomment-1925019522">解决</a> ：将 <a href="https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-devel-2.30.0-VC.zip">SDL2-devel-2.30.0-VC.zip</a> 下载并解压到“D:\carla\Build\recast-src\RecastDemo\Contrib”目录下，然后将解压后的文件夹重命名为“SDL”</p>
+</blockquote>
 <h6 id="cicd-make-package-boost">CICD 到 make package 时候出现链接 boost 的错误</h6>
 <blockquote>
 <p>解决：重新安装报错的 python 虚拟环境。</p>
