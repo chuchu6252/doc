@@ -68,9 +68,99 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h2 id="_1">行人蓝图</h2>
+                <h2 id="_1">行人的实现分析</h2>
+<h2 id="_2">调用过程</h2>
+<p>使用 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/PythonAPI/examples/manual_control.py#L257">manual_control.py</a> 生成行人：
+<div class="highlight"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">try_spawn_actor</span><span class="p">(</span><span class="n">blueprint</span><span class="p">,</span> <span class="n">spawn_point</span><span class="p">)</span>
+</code></pre></div></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/PythonAPI/carla/source/libcarla/World.cpp#L331">hutb/PythonAPI/carla/source/libcarla/World.cpp</a> 中定义了 try_spawn_action() 调用 TrySpawnActor。</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;try_spawn_actor&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SPAWN_ACTOR_WITHOUT_GIL</span><span class="p">(</span><span class="n">TrySpawnActor</span><span class="p">))</span>
+</code></pre></div>
+<hr />
+<p>然后调用 <strong>LibCarla</strong>/source/carla/client/World.cpp 的 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/LibCarla/source/carla/client/World.cpp#L136">TrySpawnActor()</a> ：
+<div class="highlight"><pre><span></span><code><span class="n">SharedPtr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">World</span><span class="o">::</span><span class="n">TrySpawnActor</span><span class="p">(</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">SpawnActor</span><span class="p">(</span><span class="n">blueprint</span><span class="p">,</span><span class="w"> </span><span class="n">transform</span><span class="p">,</span><span class="w"> </span><span class="n">parent_actor</span><span class="p">,</span><span class="w"> </span><span class="n">attachment_type</span><span class="p">,</span><span class="w"> </span><span class="n">socket_name</span><span class="p">);</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+然后调用 World.cpp 的 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/LibCarla/source/carla/client/World.cpp#L127">SpwanActor()</a> ：
+<div class="highlight"><pre><span></span><code><span class="n">SharedPtr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">World</span><span class="o">::</span><span class="n">SpawnActor</span><span class="p">(</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">_episode</span><span class="p">.</span><span class="n">Lock</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SpawnActor</span><span class="p">(</span><span class="n">blueprint</span><span class="p">,</span><span class="w"> </span><span class="n">transform</span><span class="p">,</span><span class="w"> </span><span class="n">parent_actor</span><span class="p">,</span><span class="w"> </span><span class="n">attachment_type</span><span class="p">,</span><span class="w"> </span><span class="n">GarbageCollectionPolicy</span><span class="o">::</span><span class="n">Inherit</span><span class="p">,</span><span class="w"> </span><span class="n">socket_name</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+调用了 client/detail/EpisodeProxy.cpp 的 Lock()，返回 EpisodeProxyImpl
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">typename</span><span class="w"> </span><span class="nc">EpisodeProxyImpl</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">SharedPtrType</span><span class="w"> </span><span class="n">EpisodeProxyImpl</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">Lock</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Load</span><span class="p">(</span><span class="n">_simulator</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">throw_exception</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;trying to operate on a destroyed actor; an actor&#39;s function &quot;</span>
+<span class="w">        </span><span class="s">&quot;was called, but the actor is already destroyed.&quot;</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">ptr</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+获得模拟器 _simulator 的指针。并调用 client/detail/Simulator.cpp 的 SpawnActor() 
+<div class="highlight"><pre><span></span><code><span class="n">SharedPtr</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Simulator</span><span class="o">::</span><span class="n">SpawnActor</span><span class="p">(</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">ActorBlueprint</span><span class="w"> </span><span class="o">&amp;</span><span class="n">blueprint</span><span class="p">,</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">geom</span><span class="o">::</span><span class="n">Transform</span><span class="w"> </span><span class="o">&amp;</span><span class="n">transform</span><span class="p">,</span>
+<span class="w">  </span><span class="n">Actor</span><span class="w"> </span><span class="o">*</span><span class="n">parent</span><span class="p">,</span>
+<span class="w">  </span><span class="n">rpc</span><span class="o">::</span><span class="n">AttachmentType</span><span class="w"> </span><span class="n">attachment_type</span><span class="p">,</span>
+<span class="w">  </span><span class="n">GarbageCollectionPolicy</span><span class="w"> </span><span class="n">gc</span><span class="p">,</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">socket_name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">rpc</span><span class="o">::</span><span class="n">Actor</span><span class="w"> </span><span class="n">actor</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parent</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">actor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_client</span><span class="p">.</span><span class="n">SpawnActorWithParent</span><span class="p">(</span>
+<span class="w">              </span><span class="n">blueprint</span><span class="p">.</span><span class="n">MakeActorDescription</span><span class="p">(),</span>
+<span class="w">              </span><span class="n">transform</span><span class="p">,</span>
+<span class="w">              </span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">GetId</span><span class="p">(),</span>
+<span class="w">              </span><span class="n">attachment_type</span><span class="p">,</span>
+<span class="w">              </span><span class="n">socket_name</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">actor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_client</span><span class="p">.</span><span class="n">SpawnActor</span><span class="p">(</span>
+<span class="w">              </span><span class="n">blueprint</span><span class="p">.</span><span class="n">MakeActorDescription</span><span class="p">(),</span>
+<span class="w">              </span><span class="n">transform</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="p">...</span>
+</code></pre></div></p>
+<hr />
+<p>调用 <strong>CarlaUE4</strong> Server 模块的 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Server/CarlaServer.cpp#L731">CarlaServer.cpp</a> 的：
+<div class="highlight"><pre><span></span><code><span class="n">BIND_SYNC</span><span class="p">(</span><span class="n">spawn_actor</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">](</span>
+<span class="w">    </span><span class="n">cr</span><span class="o">::</span><span class="n">ActorDescription</span><span class="w"> </span><span class="n">Description</span><span class="p">,</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">cr</span><span class="o">::</span><span class="n">Transform</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Transform</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">R</span><span class="o">&lt;</span><span class="n">cr</span><span class="o">::</span><span class="n">Actor</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">REQUIRE_CARLA_EPISODE</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Episode</span><span class="o">-&gt;</span><span class="n">SpawnActorWithInfo</span><span class="p">(</span><span class="n">Transform</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">Description</span><span class="p">));</span>
+<span class="w">  </span><span class="p">...</span>
+</code></pre></div></p>
+<p>调用 Game 模块的 CarlaEpisode.h 中的 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Game/CarlaEpisode.h#L235">SpawnActor()</a> ：
+<div class="highlight"><pre><span></span><code><span class="n">UFUNCTION</span><span class="p">(</span><span class="n">BlueprintCallable</span><span class="p">)</span>
+<span class="n">AActor</span><span class="w"> </span><span class="o">*</span><span class="n">SpawnActor</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">FTransform</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Transform</span><span class="p">,</span>
+<span class="w">    </span><span class="n">FActorDescription</span><span class="w"> </span><span class="n">ActorDescription</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">SpawnActorWithInfo</span><span class="p">(</span><span class="n">Transform</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ActorDescription</span><span class="p">)).</span><span class="n">Value</span><span class="o">-&gt;</span><span class="n">GetActor</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>调用 CarlaEpisode.cpp 中的 <a href="https://github.com/OpenHUTB/hutb/blob/3cc9770572f1b531f0eed69a5dc3e0e4f186a876/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Game/CarlaEpisode.cpp#L464">SpawnActorWithInfo()</a> ：
+<div class="highlight"><pre><span></span><code><span class="n">TPair</span><span class="o">&lt;</span><span class="n">EActorSpawnResultStatus</span><span class="p">,</span><span class="w"> </span><span class="n">FCarlaActor</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">UCarlaEpisode</span><span class="o">::</span><span class="n">SpawnActorWithInfo</span><span class="p">(</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">FTransform</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Transform</span><span class="p">,</span>
+<span class="w">    </span><span class="n">FActorDescription</span><span class="w"> </span><span class="n">thisActorDescription</span><span class="p">,</span>
+<span class="w">    </span><span class="n">FCarlaActor</span><span class="o">::</span><span class="n">IdType</span><span class="w"> </span><span class="n">DesiredId</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ActorDispatcher</span><span class="o">-&gt;</span><span class="n">SpawnActor</span><span class="p">(</span><span class="n">LocalTransform</span><span class="p">,</span><span class="w"> </span><span class="n">thisActorDescription</span><span class="p">,</span><span class="w"> </span><span class="n">DesiredId</span><span class="p">);</span>
+</code></pre></div></p>
+<p>ActorDispatcher 的声明位于 CarlaEpisode.h
+<div class="highlight"><pre><span></span><code><span class="n">UPROPERTY</span><span class="p">(</span><span class="n">VisibleAnywhere</span><span class="p">)</span>
+<span class="n">UActorDispatcher</span><span class="w"> </span><span class="o">*</span><span class="n">ActorDispatcher</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+</code></pre></div></p>
+<h2 id="_3">行人蓝图</h2>
 <p>所有行人相关的蓝图都位于虚幻编辑器<code>内容浏览器</code>中的<code>内容/Carla/Blueprints/Walkers/</code>目录下。
-每个蓝图都是一个<strong>胶囊体组件(CollisionCylinder)</strong> ，即一个 <a href="https://ww2.mathworks.cn/help/nav/ref/collisioncylinder.html">圆柱碰撞几何体</a> ，该集合体与其固定身体框架的z轴对齐，并且固定身体框架的原点位于圆柱体的中心。</p>
+每个蓝图都是一个<strong>胶囊体组件(CollisionCylinder)</strong> ，即一个 <a href="https://ww2.mathworks.cn/help/nav/ref/collisioncylinder.html">圆柱碰撞几何体</a> ，该集合体与其固定身体框架的 z 轴对齐，并且固定身体框架的原点位于圆柱体的中心。</p>
               
             </div>
           </div><footer>

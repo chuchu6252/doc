@@ -180,10 +180,13 @@
 <p class="admonition-title">注意</p>
 <p>需要先启动Town10HT-Opt场景：需要从vs2019中使用调试模式启动虚幻编辑器并运行场景，如果使用编译后的场景执行<code>world.GetBlueprintLibrary()</code>会抛出异常。如果调式报错<code>错误   LNK1169 找到一个或多个多重定义的符号</code>，则表明当前工程有多个主函数的代码，需要删除<code>main.cpp</code>或者在Cmakelist.txt中指定需要编译包含住函数的的源代码<code>main_debug.cpp</code>。</p>
 </div>
-<h2 id="libcarla">调试LibCarla <span id="debug_LibCarla"></span></h2>
-<p>该功能已经在 <a href="#cpp_client_debug">C++客户端调试</a> 中实现，故不再需要，后面的步骤仅做探索使用。<strong>客户端</strong>向服务端调用实现的功能。
-* 脚本<code>BuildLibCarla.bat</code>调用<code>cmake</code>命令进行构建：
-<div class="highlight"><pre><span></span><code>cmake<span class="w"> </span>-G<span class="w"> </span>%GENERATOR%<span class="w"> </span>%PLATFORM%^
+<h2 id="libcarla">调试 LibCarla <span id="debug_LibCarla"></span></h2>
+<h3 id="c_1">使用 C++ 进行调用</h3>
+<p>该功能已经在 <a href="#cpp_client_debug">C++客户端调试</a> 中实现，故不再需要，后面的步骤仅做探索使用。<strong>客户端</strong>向服务端调用实现的功能。</p>
+<ul>
+<li>脚本<code>BuildLibCarla.bat</code>调用<code>cmake</code>命令进行构建：</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code>cmake<span class="w"> </span>-G<span class="w"> </span>%GENERATOR%<span class="w"> </span>%PLATFORM%^
 <span class="w">  </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Server^
 <span class="w">  </span>-DCMAKE_CXX_FLAGS_RELEASE<span class="o">=</span><span class="s2">&quot;/MD /MP&quot;</span>^
 <span class="w">  </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="s2">&quot;%LIBCARLA_SERVER_INSTALL_PATH:\=/%&quot;</span>^
@@ -222,6 +225,26 @@
 </div>
 <p>参考 <a href="https://blog.csdn.net/qq_36330274/article/details/128380765">vs调试C++</a> 。</p>
 <p>调试<code>carla_client</code>时，vs报错：<code>boost::python::error_already_set</code>，尝试<a href="https://leonlee.wordpress.com/2018/09/24/%E4%BD%BF%E7%94%A8boostpython%E5%9C%A8c%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E5%B5%8C%E5%85%A5python%EF%BC%9A%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/">捕获具体异常</a> 。</p>
+<h3 id="carlaue4-libcarla-server">从 CarlaUE4 启动调试 LibCarla Server</h3>
+<p>需要在 CarlaUE4 项目的菜单栏中选择 <strong>解决方案配置</strong> <code>Debug Editor</code>，然后点击<code>调试-&gt;启动调试</code>打开编辑器，然后启动场景，可以进入 LibCarla Server 代码。</p>
+<h4 id="_1">其他尝试性配置</h4>
+<p>使用 VS 打开工程<code>hutb\Unreal\CarlaUE4\CarlaUE4.sln</code>，点击<code>调试-&gt;开始执行(不调试)</code>运行 CarlaUE4 来启动编辑器</p>
+<div class="admonition 注意">
+<p class="admonition-title">注意</p>
+<p>如果以调式模式运行会导致 LibCarla 模块附着到编辑器时报错：<code>无法附着到进程。已附加了一个调试器</code>。</p>
+</div>
+<p>打开 LibCarla 工程<code>hutb\Build\libcarla-visualstudio\CARLA.sln</code></p>
+<p>调式信息位于：<code>hutb\Build\libcarla-visualstudio\LibCarla\cmake\client\Debug\</code></p>
+<p>可执行模块（exe或dll）--&gt; pdb文件 --&gt; 源代码。</p>
+<p><a href="https://blog.csdn.net/weixin_34384915/article/details/93961167">根据pdb中的源文件路径查找源文件</a> 。如果源文件在路径中不存在，则在中的“Browse to find source”可以使用，点击后会弹出文件打开对话框。</p>
+<p>如果能加载正确的pdb文件了，却不能自动关联对正确的源文件。这时候就可以看看pdb文件中对应的源文件信息是否正确。
+查看pdb文件的工具，我们可以使用vs安装目录下的<code>C:\Program Files\Microsoft Visual Studio\2022\Community\DIA SDK\Samples\DIA2Dump</code>中的DIA2Dump工具。这个有源代码，需要打开<code>DIA2Dump.sln</code>重新编译就可以使用了。</p>
+<p><a href="https://learn.microsoft.com/en-us/visualstudio/debugger/debug-interface-access/dia2dump-sample?view=visualstudio">编译DiaDump</a> ：To build the Dia2Dump sample in Visual Studio</p>
+<p>运行DiaDump解析pdf文件：
+<div class="highlight"><pre><span></span><code>C:<span class="se">\P</span>rogram<span class="w"> </span>Files<span class="se">\M</span>icrosoft<span class="w"> </span>Visual<span class="w"> </span>Studio<span class="se">\2</span><span class="m">022</span><span class="se">\C</span>ommunity<span class="se">\D</span>IA<span class="w"> </span>SDK<span class="se">\S</span>amples<span class="se">\D</span>IA2Dump<span class="se">\x</span><span class="m">64</span><span class="se">\D</span>ebug&gt;Dia2Dump.exe<span class="w"> </span>D:<span class="se">\h</span>utb<span class="se">\U</span>nreal<span class="se">\C</span>arlaUE4<span class="se">\P</span>lugins<span class="se">\C</span>arla<span class="se">\B</span>inaries<span class="se">\W</span>in64<span class="se">\U</span>E4Editor-Carla.pdb<span class="w"> </span>&gt;&gt;<span class="w"> </span>D:<span class="se">\h</span>utb<span class="se">\U</span>nreal<span class="se">\C</span>arlaUE4<span class="se">\P</span>lugins<span class="se">\C</span>arla<span class="se">\B</span>inaries<span class="se">\W</span>in64<span class="se">\U</span>E4Editor-Carla.log
+</code></pre></div>
+Compiland就是编译的单元，我们可以看到全路径信息。然后到对应的路径下查看是否源代码文件是否存在。</p>
+<p>以上方法不能调试进入LibCarla模块的代码。</p>
 <h3 id="python">Python 扩展模块 <span id="python_extension"></span></h3>
 <p>LibCarla编译后生成<code>Python37/Lib/site-packages/carla/libcarla.cp37-win_amd64.pyd</code>给Python进行调用。为了提高运行速度，将当前目录中的<code>__init__.py</code>和<code>command.py</code>编译为<code>__pycache__</code>目录中的 <code>byte code(字节码)</code>。</p>
 <h2 id="pythonapi">调试PythonAPI <span id="debug_Python_API"></span></h2>
@@ -232,7 +255,7 @@
 <p>构建命令：
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>setup.py<span class="w"> </span>build
 </code></pre></div></p>
-<h3 id="_1">构建调试版本 <span id="build_debug_version"></span></h3>
+<h3 id="_2">构建调试版本 <span id="build_debug_version"></span></h3>
 <ol>
 <li>右键 <code>CARLA</code>解决方案，<code>添加</code>-&gt;<code>新建项目</code>-&gt;<code>Python应用程序</code>；</li>
 <li>将<code>manual_control.py</code>文件内容复制到新建工程的<code>PythonApplication.py</code>文件中；</li>
@@ -242,8 +265,8 @@
 <li>在第4步弹出的命令行界面中敲回车；</li>
 </ol>
 <p>参考<a href="https://stackoverflow.com/questions/61692952/how-to-pass-debug-to-build-ext-when-invoking-setup-py-install">链接</a> ，效果未知。</p>
-<h3 id="_2">调试单元测试脚本 <span id="debug_unit_test"></span></h3>
-<h2 id="_3">调式蓝图 <span id="debug_blueprint"></span></h2>
+<h3 id="_3">调试单元测试脚本 <span id="debug_unit_test"></span></h3>
+<h2 id="_4">调式蓝图 <span id="debug_blueprint"></span></h2>
 <p>这里以 <a href="https://bitbucket.org/carla-simulator/carla-content/src/master/Blueprints/Game/Spectator.uasset">Spectator 蓝图</a> 为例进行蓝图调式的说明。</p>
 <ol>
 <li>打开蓝图后，在所需要的模块上右键，添加断点；</li>
@@ -252,7 +275,7 @@
 <img alt="" src="../img/tuto_D_windows_debug/BP_debug.jpg" /></li>
 </ol>
 <p>从菜单<code>窗口-&gt;开发者工具</code>中的<code>蓝图调试器</code>，可以查看调用堆栈、变量值等信息，具体操作请查看<a href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/blueprint-debugging?application_version=4.27">蓝图调试</a> 。</p>
-<h2 id="_4">其他 <span id="other"></span></h2>
+<h2 id="_5">其他 <span id="other"></span></h2>
 <h3 id="dll">检查所依赖dll库的符号是否加载 <span id="check_dll_loaded"></span></h3>
 <p>下断点，F5调试。然后“调试 - 窗口 - 模块”打开模块窗口。</p>
 <div class="admonition 笔记">
@@ -279,7 +302,7 @@
 <li>生成：</li>
 </ol>
 <p>点击菜单栏<code>生成</code>-<code>全部生成</code>或<code>部分生成</code>即可。</p>
-<h3 id="_5">导入崩溃问题 <span id="crash_problem"></span></h3>
+<h3 id="_6">导入崩溃问题 <span id="crash_problem"></span></h3>
 <ol>
 <li>
 <p>例如，导入测试链接：
@@ -366,7 +389,7 @@ D:<span class="se">\w</span>ork<span class="se">\w</span>orkspace<span class="se
 <li>变量已被优化掉，因而不可用。    </li>
 </ul>
 <p>VS菜单中选择<code>DebugGammingEditor</code>，然后开始调试，就可以添加要监视的项。</p>
-<h3 id="_6">问题 <span id="problems"></span></h3>
+<h3 id="_7">问题 <span id="problems"></span></h3>
 <p>崩溃于<code>engine\Engine\Source\Runtime\CoreUObject\Private\UObject\ScriptCore.cpp</code>1990行<code>Function-&gt;Invoke(this, NewStack, ReturnValueAddress);</code>
 弹出报错信息框：
 <div class="highlight"><pre><span></span><code>Failed to open descriptor file ./../../../carla/Unreal/CarlaUE4/CarlaUE4.uproject
@@ -390,17 +413,17 @@ D:<span class="se">\w</span>ork<span class="se">\w</span>orkspace<span class="se
 <li>服务端帧率过低，十多帧，正常有40帧左右</li>
 </ul>
 <p>可能是因为编译的时候链接到了libcarla库的调式版本。</p>
-<h3 id="_7">依赖 <span id="dependency"></span></h3>
+<h3 id="_8">依赖 <span id="dependency"></span></h3>
 <h4 id="boost-1800">boost-1.80.0</h4>
 <p><a href="https://blog.csdn.net/ASCE_Python/article/details/105595218">Python封装C++库调试</a> 。</p>
-<h3 id="_8">发布 <span id="release"></span></h3>
+<h3 id="_9">发布 <span id="release"></span></h3>
 <p>包含所有软件依赖，双击<code>launch.bat</code>启动软件。</p>
 <h4 id="vs2019">VS2019社区版安装</h4>
 <p>解压安装包：
 <div class="highlight"><pre><span></span><code>7z<span class="w"> </span>x<span class="w"> </span>filename.zip<span class="w"> </span>-o.
 </code></pre></div>
 新电脑运行<code>NativeDesktop.exe</code>出现<code>此版本的Windows不支持此产品，请尝试升级Windows。</code></p>
-<h3 id="_9">技巧 <span id="trick"></span></h3>
+<h3 id="_10">技巧 <span id="trick"></span></h3>
 <ul>
 <li>
 <p>进行函数跳转时，vs一致出现<code>正在进行IntelliSense</code>：</p>
@@ -429,20 +452,20 @@ D:<span class="se">\w</span>ork<span class="se">\w</span>orkspace<span class="se
 <p><code>UE_LOG</code>函数记录的日志位于<code>carla\Unreal\CarlaUE4\Saved\Logs\CarlaUE4.log</code>文件中。</p>
 </li>
 </ul>
-<h3 id="_10">工具</h3>
+<h3 id="_11">工具</h3>
 <p><a href="https://blog.csdn.net/helloasimo/article/details/130444217">VScode调试shell bash脚本</a>
 在VScode中安装<code>Bash Debug</code>，</p>
 <p><a href="https://blog.csdn.net/sxtllll/article/details/135411142">VScode远程连接时报错：Bad owner or permissions</a></p>
 <h3 id="pythonapi_1">PythonAPI说明</h3>
 <p><code>PythonAPI/carla/setup.py</code>中的 <code>ext_modules</code> 参数用于构建 C 和 C++ 扩展扩展包。其是 Extension 实例的列表，每一个 Extension 实例描述了一个独立的扩展模块，扩展模块可以设置扩展包名，头文件、源文件、链接库及其路径、宏定义和编辑参数等。</p>
 <p><code>package_dir</code> 选项的值是字典而不是列表。当您的源代码不直接位于与 <code>setup.py</code> 相同的文件夹中时，请使用此选项。</p>
-<h3 id="_11">测试</h3>
+<h3 id="_12">测试</h3>
 <p>自动化测试请参考 <a href="../test/tuto_test/">链接</a> 。</p>
-<h2 id="_12">其他</h2>
+<h2 id="_13">其他</h2>
 <ul>
 <li><a href="../ue/ue_faq/">引擎 MiniDump 崩溃现场的恢复</a></li>
 </ul>
-<h3 id="_13">学习 <span id="learn"></span></h3>
+<h3 id="_14">学习 <span id="learn"></span></h3>
 <ul>
 <li><a href="../tuto_D_bat/">bat脚本</a></li>
 <li><a href="../libcarla/">LibCarla 说明</a></li>
