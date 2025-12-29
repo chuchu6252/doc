@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>客户端的详细实现模块 - 人车模拟</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u5ba2\u6237\u7aef\u7684\u8be6\u7ec6\u5b9e\u73b0\u6a21\u5757";
+        var mkdocs_page_input_path = "modules/detail.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">首页</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">客户端的详细实现模块</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/modules/detail.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="_1">客户端的详细实现模块</h1>
+<h2 id="simulator">模拟器 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/client/detail/Simulator.cpp">Simulator</a></h2>
+<p>作为客户端核心调度器：管理 Episode 生命周期、地图加载、帧同步、Actor 与传感器的创建与订阅，并桥接底层 _client 与高层 API。</p>
+<h2 id="episodeproxy">回合代理 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/client/detail/EpisodeProxy.cpp">EpisodeProxy</a></h2>
+<p>访问当前仿真回合的上下文，防止在换图/重载后继续操作旧回合的对象导致崩溃或逻辑错误（Episode 变更时优雅地拒绝操作或提示对象已销毁）。</p>
+<p><strong>工作机制</strong>：每次访问通过 TryLock()/Lock()获取模拟器：比较保存的 EpisodeId 与当前的是否一致。不一致或对象已销毁时返回空指针（TryLock）或抛异常（Lock）。</p>
+<h2 id="actoryfactory">参与者工厂 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/client/detail/ActorFactory.cpp">ActoryFactory</a></h2>
+<p><strong>类型分派工厂</strong>: 根据 rpc::Actor 描述符的 id 字段，实例化对应的客户端 Actor 子类（Vehicle、Walker、Sensor、TrafficLight 等）。</p>
+<p><strong>统一构造入口</strong>: 提供 <a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/ActorFactory.cpp#L73">MakeActor</a> 静态方法，屏蔽内部类型判断细节，上层只需传入描述符即可得到正确的强类型对象。</p>
+<p><strong>垃圾回收策略</strong>：启用（Enabled）时使用 GarbageCollector deleter，在 shared_ptr 析构时自动调用 Actor::Destroy() 销毁服务器端对象，捕获超时与异常。Disabled 时仅用默认 deleter 销毁本地对象，不触碰服务器端；需手动管理。</p>
+<h2 id="actorvariant">参与者变体 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/client/detail/ActorVariant.cpp">ActorVariant</a></h2>
+<p><strong>统一包装</strong>: 用一个 variant 保存“轻量的 rpc::Actor 描述”或“已构造的客户端 Actor 对象”，便于上层统一管理与延迟处理。</p>
+<h2 id="cachedactorlist">缓存的参与者列表 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/client/detail/CachedActorList.h">CachedActorList</a></h2>
+<p><strong>核心目的</strong>：避免重复向服务器请求 Actor 描述信息，通过本地缓存 rpc::Actor 提升性能。</p>
+<p><strong>设计原理</strong></p>
+<ul>
+<li><strong>本地描述符缓存</strong>: 维护 <a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/CachedActorList.h#L59">std::unordered_map<ActorId, rpc::Actor></a> 存储已知 Actor 的元信息（类型、属性、变换等）</li>
+<li><strong>线程安全</strong>: 所有操作用互斥锁（ <a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/CachedActorList.h#L81">std::mutex</a> ）保护（该句代码后面即为被保护的共享数据，析构时自动解锁，即使发生异常也能正确解锁），支持多线程并发访问</li>
+<li><strong>增量更新</strong>: <a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/CachedActorList.h#L86">只请求缺失的 Actor</a> ，已缓存的直接返回</li>
+</ul>
+<h2 id="callbacklist">回调列表 CallbackList</h2>
+<p><strong>核心目的</strong>：线程安全的回调函数管理器，支持 <a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/CallbackList.h#L32">注册回调</a> 、<a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/CallbackList.h#L25">触发所有回调</a> 、<a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/detail/CallbackList.h#L39">按ID移除回调</a> ，常用于事件通知、传感器数据分发等场景。</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../../js/umlconvert.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

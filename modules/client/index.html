@@ -96,7 +96,7 @@
 <p>HUTB 是一个开源的人机模拟平台，提供了丰富的 API 以支持仿真环境的控制、车辆的管理以及自动驾驶算法的验证。客户端部分的 API 主要通过 <code>Client</code> 类与模拟器进行交互，执行仿真控制、传感器管理、交通流管理等功能。该文档主要介绍 HUTB 客户端相关类的功能和使用方式。</p>
 <h2 id="_8"><strong>主要类与功能</strong></h2>
 <h3 id="1-client">1. <code>Client</code> 类</h3>
-<p><code>Client</code> 类是与 HUTB 模拟器交互的核心类，提供了连接仿真器、加载世界、设置物理参数、控制传感器等功能。在 HUTB 自动驾驶仿真平台中，Client 类是开发者与 HUTB 服务器（服务端）交互的核心接口。它负责建立客户端与服务器之间的连接，并通过网络通信管理仿真世界中的实体（如车辆、传感器、行人等）。通过 Client 类，开发者可以灵活控制 HUTB 仿真环境，实现从简单的车辆控制到复杂的多智能体协同仿真。</p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L21">Client 类</a> 是与 HUTB 模拟器交互的核心类，提供了连接仿真器、加载世界、设置物理参数、控制传感器等功能。在 HUTB 自动驾驶仿真平台中，Client 类是开发者与 HUTB 服务器（服务端）交互的核心接口。它负责建立客户端与服务器之间的连接，并通过网络通信管理仿真世界中的实体（如车辆、传感器、行人等）。通过 Client 类，开发者可以灵活控制 HUTB 仿真环境，实现从简单的车辆控制到复杂的多智能体协同仿真。</p>
 <h4 id="_9">核心作用</h4>
 <table>
 <thead>
@@ -108,11 +108,11 @@
 <tbody>
 <tr>
 <td>连接仿真器</td>
-<td>建立客户端与 HUTB 服务器的TCP/IP连接，支持指定IP地址和端口号</td>
+<td>建立客户端与 HUTB 服务器的 TCP/IP 连接，支持指定IP地址和端口号</td>
 </tr>
 <tr>
 <td>加载/切换世界</td>
-<td>动态加载不同地图（如Town01-Town10），支持世界状态重置和场景热更新</td>
+<td>动态加载不同地图（如 Town01-Town15），支持世界状态重置和场景热更新</td>
 </tr>
 <tr>
 <td>时间同步控制</td>
@@ -159,63 +159,134 @@
 <h4 id="_11">核心方法</h4>
 <ul>
 <li>
-<p><code>std::string GetClientVersion() const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L46">GetClientVersion()</a></p>
 </li>
 <li>
 <p>获取当前客户端的版本。</p>
 </li>
 <li>
-<p><code>std::string GetServerVersion() const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L51">GetServerVersion()</a></p>
 </li>
 <li>
 <p>获取当前连接的模拟器的版本。</p>
 </li>
 <li>
-<p><code>std::vector&lt;std::string&gt; GetAvailableMaps() const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L55">GetAvailableMaps()</a></p>
 </li>
 <li>
 <p>获取所有可用的地图名称。</p>
 </li>
 <li>
-<p><code>World LoadWorld(std::string map_name, bool reset_settings = true, rpc::MapLayer map_layers = rpc::MapLayer::All) const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L75">LoadWorld()</a></p>
 </li>
 <li>
 <p>加载指定的仿真地图。</p>
 </li>
 <li>
-<p><code>World ReloadWorld(bool reset_settings = true) const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L84">LoadWorldIfDifferent()</a></p>
+</li>
+<li>
+<p>条件加载地图的方法，只在请求的地图与当前地图不同时才加载新地图（请求的地图名与当前带前缀/不带前缀的地图名都不一样）。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L99">GenerateOpenDriveWorld()</a> </p>
+</li>
+<li>
+<p>使用 OpenDrive 文件生成仿真世界。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L71">ReloadWorld</a></p>
 </li>
 <li>
 <p>重新加载当前仿真世界。</p>
 </li>
 <li>
-<p><code>void SetTimeout(time_duration timeout)</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L37">SetTimeout</a></p>
 </li>
 <li>
 <p>设置与模拟器的网络超时时间。</p>
 </li>
 <li>
-<p><code>TrafficManager GetInstanceTM(uint16_t port = TM_DEFAULT_PORT) const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L113">GetInstanceTM</a></p>
 </li>
 <li>
-<p>获取当前模拟器中的交通管理实例（TrafficManager）。</p>
+<p>获取当前模拟器中活跃的交通管理实例（TrafficManager）。</p>
 </li>
 <li>
-<p><code>void StartRecorder(std::string name, bool additional_data = false)</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L122">StartRecorder</a> </p>
 </li>
 <li>
 <p>启动仿真数据记录器。</p>
 </li>
 <li>
-<p><code>void StopRecorder()</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L126">StopRecorder()</a></p>
 </li>
 <li>
 <p>停止仿真数据记录器。</p>
 </li>
 <li>
-<p><code>World GenerateOpenDriveWorld(std::string opendrive, const rpc::OpendriveGenerationParameters &amp;params, bool reset_settings = true) const</code></p>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L130">ShowRecorderFileInfo()</a></p>
 </li>
-<li>使用 OpenDrive 文件生成仿真世界。</li>
+<li>
+<p>显示记录文件的详细信息，用于分析和调试 HUTB 模拟场景的记录数据。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L134">ShowRecorderCollisions()</a></p>
+</li>
+<li>
+<p>查询并显示记录文件中的<strong>碰撞事件</strong>，支持按 Actor 类型过滤。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L138">ShowRecorderActorsBlocked()</a></p>
+</li>
+<li>
+<p>检测并显示录制文件中长时间<strong>停滞不动</strong>的 Actor，用于发现交通堵塞、死锁或异常停止的情况。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">ReplayFile()</a></p>
+</li>
+<li>
+<p>回放之前记录的模拟场景文件，完整重现 Actor 的行为和事件。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">StopReplayer()</a></p>
+</li>
+<li>
+<p><strong>停止</strong>当前正在进行的记录文件<strong>回放</strong>，并可选择是否保留回放生成的 Actor。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">SetReplayerTimeFactor()</a></p>
+</li>
+<li>
+<p>设置回放的时间倍速，控制记录文件回放的<strong>快慢</strong>。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">SetReplayerIgnoreHero()</a></p>
+</li>
+<li>
+<p>忽略“Hero（主车/自车）”在回放中的更新：开启后，回放过程不再对录制文件中的 Hero 车辆应用动画、位置更新、骨骼更新等事件。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">SetReplayerIgnoreSpectator()</a></p>
+</li>
+<li>
+<p>忽略“旁观者（Spectator）相机”的回放更新：开启后，重放过程中不再应用录制文件中的 Spectator 位移/姿态更新。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">ApplyBatch()</a></p>
+</li>
+<li>
+<p>批量发送一组 rpc::Command 到模拟器，减少多次 RPC 往返，将多个操作在同一帧里应用。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/LibCarla/source/carla/client/Client.h#L142">ApplyBatchSync()</a></p>
+</li>
+<li>
+<p>批量同步执行一组命令并返回每条命令的执行结果，用于需要确认结果（如新建 Actor 的 ID、失败原因）或希望在同一仿真步内完成的操作。</p>
+</li>
+<li>
+<p><a href="../detail/">客户端的详细实现</a> 的 <a href="https://github.com/OpenHUTB/hutb/tree/hutb/LibCarla/source/carla/client/detail">detail</a> 模块</p>
+</li>
 </ul>
 <h3 id="2-actor">2. <code>Actor</code> 类</h3>
 <p><code>Actor</code> 类代表仿真中的任何实体（例如：车辆、行人等）。通过该类，用户可以控制行为体的位置、速度、碰撞、物理状态等。</p>
@@ -994,7 +1065,7 @@ vehicle.SetAutopilot(true);
 </blockquote>
 <h2 id="_57">总结</h2>
 <p>HUTB 客户端部分提供了与仿真环境交互的丰富 API，支持开发者控制仿真世界中的各种元素，包括行为体（Actor）、传感器（ClientSideSensor）和交通流（TrafficManager）等。通过 Client 类，开发者能够加载地图、获取世界状态、管理传感器、操作物理环境等。类之间的交互使得开发者能够在仿真环境中进行精确的控制和验证。</p>
-<p>参考文档：<a href="https://openhutb.github.io/carla_cpp/dir_64d7bb605f27024d49af86070bd3f0b6.html">点击此处跳转</a></p>
+<p>C++ 参考文档和 client 的目录依赖关系图：<a href="https://openhutb.github.io/carla_cpp/dir_64d7bb605f27024d49af86070bd3f0b6.html">点击此处跳转</a> 。</p>
               
             </div>
           </div><footer>
