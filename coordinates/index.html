@@ -116,10 +116,10 @@
 <p>可以省略任何或所有关键字参数，相关轴的值将设置为零。</p>
 <hr />
 <h3 id="_3">旋转</h3>
-<p><a href="../python_api/#carlarotation">Rotation 对象</a> 用于定义 HUTB 坐标系中的旋转。旋转以欧拉角形式定义，包括<strong>横滚角</strong>、<strong>俯仰角</strong>和<strong>偏航角</strong>。欧拉角的单位为度。固有的旋转是按<strong>偏航、俯仰、横滚</strong>的顺序进行的。</p>
+<p><a href="../python_api/#carlarotation">Rotation 对象</a> 用于定义 HUTB 坐标系中的旋转。旋转以度为单位，顺序为<strong>俯仰角</strong>、<strong>偏航角</strong> 和 <strong>横滚角</strong>。而虚幻引擎旋转是<strong>偏航、俯仰、横滚</strong>。</p>
 <p>以下代码展示了如何创建一个旋转对象，使其横滚角为 10 度，俯仰角为 10 度，偏航角为 90 度：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># 带位置参数的默认构造函数</span>
-<span class="n">rotation</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># pitch, yaw, roll</span>
+<span class="n">rotation</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># 俯仰, 偏航, 横滚</span>
 
 <span class="c1"># 使用关键字参数</span>
 <span class="n">rotation</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="n">pitch</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">yaw</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>

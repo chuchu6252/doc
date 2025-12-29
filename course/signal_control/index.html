@@ -71,12 +71,14 @@
                 <h1 id="_1">手动信号控制</h1>
 <p>这是一个用于控制交通信号灯的Flask应用程序，通过 <a href="https://pan.baidu.com/s/15T1hGoWJ70tVmsTX7-zcSw?pwd=hutb">Carla模拟环境</a> 实现。用户可以通过指定交通信号灯的OpenDRIVE ID、颜色ID以及设置时长来控制交通信号灯的状态。交通信号灯的颜色设置包括绿灯、黄灯和红灯，分别对应颜色ID [1, 2, 3]。颜色持续时间以秒为单位。</p>
 <h4 id="_2">参数说明</h4>
-<p><a href="https://github.com/OpenHUTB/doc/blob/master/src/course/signal_control.py">脚本</a> 接收以下参数：
-1. <code>--traffic_id</code> (<code>-I</code>): 目标交通信号灯的OpenDrive ID。
-2. <code>--color_id</code> (<code>-C</code>): 交通信号灯颜色ID，对应绿灯、黄灯和红灯，分别为1、2和3。
-3. <code>--color_time</code> (<code>-T</code>): 交通信号灯颜色的持续时间，单位为秒。</p>
+<p><a href="https://github.com/OpenHUTB/doc/blob/master/src/course/signal_control.py">脚本</a> 接收以下参数：</p>
+<ol>
+<li><code>--traffic_id</code> (<code>-I</code>): 目标交通信号灯的 OpenDrive ID。</li>
+<li><code>--color_id</code> (<code>-C</code>): 交通信号灯颜色 ID，对应绿灯、黄灯和红灯，分别为1、2和3。</li>
+<li><code>--color_time</code> (<code>-T</code>): 交通信号灯颜色的持续时间，单位为秒。</li>
+</ol>
 <h4 id="_3">参数格式</h4>
-<p>交通信号灯颜色设置参数的格式为【交通信号灯OpenDrive ID，颜色ID，设置时长】。</p>
+<p>交通信号灯颜色设置参数的格式为：交通信号灯OpenDrive ID，颜色ID，设置时长。</p>
 <p>交通信号灯颜色ID说明：</p>
 <ul>
 <li>绿灯：<code>1</code></li>
@@ -87,8 +89,8 @@
 <p>要设置交通信号灯，可以发送一个GET请求到 <code>/set_traffic_light</code>：</p>
 <ol>
 <li>打开Carla模拟环境</li>
-<li>运行脚本signal_control.py来开启服务端</li>
-<li>发送http请求:</li>
+<li>运行脚本 <a href="https://github.com/OpenHUTB/doc/blob/master/src/course/signal_control.py">signal_control.py</a> 来开启服务端</li>
+<li>发送 http 请求:</li>
 </ol>
 <div class="highlight"><pre><span></span><code>http://127.0.0.1:5000/set_traffic_light?traffic_id=-5&amp;color_id=3&amp;color_time=30
 </code></pre></div>

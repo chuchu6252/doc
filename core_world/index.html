@@ -212,7 +212,10 @@
 <p><strong>当 sun_altitude_angle &lt; 0 时，夜间模式开始</strong>，这被认为是日落。这是灯光变得特别重要的时候。</p>
 <h3 id="_10">灯光 <span id="lights"></span></h3>
 <ul>
-<li>当模拟进入夜间模式时， <strong>路灯</strong> 会自动打开。灯光由地图开发人员放置，并可作为 <a href="../python_api/#carla.Light"><strong>carla.Light</strong></a> 对象访问。颜色和强度等属性可以随意更改。<a href="../python_api/#carla.LightState"><strong>carla.LightState</strong></a> 类型的变量 <strong>light_state</strong> 允许在一次调用中设置所有这些。 路灯使用其类型为 <a href="../python_api/#carla.LightState"><strong>carla.LightState</strong></a> 的属性 <strong>light_state</strong> 进行分类。这允许将灯分类为路灯、建筑物灯...可以检索 [<strong>carla.LightManager</strong>] 的实例来在一次调用中处理一组灯。</li>
+<li>
+<p>当模拟进入夜间模式时， <strong>路灯</strong> 会自动打开。灯光由地图开发人员放置，并可作为 <a href="../python_api/#carla.Light"><strong>carla.Light</strong></a> 对象访问。颜色和强度等属性可以随意更改。<a href="../python_api/#carla.LightState"><strong>carla.LightState</strong></a> 类型的变量 <strong>light_state</strong> 允许在一次调用中设置所有这些。 </p>
+<p>路灯根据其属性 <strong>light_group</strong>（类型为 <a href="../python_api/#carla.LightState"><strong>carla.LightState</strong></a> ）的属性进行分类。可以通过一次调用检索 <a href="../python_api/#carla.LightManager"><strong>carla.LightManager</strong></a> 实例来管理灯光组。</p>
+</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="c1"># 获得灯光管理器和灯光</span>
 <span class="n">lmanager</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_lightmanager</span><span class="p">()</span>
@@ -247,7 +250,7 @@
 </code></pre></div>
 <div class="admonition 笔记">
 <p class="admonition-title">笔记</p>
-<p>还可以使用天气 <code>environment.py</code> 部分中描述的实时设置灯光。</p>
+<p>还可以使用天气部分中描述的 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/environment.py">environment.py</a> 脚本实时设置灯光。</p>
 </div>
 <h3 id="_11">调试 <span id="debugging"></span></h3>
 <p>世界对象有一个 <a href="../python_api/#carla.DebugHelper">carla.DebugHelper</a> 对象作为公共属性。它允许在模拟过程中绘制不同的形状。这些用于跟踪正在发生的事件。以下示例将在参与者的位置和旋转处绘制一个红色框。</p>

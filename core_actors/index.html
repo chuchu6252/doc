@@ -141,7 +141,7 @@
 </code></pre></div>
 <div class="admonition 重要">
 <p class="admonition-title">重要</p>
-<p>Carla 使用 <a href="https://openhutb.github.io/doc/python_api/#carlarotation">虚幻引擎坐标系统</a> 。记住： <a href="https://openhutb.github.io/doc/python_api/#carlarotation"><code>carla.Rotation</code></a> 构造函数定义为“俯仰、偏航、翻滚” <code>(pitch, yaw, roll)</code>，与虚幻编辑器的“翻滚、俯仰、偏航” <code>(roll, pitch, yaw)</code> 不同。</p>
+<p>Carla 使用 <a href="../python_api/#carlarotation">虚幻引擎坐标系统</a> 。记住： <a href="https://openhutb.github.io/doc/python_api/#carlarotation"><code>carla.Rotation</code></a> 构造函数定义为“俯仰、偏航、横滚<code>(pitch, yaw, roll)</code>” ，与虚幻引擎的“横滚、俯仰、偏航<code>(roll, pitch, yaw)</code>” 不同。</p>
 </div>
 <p>如果在指定位置发生冲突，将不会生成参与者。无论这种情况发生在静态对象还是其他参与者身上。可以尝试避免这些不希望的生成碰撞。</p>
 <ul>
@@ -184,12 +184,12 @@
 <p><div class="highlight"><pre><span></span><code><span class="n">actor</span><span class="o">.</span><span class="n">set_simulate_physics</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 除此之外，参与者还有他们的蓝图提供的标签。这些对于语义分割传感器最有用。</p>
-<div class="admonition 笔记">
-<p class="admonition-title">笔记</p>
-<p>大多数方法是异步向模拟器发送请求。模拟器每次更新解析它们的时间有限。使用 <em>set()</em> 方法淹没模拟器将积累明显的延迟。</p>
+<div class="admonition 警告">
+<p class="admonition-title">警告</p>
+<p>大多数方法是异步向模拟器发送请求。模拟器每次更新时解析这些请求的时间有限。如果大量使用 <font color="#7fb800">set()</font> 方法，会淹没模拟器，造成明显的延迟。</p>
 </div>
 <h3 id="_7">销毁 <span id="destruction"></span></h3>
-<p>当 Python 脚本完成时，不回销毁参与者。他们必须明确地销毁自己。</p>
+<p>当 Python 脚本完成时，不会销毁参与者。他们必须明确地销毁自己。</p>
 <div class="highlight"><pre><span></span><code><span class="n">destroyed_sucessfully</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span> <span class="c1"># 如果成功返回 True </span>
 </code></pre></div>
 <div class="admonition 重要">
@@ -201,13 +201,15 @@
 <h3 id="_9">传感器 <span id="sensors"></span></h3>
 <p>传感器是产生数据流的参与者。他们有自己的部分，<a href="../core_sensors/">第四部分. 传感器和数据</a>。现在，我们只看一下常见的传感器生成周期。</p>
 <p>此示例生成一个相机传感器，将其连接到车辆，并告诉相机将生成的图像保存到磁盘。</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">camera_bp</span> <span class="o">=</span> <span class="n">blueprint_library</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;sensor.camera.rgb&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">camera_bp</span> <span class="o">=</span> <span class="n">blueprint_library</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;sensor.camera.rgb&#39;</span><span class="p">)</span>
 <span class="n">camera</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">camera_bp</span><span class="p">,</span> <span class="n">relative_transform</span><span class="p">,</span> <span class="n">attach_to</span><span class="o">=</span><span class="n">my_vehicle</span><span class="p">)</span>
 <span class="n">camera</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="s1">&#39;output/</span><span class="si">%06d</span><span class="s1">.png&#39;</span> <span class="o">%</span> <span class="n">image</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
 </code></pre></div>
-* 传感器也有蓝图。设置属性至关重要。 
-* 大多数传感器将安装在车辆上以收集周围环境的信息。
-* 传感器 <strong>监听</strong> 数据。收到数据后，它们会调用用 <strong><a href="https://docs.python.org/3/reference/expressions.html">Lambda 表达式</a></strong> 描述的函数<small>(提供的链接中的 6.14)</small>。 </p>
+<ul>
+<li>传感器也有蓝图。设置属性至关重要。</li>
+<li>大多数传感器将安装在车辆上以收集周围环境的信息。</li>
+<li>传感器 <strong>监听</strong> 数据。收到数据后，它们会调用用 <strong><a href="https://docs.python.org/3/reference/expressions.html#lambda">Lambda 表达式</a></strong> 描述的函数。 </li>
+</ul>
 <h3 id="_10">观察者 <span id="spectator"></span></h3>
 <p>由虚幻引擎放置以提供游戏内的视角。它可用于移动模拟器窗口的视角。以下示例将移动观众参与者，将视角指向所需的车辆。</p>
 <div class="highlight"><pre><span></span><code><span class="n">spectator</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_spectator</span><span class="p">()</span>
