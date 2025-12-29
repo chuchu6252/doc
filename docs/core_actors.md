@@ -79,7 +79,7 @@ actor = world.spawn_actor(blueprint, transform)
 ```
 
 !!! 重要
-    Carla 使用 [虚幻引擎坐标系统](https://openhutb.github.io/doc/python_api/#carlarotation) 。记住： [`carla.Rotation`](https://openhutb.github.io/doc/python_api/#carlarotation) 构造函数定义为“俯仰、偏航、翻滚” `(pitch, yaw, roll)`，与虚幻编辑器的“翻滚、俯仰、偏航” `(roll, pitch, yaw)` 不同。
+    Carla 使用 [虚幻引擎坐标系统](python_api.md#carlarotation) 。记住： [`carla.Rotation`](https://openhutb.github.io/doc/python_api/#carlarotation) 构造函数定义为“俯仰、偏航、横滚`(pitch, yaw, roll)`” ，与虚幻引擎的“横滚、俯仰、偏航`(roll, pitch, yaw)`” 不同。
 
 如果在指定位置发生冲突，将不会生成参与者。无论这种情况发生在静态对象还是其他参与者身上。可以尝试避免这些不希望的生成碰撞。
 
@@ -136,13 +136,13 @@ actor.set_simulate_physics(False)
 ```
 除此之外，参与者还有他们的蓝图提供的标签。这些对于语义分割传感器最有用。
 
-!!! 笔记
-    大多数方法是异步向模拟器发送请求。模拟器每次更新解析它们的时间有限。使用 _set()_ 方法淹没模拟器将积累明显的延迟。
+!!! 警告
+    大多数方法是异步向模拟器发送请求。模拟器每次更新时解析这些请求的时间有限。如果大量使用 <font color="#7fb800">set()</font> 方法，会淹没模拟器，造成明显的延迟。
 
 
 ### 销毁 <span id="destruction"></span>
 
-当 Python 脚本完成时，不回销毁参与者。他们必须明确地销毁自己。
+当 Python 脚本完成时，不会销毁参与者。他们必须明确地销毁自己。
 
 ```py
 destroyed_sucessfully = actor.destroy() # 如果成功返回 True 
@@ -167,9 +167,10 @@ camera_bp = blueprint_library.find('sensor.camera.rgb')
 camera = world.spawn_actor(camera_bp, relative_transform, attach_to=my_vehicle)
 camera.listen(lambda image: image.save_to_disk('output/%06d.png' % image.frame))
 ```
-* 传感器也有蓝图。设置属性至关重要。 
+
+* 传感器也有蓝图。设置属性至关重要。
 * 大多数传感器将安装在车辆上以收集周围环境的信息。
-* 传感器 __监听__ 数据。收到数据后，它们会调用用 __[Lambda 表达式](https://docs.python.org/3/reference/expressions.html)__ 描述的函数<small>(提供的链接中的 6.14)</small>。 
+* 传感器 __监听__ 数据。收到数据后，它们会调用用 __[Lambda 表达式](https://docs.python.org/3/reference/expressions.html#lambda)__ 描述的函数。 
 
 ### 观察者 <span id="spectator"></span>
 

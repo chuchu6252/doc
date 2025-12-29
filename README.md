@@ -112,17 +112,21 @@ python -m pip install . -i http://mirrors.aliyun.com/pypi/simple --trusted-host 
 
 ### 颜色规范
 
-灰色底的变量名 **<font color="#f8805a">variable</font>**：
+橙色的变量名 **<font color="#f8805a">variable</font>**：
 ```shell
 **<font color="#f8805a">variable</font>**
 ```
-函数名 **<font color="#7fb800">method</font>** ：
+绿色的方法名 **<font color="#7fb800">method</font>** ：
 ```shell
 **<font color="#7fb800">method</font>**
 ```
-函数参数名 <font color="#00a6ed">**self**</font>：
+蓝色的函数参数名 <font color="#00a6ed">**self**</font>：
 ```shell
 <font color="#00a6ed">**self**</font>
+```
+红色的 <font color="#ED2F2F"> 警告 </font>
+```shell
+**警告：** <font color="#ED2F2F">_ hutb_</font>
 ```
 
 ### 公式

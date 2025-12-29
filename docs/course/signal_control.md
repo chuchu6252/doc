@@ -5,13 +5,14 @@
 #### 参数说明
 
 [脚本](https://github.com/OpenHUTB/doc/blob/master/src/course/signal_control.py) 接收以下参数：
-1. `--traffic_id` (`-I`): 目标交通信号灯的OpenDrive ID。
-2. `--color_id` (`-C`): 交通信号灯颜色ID，对应绿灯、黄灯和红灯，分别为1、2和3。
+
+1. `--traffic_id` (`-I`): 目标交通信号灯的 OpenDrive ID。
+2. `--color_id` (`-C`): 交通信号灯颜色 ID，对应绿灯、黄灯和红灯，分别为1、2和3。
 3. `--color_time` (`-T`): 交通信号灯颜色的持续时间，单位为秒。
 
 #### 参数格式
 
-交通信号灯颜色设置参数的格式为【交通信号灯OpenDrive ID，颜色ID，设置时长】。
+交通信号灯颜色设置参数的格式为：交通信号灯OpenDrive ID，颜色ID，设置时长。
 
 交通信号灯颜色ID说明：
 
@@ -24,8 +25,8 @@
 要设置交通信号灯，可以发送一个GET请求到 `/set_traffic_light`：
 
 1. 打开Carla模拟环境
-2. 运行脚本signal_control.py来开启服务端
-3. 发送http请求:
+2. 运行脚本 [signal_control.py](https://github.com/OpenHUTB/doc/blob/master/src/course/signal_control.py) 来开启服务端
+3. 发送 http 请求:
 
 ```
 http://127.0.0.1:5000/set_traffic_light?traffic_id=-5&color_id=3&color_time=30

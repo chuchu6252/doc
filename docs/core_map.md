@@ -175,7 +175,7 @@ waypoint = waypoint.next(2.0)
 
 ### 生成地图导航 <span id="generating-a-map-navigation"></span>
 
-客户端需要向服务器发出请求来获取 `.xodr` 地图文件并将其解析为[`carla.Map`](python_api.md#carla.Map) 对象。这只需要做一次。
+客户端需要向服务器发出请求来获取 <font color="#f8805a">.xodr</font> 地图文件并将其解析为[`carla.Map`](python_api.md#carla.Map) 对象。这只需要做一次。
 
 获取地图对象：
 

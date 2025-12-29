@@ -1986,10 +1986,10 @@ X-轴旋转角度。
 ### 方法
 - <a name="carla.Rotation.__init__"></a>**<font color="#7fb800">\__init__</font>**(<font color="#00a6ed">**self**</font>, <font color="#00a6ed">**pitch**=0.0</font>, <font color="#00a6ed">**yaw**=0.0</font>, <font color="#00a6ed">**roll**=0.0</font>)  
     - **参数：**
-        - `pitch` (_float<small> - 度</small>_) - Y-axis rotation angle.  
-        - `yaw` (_float<small> - 度</small>_) - Z-axis rotation angle.  
-        - `roll` (_float<small> - 度</small>_) - X-axis rotation angle.  
-    - **警告：** <font color="#ED2F2F">_ CARLA <code>(pitch,yaw,roll)</code> 和虚幻引擎编辑器中的声明顺序不同。当从源代码构建时，不要混淆轴的旋转。_</font>  
+        - `pitch` (_float<small> - 度</small>_) - Y 轴的旋转角  
+        - `yaw` (_float<small> - 度</small>_) - Z 轴的旋转角  
+        - `roll` (_float<small> - 度</small>_) - X 轴的旋转角  
+    - **警告：** <font color="#ED2F2F">_ HUTB <code>(pitch,yaw,roll)</code> 和虚幻引擎中的声明顺序 <code>(roll,pitch,yaw)</code>)不同。当从源代码构建时，不要混淆轴的旋转。_</font>  
 
 ##### 设置器
 - <a name="carla.Rotation.get_forward_vector"></a>**<font color="#7fb800">get_forward_vector</font>**(<font color="#00a6ed">**self**</font>)  

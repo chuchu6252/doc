@@ -15,7 +15,7 @@
 
   - **[spectator.py](https://github.com/OpenHUTB/doc/blob/master/src/course/spectator/spectator.py)**
 
-  - [**湖工商场景**](https://pan.baidu.com/s/15T1hGoWJ70tVmsTX7-zcSw?pwd=hutb )**(WindowsNoEditor)**，并运行**[generate_traffic.py](https://github.com/OpenHUTB/doc/blob/master/src/examples/generate_traffic.py)**
+  - [**湖工商场景**](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb)(学习/交通课程相关软件/WindowsNoEditor.rar)，并运行**[generate_traffic.py](https://github.com/OpenHUTB/doc/blob/master/src/examples/generate_traffic.py)**
 
 
 - 安装必要的python库

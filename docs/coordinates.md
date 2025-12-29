@@ -69,13 +69,13 @@ location = carla.Location() # x=y=z=0
 
 ### 旋转
 
-[Rotation 对象](python_api.md#carlarotation) 用于定义 HUTB 坐标系中的旋转。旋转以欧拉角形式定义，包括**横滚角**、**俯仰角**和**偏航角**。欧拉角的单位为度。固有的旋转是按**偏航、俯仰、横滚**的顺序进行的。
+[Rotation 对象](python_api.md#carlarotation) 用于定义 HUTB 坐标系中的旋转。旋转以度为单位，顺序为**俯仰角**、**偏航角** 和 **横滚角**。而虚幻引擎旋转是**偏航、俯仰、横滚**。
 
 以下代码展示了如何创建一个旋转对象，使其横滚角为 10 度，俯仰角为 10 度，偏航角为 90 度：
 
 ```py
 # 带位置参数的默认构造函数
-rotation = carla.Rotation(10,90,10) # pitch, yaw, roll
+rotation = carla.Rotation(10,90,10) # 俯仰, 偏航, 横滚
 
 # 使用关键字参数
 rotation = carla.Rotation(pitch=10, yaw=90, roll=10)

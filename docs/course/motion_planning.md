@@ -14,7 +14,7 @@
 - [main_v4_VO](https://github.com/OpenHUTB/doc/blob/master/src/course/Motion_Planning/main_v4_VO.py)
 
 
-- [**湖工商场景**](https://pan.baidu.com/s/15T1hGoWJ70tVmsTX7-zcSw?pwd=hutb )**(WindowsNoEditor)**
+- [**湖工商场景**](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb)(学习/交通课程相关软件/WindowsNoEditor.rar)
 
   ![](../img/traffic_course_img/planning.gif)
 
