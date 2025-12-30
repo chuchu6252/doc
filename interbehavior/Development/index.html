@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>DReyeVR Development - 人车模拟</title>
+    <title>DReyeVR 开发 - 人车模拟</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "DReyeVR Development";
+        var mkdocs_page_name = "DReyeVR \u5f00\u53d1";
         var mkdocs_page_input_path = "interbehavior/Development.md";
         var mkdocs_page_url = null;
       </script>
@@ -58,7 +58,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">DReyeVR Development</li>
+      <li class="breadcrumb-item active">DReyeVR 开发</li>
     <li class="wy-breadcrumbs-aside">
           <a href="https://github.com/OpenHUTB/doc/edit/master/docs/interbehavior/Development.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
@@ -68,35 +68,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="dreyevr-development"><code>DReyeVR</code> Development</h1>
-<p>For users who want a deeper dive into the inner workings of DReyeVR and how they can get started with development and writing code, look no further!</p>
-<p>(This guide assumes you've read the <a href="../Usage.md"><code>Usage.md</code></a> documentation and have <code>DReyeVR</code> installed)</p>
-<h1 id="getting-started">Getting started</h1>
-<p>We recommend a development setup where your changes to DReyeVR can be quickly identified compared to our upstream changes. To do this we provide a fork of CARLA with DReyeVR pre-installed (and committed) so you should have a clean starting repository to work with:
-<div class="highlight"><pre><span></span><code><span class="c1"># clone our fork and replace your vanilla CARLA repository</span>
-
+                <h1 id="dreyevr"><code>DReyeVR</code> 开发</h1>
+<p>对于想要深入了解 DReyeVR 内部运作原理以及如何开始开发和编写代码的用户来说，无需再四处寻找了！</p>
+<p>（本指南假设您已阅读 <a href="../Usage.md"><code>Usage.md</code></a> 文档并已安装 <code>DReyeVR</code> ）。</p>
+<h1 id="_1">入门</h1>
+<p>我们建议您采用一种开发环境，以便能够快速识别您对 DReyeVR 的更改与上游更改之间的差异。为此，我们提供了一个预装（并已提交）DReyeVR 的 CARLA 分支，这样您就可以使用一个干净的初始代码库：
+<div class="highlight"><pre><span></span><code><span class="c1"># 克隆我们的分支并替换你原有的 CARLA 仓库。</span>
 git<span class="w"> </span>clone<span class="w"> </span>https://github.com/harplab/carla<span class="w"> </span>-b<span class="w"> </span>DReyeVR-0.9.13<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span>
 <span class="nb">cd</span><span class="w"> </span>carla
-./Update.sh<span class="w"> </span><span class="c1"># on Linux/Mac</span>
-Update.bat<span class="w"> </span><span class="c1"># on Windows</span>
+<span class="c1"># ./Update.sh # 在 Linux/Mac 系统中</span>
+Update.bat<span class="w"> </span><span class="c1"># 在 Windows 系统中</span>
 
-<span class="nb">cd</span><span class="w"> </span>../DReyeVR/<span class="w"> </span><span class="c1"># assumed DReyeVR repo is adjacent to carla repo</span>
+<span class="nb">cd</span><span class="w"> </span>../DReyeVR/<span class="w"> </span><span class="c1"># 假设 DReyeVR 代码库与 carla 代码库相邻。</span>
 
-<span class="c1"># (in DReyeVR repo)</span>
-make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla<span class="w"> </span><span class="c1"># install things not tracked by git such as blueprint/binary files</span>
+<span class="c1"># (在 DReyeVR 仓库)</span>
+make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla<span class="w"> </span><span class="c1"># 安装未被 Git 跟踪的内容，例如蓝图/二进制文件</span>
 
-<span class="nb">cd</span><span class="w"> </span>../carla<span class="w"> </span><span class="c1"># switch back to carla dir</span>
+<span class="nb">cd</span><span class="w"> </span>../carla<span class="w"> </span><span class="c1"># 切换回 carla 目录</span>
 git<span class="w"> </span>status
-<span class="c1"># now, git should show changes relative to our upstream DReyeVR branch rather than CARLA 0.9.13</span>
+<span class="c1"># 现在，git 应该显示相对于我们上游 DReyeVR 分支的更改，而不是相对于 CARLA 0.9.13 分支的更改。</span>
 </code></pre></div></p>
-<h2 id="reverse-install">Reverse install</h2>
-<p>Once you have made some changes in the Carla codebase that relate to DReyeVR, it is tedious to manually copy all these changes back into the DReyeVR repo (if you wanted to upstream them). As part of our <a href="../Scripts/README.md"><code>make</code></a> system, we provide a "reverse install" (<code>r-install</code>) procedure to mirror the <code>install</code> function and copy all the corresponding files that were installed by DReyeVR (from <code>make install</code>) back into DReyeVR:</p>
+<h2 id="_2">反向安装</h2>
+<p>一旦您对 Carla 代码库中与 DReyeVR 相关的部分进行了更改，手动将所有这些更改复制回 DReyeVR 代码库（如果您想将其提交到上游）将非常繁琐。作为我们构建系统的一部分，我们提供了一个“反向安装”（<code>r-install</code>）程序，用于镜像安装 <code>install</code> 功能，并将 DReyeVR（通过 <code>make install</code>）安装的所有相应文件复制回 DReyeVR：</p>
 <details>
 
-<summary> Click to open example make output</summary>
+<summary> 点击打开示例以生成输出</summary>
 
-<div class="highlight"><pre><span></span><code>make<span class="w"> </span>r-install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla<span class="w"> </span><span class="c1"># equivalent to &quot;make rev&quot;</span>
-make<span class="w"> </span>rev<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla<span class="w">       </span><span class="c1"># alias for r-install</span>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>r-install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla<span class="w"> </span><span class="c1"># 相当于 &quot;make rev&quot;</span>
+make<span class="w"> </span>rev<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla<span class="w">       </span><span class="c1"># r-install 的别名</span>
 
 Proceeding<span class="w"> </span>on<span class="w"> </span>/PATH/TO/CARLA<span class="w"> </span><span class="o">(</span>git<span class="w"> </span>branch<span class="o">)</span>
 /PATH/TO/CARLA/Unreal/CarlaUE4/Source/CarlaUE4/DReyeVR/<span class="w"> </span>--<span class="w"> </span>found
@@ -110,8 +109,8 @@ Done<span class="w"> </span>Reverse<span class="w"> </span>Install!
 </code></pre></div>
 </details>
 <p><br></p>
-<p>Note that the files that are copied back into DReyeVR follow those defined by the DReyeVR &lt;--&gt; Carla file correspondence defined in <a href="../Scripts/Paths/"><code>Paths/*.csv</code></a>, so if you have modified a completely new file (not tracked by DReyeVR) you'll need to manually add that file to the DReyeVR repo and update the correspondences file (.csv).</p>
-<h2 id="typical-workflow">Typical workflow</h2>
+<p>请注意，复制回 DReyeVR 的文件遵循 <a href="../Scripts/Paths/"><code>Paths/*.csv</code></a> 中定义的 DReyeVR &lt;--&gt; Carla 文件对应关系，因此，如果您修改了一个全新的文件（DReyeVR 未跟踪的文件），则需要手动将该文件添加到 DReyeVR 存储库并更新对应关系文件 (.csv)。</p>
+<h2 id="_3">典型工作流程</h2>
 <p>The workflow we have designed for our development process on DReyeVR includes using our fork of carla (<code>DReyeVR-0.9.13</code> branch) alongside a cloned <code>DReyeVR</code> repo that we can use to both push and pull from upstream.</p>
 <details>
 
@@ -143,53 +142,53 @@ make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARL
 </details>
 <p><br></p>
 <p><img alt="Directories" src="../Figures/Dev/Directories.jpg" /></p>
-<h1 id="understanding-the-carla-dreyevr-codebase-whereabouts">Understanding the Carla + DReyeVR codebase whereabouts</h1>
-<p>These are the main places you'll want to look at when developing atop Carla:</p>
+<h1 id="carla-dreyevr">了解 Carla + DReyeVR 代码库的位置</h1>
+<p>在 Carla 上进行开发时，您需要重点关注以下几个方面：</p>
 <ol>
 <li><code>Unreal/CarlaUE4/Source/CarlaUE4/DReyeVR/</code><ul>
-<li>This contains all our custom DReyeVR C++ code which typically builds off existing Carla code.</li>
+<li>这包含了我们所有的自定义 DReyeVR C++ 代码，这些代码通常是在现有的 Carla 代码基础上构建的。</li>
 </ul>
 </li>
 <li><code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/</code><ul>
-<li>This is where the main UE4 C++ Carla logic is defined for everything from Sensors to Vehicles to the Recorder/Replayer to the Weather. </li>
-<li>We have some code here, such as for custom sensors and small feature patches.</li>
+<li>这里定义了 UE4 C++ Carla 的主要逻辑，涵盖了从传感器到车辆，再到记录器/回放器和天气等所有内容。</li>
+<li>这里有一些代码，例如用于自定义传感器和小功能补丁的代码。</li>
 </ul>
 </li>
 <li><code>LibCarla/source/carla/</code><ul>
-<li>This is where nearly all the <code>Python</code> interfacing Carla C++ code is housed. Much of this is reimplementation of the <code>CarlaUE4/Plugins</code> code, but without the Unreal C++ API and with a great emphasis on streaming logic to the PythonAPI</li>
-<li>We have a small amount of code here to ensure our sensor data gets properly transmitted to Python</li>
+<li>这里存放了几乎所有与 <code>Python</code> 交互的 Carla C++ 代码。其中大部分是对 <code>CarlaUE4/Plugins</code> 代码的重新实现，但没有使用 Unreal C++ API，并且非常注重向 Python API 传输数据流逻辑。</li>
+<li>这里有一小段代码，用于确保传感器数据能够正确地传输到 Python。</li>
 </ul>
 </li>
 <li><code>PythonAPI/examples/</code><ul>
-<li>Here you can find most of the important Python scripts that interact with Carla.</li>
-<li>We have a few files here to improve the experience with DReyeVR and Carla's PythonAPI</li>
+<li>在这里您可以找到与 Carla 交互的大部分重要 Python 脚本。</li>
+<li>这里有一些文件，用于改善 DReyeVR 和 Carla 的 PythonAPI 的使用体验。</li>
 </ul>
 </li>
 </ol>
-<h1 id="inner-workings">Inner workings</h1>
-<p>This section will discuss the inner workings of DReyeVR including design paradigms and corresponding handshakes with Carla. </p>
+<h1 id="_4">内部运作</h1>
+<p>本节将讨论 DReyeVR 的内部运作，包括设计范式以及与 Carla 的相应握手。</p>
 <h2 id="egovehicle">EgoVehicle</h2>
 <ul>
-<li>Relevant files: <a href="../DReyeVR/EgoVehicle.h">EgoVehicle.h</a>, <a href="../DReyeVR/EgoVehicle.cpp">EgoVehicle.cpp</a>, <a href="../DReyeVR/EgoInputs.cpp">EgoInputs.cpp</a>, <a href="../Content/DReyeVR/EgoVehicle/">Content/DReyeVR/EgoVehicle/BP_*.uasset</a></li>
+<li>相关文件： <a href="../DReyeVR/EgoVehicle.h">EgoVehicle.h</a>, <a href="../DReyeVR/EgoVehicle.cpp">EgoVehicle.cpp</a>, <a href="../DReyeVR/EgoInputs.cpp">EgoInputs.cpp</a>, <a href="../Content/DReyeVR/EgoVehicle/">Content/DReyeVR/EgoVehicle/BP_*.uasset</a></li>
 </ul>
-<p>The EgoVehicle is the main vessel as our "hero vehicle". Following our goal to improve human driver immersion in Carla, the EgoVehicle contains many human-centric features that normal Carla vehicles do not carry. For example, the EgoVehicle defines the logic for the internal mirrors, dynamic steering wheel, dashboard, human inputs, audio, etc. These are all things that an AI-powered vehicle would not care about, so Carla omits them from all their other Vehicles. </p>
-<p>Still, the EgoVehicle is just a wrapper (child of) over a standard <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/CarlaWheeledVehicle.h"><code>ACarlaWheeledVehicle</code></a>, so it automatically inherits all the Carla vehicle operations and is compatible with all CarlaVehicle features. Notably, the EgoVehicle is not possessed by the player, but by the default <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/WheeledVehicleAIController.h"><code>AWheeledVehicleAIController</code></a>. This is to enable simultaneous input from the player and from the built-in Carla autopilot. We'll discuss this more in <code>DReyeVRPawn</code> below. </p>
-<p>Importantly, we base all our ticking synchronization logic off of the EgoVehicle, whose <code>Tick</code> method calls the <code>Tick</code> method for many other key components in DReyeVR. This ensures we have a deterministic and consistent sequence of updates in the simulator and can rely on this ordering in the future.</p>
-<p>Here we also manually manage the replay behavior for the EgoVehicle, who follows the values captured from the EgoSensor rather than the Carla default behavior, this is so we can more closely reenact the exact data that we collected from the EgoSensor such as eye gaze, camera orientation, vehicle inputs &amp; pose, etc. </p>
-<p>We also define the logic for spawning and managing the three mirrors in the vehicle, since these are not included by default in the blueprint mesh. It is a good idea to separate these since mirrors in UE4 implemented with planar reflections are a huge performance killer and should be used sparingly. We also can define per-mirror quality settings to dynamically adjust their resolution and corresponding performance impact.</p>
-<p>The EgoVehicle contains pointers to nearly all other major DReyeVR objects so they can communicate seamlessly. These pointers are set up on construction and persist for the lifetime of these objects. Importantly, the EgoVehicle spawns and attaches the EgoSensor, so they are intrinsically linked and one cannot exist without the other.</p>
-<p>Additionally, all the input logic for the EgoVehicle is held in the <code>EgoInputs.cpp</code> source file, it is purely to separate this logic from the rest of the EgoVehicle source. </p>
-<p>Finally, how we spawn our EgoVehicle in the Carla world is by creating a copy of an existing Carla vehicle blueprint and <a href="https://forums.unrealengine.com/t/how-to-change-parent-class-of-blueprint-asset/281843">reparenting</a> the base class to our EgoVehicle in the blueprint. This can be found in our <code>Content</code> folder for <code>EgoVehicle</code>. All the corresponding blueprints are organized here.</p>
+<p>EgoVehicle 是我们的“英雄车”，也是我们的主要载体。为了提升 Carla 中人类驾驶员的沉浸感，EgoVehicle 包含许多普通 Carla 车辆所不具备的以人为中心的功能。例如，EgoVehicle 定义了车内后视镜、动态方向盘、仪表盘、人为输入、音频等的逻辑。这些都是人工智能车辆无需关注的功能，因此 Carla 在其他所有车辆中都省略了这些功能。</p>
+<p>不过，EgoVehicle 只是标准 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/CarlaWheeledVehicle.h"><code>ACarlaWheeledVehicle</code></a> 的一个封装（子类），因此它会自动继承所有 Carla 车辆操作，并兼容所有 CarlaVehicle 功能。值得注意的是，EgoVehicle 并非由玩家拥有，而是由默认的 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Vehicle/WheeledVehicleAIController.h"><code>AWheeledVehicleAIController</code></a> 拥有。这样做是为了允许玩家和内置的 Carla 自动驾驶系统同时进行输入。我们将在下文的 <code>DReyeVRPawn</code> 部分对此进行更详细的讨论。</p>
+<p>重要的是，我们所有的节拍同步逻辑都基于 EgoVehicle，其 <code>Tick</code> 方法会调用 DReyeVR 中许多其他关键组件的 <code>Tick</code> 方法。这确保了模拟器中更新的顺序是确定且一致的，并且将来可以依赖这种顺序。</p>
+<p>在这里，我们也手动管理 EgoVehicle 的回放行为，它会遵循从 EgoSensor 捕获的值，而不是 Carla 的默认行为，这样我们就可以更精确地重现从 EgoSensor 收集的确切数据，例如眼睛凝视、相机方向、车辆输入和姿态等。 </p>
+<p>我们还定义了车辆中三个后视镜的生成和管理逻辑，因为它们默认情况下并未包含在蓝图网格中。将它们分开处理是明智之举，因为在模拟引擎中，使用平面反射实现的后视镜会严重影响性能，因此应谨慎使用。我们还可以为每个后视镜定义画质设置，以动态调整其分辨率及其相应的性能影响。</p>
+<p>EgoVehicle 包含指向几乎所有其他主要 DReyeVR 对象的指针，以便它们能够无缝通信。这些指针在构造时设置，并在这些对象的整个生命周期内保持不变。重要的是，EgoVehicle 会生成并附加 EgoSensor，因此它们本质上是相互关联的，彼此不可或缺。</p>
+<p>此外，EgoVehicle 的所有输入逻辑都保存在 <code>EgoInputs.cpp</code> 源文件中，这样做纯粹是为了将该逻辑与 EgoVehicle 源代码的其余部分分离。</p>
+<p>最后，我们在 Carla 世界中生成 EgoVehicle 的方法是：复制一个现有的 Carla 载具蓝图，并将蓝图中的基类 <a href="https://forums.unrealengine.com/t/how-to-change-parent-class-of-blueprint-asset/281843">重新父级化 reparenting</a> 到我们的 EgoVehicle。该蓝图位于 <code>EgoVehicle</code> 的 <code>内容(Content)</code> 文件夹中，所有相关的蓝图都整理在这里。</p>
 <h2 id="egosensor">EgoSensor</h2>
 <ul>
-<li>Relevant files: <a href="../DReyeVR/EgoSensor.h">EgoSensor.h</a>, <a href="../DReyeVR/EgoSensor.cpp">EgoSensor.cpp</a>, <a href="../Carla/Sensor/DReyeVRSensor.h">DReyeVRSensor.h|cpp</a>, <a href="../Carla/Sensor/DReyeVRData.h">DReyeVRData.h|cpp</a></li>
+<li>相关文件： <a href="../DReyeVR/EgoSensor.h">EgoSensor.h</a>, <a href="../DReyeVR/EgoSensor.cpp">EgoSensor.cpp</a>, <a href="../Carla/Sensor/DReyeVRSensor.h">DReyeVRSensor.h|cpp</a>, <a href="../Carla/Sensor/DReyeVRData.h">DReyeVRData.h|cpp</a></li>
 </ul>
-<p>The EgoSensor is our virtual Carla sensor to track all kinds of human-centric data we might be interested in. It can be thought of as an <strong>invisible data collector that operates in the Carla world</strong>. Unlike most other Carla sensors which have some physical description and mounting to an actor, the EgoSensor is spawned and destroyed automatically with the EgoVehicle and bound to the EgoVehicle instance for its entire lifetime. </p>
-<p>The EgoSensor a child of a <code>DReyeVRSensor</code> which is a child of a generic <code>CarlaSensor</code> that comes from following Carla's <a href="https://carla.readthedocs.io/en/latest/tuto_D_create_sensor/">"add a sensor tutorial"</a>. The <code>DReyeVRSensor</code> parent class is located in the <code>CarlaUE4/Plugin/Source</code> region of the codebase as it follows a proper Carla implementation, importantly, this class is <code>virtual</code> (abstract) meaning it is supposed to be inherited by another class that provides implementation (enter <code>EgoSensor</code>). </p>
-<p>Since DReyeVR introduces several dependencies that Carla has nothing to do with (such as SRanipal for eye tracking and LogitechWheelPlugin for steering wheel hardware), we implement their interface with our Code in <code>EgoSensor</code> rather than within the <code>CarlaUE4/Plugin/Source</code> region (which is supposed to be just for Carla). The EgoSensor then implements the methods needed to get the data from SRanipal and Logitech and format it nicely into a <code>DReyeVRData</code> package for this simulator timestep </p>
-<p>The <code>DReyeVRData</code> class is a collection of structures defined in <code>CarlaUE4/Plugin/Source/Carla/DReyeVRData.h</code> which defines individual structures for data types that are being tracked by DReyeVR. For instance, we have structures for the eye gaze data, vehicle inputs, other ego-vehicle variables, and more. This is designed this way to encourage future data types to follow a similar struct design and interface with DReyeVR, so everything can be collected together into the <code>AggregateData</code> and then sent as a complete package to the PythonAPI for streaming or to the recorder for serialization. </p>
-<p>The EgoSensor also implements other nice features such as screen capture for the Camera and variable rate shading with foveated rendering if enabled. </p>
-<h3 id="inheritance-map">Inheritance map:</h3>
+<p>EgoSensor 是我们用于追踪各种我们可能感兴趣的以人为中心的数据的虚拟 Carla 传感器。它可以被视为一个<strong>在 Carla 世界中运行的隐形数据采集器</strong>。与其他大多数具有物理描述并安装在 Actor 上的 Carla 传感器不同，EgoSensor 会随 EgoVehicle 自动生成和销毁，并在其整个生命周期内绑定到 EgoVehicle 实例。</p>
+<p>EgoSensor 是 <code>DReyeVRSensor</code> 的子类，而 DReyeVRSensor 又是通用 <code>CarlaSensor</code> 的子类，后者源自 Carla 的“<a href="https://openhutb.github.io/doc/tuto_D_create_sensor/">"添加传感器教程(add a sensor tutorial)"</a>”。<code>DReyeVRSensor</code> 父类位于代码库的 <code>CarlaUE4/Plugin/Source</code> 区域，因为它遵循了 Carla 的规范实现。重要的是，该类是虚类<code>virtual</code>（抽象类），这意味着它应该被另一个提供实现的类（即 <code>EgoSensor</code>）继承。</p>
+<p>由于 DReyeVR 引入了一些 Carla 本身并不依赖的组件（例如用于眼动追踪的 SRanipal 和用于方向盘硬件的 LogitechWheelPlugin），因此我们在 <code>EgoSensor</code> 中实现了它们的接口，而不是在 <code>CarlaUE4/Plugin/Source</code> 区域（该区域仅供 Carla 使用）。EgoSensor 随后实现了从 SRanipal 和 Logitech 获取数据并将其格式化为适用于当前模拟器时间步的 <code>DReyeVRData</code> 数据包所需的方法。</p>
+<p><code>DReyeVRData</code> 类是 <code>CarlaUE4/Plugin/Source/Carla/DReyeVRData.h</code> 中定义的一系列结构体，它定义了 DReyeVR 跟踪的各种数据类型的结构。例如，它包含了眼睛凝视数据、车辆输入、其他自车变量等结构体。这样的设计旨在鼓励未来的数据类型遵循类似的结构体设计，并与 DReyeVR 进行接口集成，以便将所有数据收集到 <code>AggregateData</code> 中，然后作为一个完整的数据包发送到 Python API 进行流式传输，或发送到记录器进行序列化。</p>
+<p>EgoSensor 还实现了其他一些不错的功能，例如相机屏幕截图和启用后带有注视点渲染的可变速率着色。</p>
+<h3 id="_5">继承关系图：</h3>
 <p>To clarify the structure of the inheritance at play here (Older generation to youngest):
 1. <a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/GameFramework/AActor/"><code>AActor</code></a> (UE4): Low-level unreal class for any object that can be spawned into the world
 2. <a href="https://github.com/carla-simulator/carla/blob/0.9.13/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/Sensor.h"><code>ASensor</code></a> (Carla): Carla actor that templates the structure for Sensors acting in the Carla world
@@ -222,7 +221,7 @@ make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARL
 <p>We follow suit with a similar design in our <code>DReyeVRFactory</code> which defines the important characteristics for our DReyeVR actors and provides the logic necessary to spawn them. For instance, here we define our actors are labeled uniquely such as <code>"harplab.dreyevr_vehicle.model3"</code> to avoid conflict with existing Carla <code>"vehicle.*"</code> queries. </p>
 <p>This is class you'll want to modify if you're looking to create new DReyeVR actors (such as new vehicle models), walkers, sensors, etc. </p>
 <hr />
-<h1 id="adding-custom-data-to-the-ego-sensor">Adding custom data to the ego-sensor</h1>
+<h1 id="ego-sensor">向自我传感器(ego-sensor)添加自定义数据</h1>
 <p>While we provide a fairly comprehensive suite of data in our DReyeVRSensor, you may be interested in also tracking other data that we don't currently enable. </p>
 <p>The first file you'll want to look at is <code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/</code><a href="../Carla/Sensor/DReyeVRData.h"><code>DReyeVRData.h</code></a> which contains the data structures that compose the contents of the ego sensor. Here you'll define the variable and its serialization methods (read/write/print). </p>
 <div class="highlight"><pre><span></span><code><span class="c1">/// DReyeVRData.h</span>
@@ -294,7 +293,7 @@ Notes:
 <span class="p">...</span><span class="w"> </span><span class="c1">// your code</span>
 <span class="n">EgoSensor</span><span class="o">-&gt;</span><span class="n">GetData</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetNewVariable</span><span class="p">(</span><span class="n">NewVariable</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">5.f</span><span class="p">);</span><span class="w"> </span><span class="c1">// update the new variable</span>
 </code></pre></div></p>
-<h2 id="optional-streaming-data-to-a-pythonapi-client">[OPTIONAL] Streaming data to a PythonAPI client:</h2>
+<h2 id="pythonapi">[可选] 向 PythonAPI 客户端传输数据：</h2>
 <p>In order to see the new data from a PythonAPI client, you'll need to duplicate the code to the LibCarla serializer. This requires looking at <code>LibCarla/Sensor/s11n/</code><a href="../LibCarla/Sensor/s11n/DReyeVRSerializer.h"><code>DReyeVRSerializer.h</code></a> and following the same template as all the other variables:
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DReyeVRSerializer</span>
 <span class="p">{</span>
@@ -354,9 +353,9 @@ After you modify files in <code>PythonAPI</code> or <code>LibCarla</code> the Py
 <span class="o">(</span>carla13<span class="o">)</span><span class="w"> </span>make<span class="w"> </span>PythonAPI
 <span class="c1"># make sure to fix any build errors that may occur!</span>
 </code></pre></div></p>
-<h1 id="todo-add-more-dev-notes">TODO: add more dev notes</h1>
-<h1 id="tips-tricks">Tips &amp; Tricks</h1>
-<h2 id="1-enable-logging-in-shipping-mode">1. Enable logging in shipping mode</h2>
+<h1 id="todo">TODO: 添加更多开发笔记</h1>
+<h1 id="_6">技巧与诀窍</h1>
+<h2 id="1">1. 启用交付模式下的日志记录</h2>
 <p>It is super useful to see the CarlaUE4.log file in shipping mode and this is not the default in Carla (or Unreal) perhaps for performance reasons?</p>
 <p>If you want to enable these features then you'll need to add the flag for <code>bUseLoggingInShipping</code> in the <code>Carla/Unreal/CarlaUE4/Source/CarlaUE4.Target.cs</code> file.</p>
 <div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CarlaUE4Target</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">TargetRules</span>
@@ -371,7 +370,7 @@ After you modify files in <code>PythonAPI</code> or <code>LibCarla</code> the Py
 </code></pre></div>
 <p>Then you should be able to find the CarlaUE4.log files (timestamped to avoid overwrite) at <code>C:\Users\%YOUR_USER_NAME%\AppData\Local\CarlaUE4\Saved\Logs\CarlaUE4.log</code> (on Windows). Also works for Mac/Linux. See <a href="https://forums.unrealengine.com/t/how-to-debug-shipping-build-exclusive-crash/411138">this</a> for more information.</p>
 <hr />
-<h2 id="2-how-to-log">2. How to <code>LOG</code></h2>
+<h2 id="2-log">2. 如何执行 <code>LOG</code></h2>
 <p>Logging is useful to track code logic and debug (especially since debugging UE4 code can be a bit rough). By default in Unreal C++ you can always use <code>UE_LOG(LogTemp, Log, TEXT("some text and %d here"), 55);</code> but we streamlined this for DReyeVR specific logging. You can use our <code>LOG</code> macros (defined in <a href="../CarlaUE4/CarlaUE4.h"><code>CarlaUE4.h</code></a>) when you are editing <code>CarlaUE4/DReyeVR/*.[cpp|h]</code> files.</p>
 <p>The main benefits include:
 - Less boilerplate code for the programmer (thats you!)
@@ -391,13 +390,13 @@ After you modify files in <code>PythonAPI</code> or <code>LibCarla</code> the Py
 </code></pre></div>
 <p>If you are working instead in the <code>CarlaUE4/Plugins/Source/Carla</code> codebase then you'll be able to use similar macros but prefixed with <code>DReyeVR_</code>: <code>DReyeVR_LOG("blah blah")</code>, <code>DReyeVR_LOG_WARN("blah blah warning")</code>, etc. </p>
 <hr />
-<h2 id="3-managing-multiple-carladreyevr-versions">3. Managing multiple Carla/DReyeVR versions</h2>
+<h2 id="3-carladreyevr">3. 管理多个 Carla/DReyeVR 版本</h2>
 <ul>
 <li>Having separate <code>python</code> environments (such as <code>conda</code>) is extremely useful to have different <code>carla</code> Python packages on the same machine with different versions (such as <code>LibCarla</code>). To do this, you can simply create an individual conda environment for each Carla version as described in <a href="../Install/"><code>Install.md</code></a>. Remember to activate your new <code>conda</code> environment on a per-shell basis!</li>
 <li>If you plan on having multiple CARLA's installed, you'll need to keep them updated with the appropriate <code>Content</code>. Rather than calling the <code>Update</code> script every time to update this, you can save the <code>Content.tar.gz</code> file and copy it into new <code>Unreal/CarlaUE4/Content/Carla</code> directories whenever you have a new repo.</li>
 </ul>
 <hr />
-<h2 id="4-todo-add-more-tips-tricks">4. TODO add more tips &amp; tricks</h2>
+<h2 id="4-todo">4. TODO 添加更多技巧和诀窍</h2>
               
             </div>
           </div><footer>
