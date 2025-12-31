@@ -70,29 +70,29 @@
               
                 <h1 id="carla">倾斜模型导入Carla</h1>
 <h2 id="_1">导入道路和红绿灯</h2>
-<p>0.将 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的 <code>software/cesium/RoadRunner插件.zip</code>解压到<code>carla\Unreal\CarlaUE4\Plugins</code>，运行<code>make launch</code>重启编辑器。</p>
-<p>1.在<code>carla\Unreal\CarlaUE4\Content\roadrunner</code>中新建<code>static</code>（放资产）和<code>map</code>（放地图）；</p>
-<p>在编辑器中static目录中右键导入baidutest2test.fbx。
+<p>0.将 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的 <font color="#00a6ed">software/cesium/RoadRunner插件.zip</font> 解压到 <font color="#00a6ed">carla\Unreal\CarlaUE4\Plugins</font> ，运行<code>make launch</code>重启编辑器。</p>
+<p>1.在 <font color="#00a6ed">carla\Unreal\CarlaUE4\Content\roadrunner</font> 中新建 <font color="#00a6ed">static</font>（放资产）和 <font color="#00a6ed">map</font>（放地图）；</p>
+<p>在编辑器中static目录中右键导入 <font color="#00a6ed">baidutest2test.fbx</font> 。
 导入选项：
-勾选 纹理中<code>反转法线贴图</code>。</p>
-<p>2.将<code>light.umap</code>拷贝到<code>carla\Unreal\CarlaUE4\Content\roadrunner\map</code>路径下。</p>
-<p>3.在虚幻编辑器中点“文件”菜单中的“关卡另存为”（方便管理，把地图和红绿灯放一块），选择<code>carla\Unreal\CarlaUE4\Content\roadrunner\map</code></p>
-<p>4.将<code>light.umap</code>引入到<code>baidutest2test.umap</code>（虚幻编辑器中点“窗口”菜单中的“关卡”，将<code>carla\Unreal\CarlaUE4\Content\roadrunner\map\light</code>拖入到关卡窗口中-&gt;右键light，修改流送方式-&gt;固定加载）。</p>
-<p>5.将<code>carla\Unreal\CarlaUE4\Content\Carla\Maps\OpenDrive\baidutest2test.xodr</code>拷贝到<code>carla\Unreal\CarlaUE4\Content\roadrunner\map\OpenDrive\baidutest2test.xodr</code></p>
+勾选 纹理中 <font color="#00a6ed">反转法线贴图</font> 。</p>
+<p>2.将 <font color="#00a6ed">light.umap</font> 拷贝到 <font color="#00a6ed">carla\Unreal\CarlaUE4\Content\roadrunner\map</font> 路径下。</p>
+<p>3.在虚幻编辑器中点“文件”菜单中的“关卡另存为”（方便管理，把地图和红绿灯放一块），选择 <font color="#00a6ed">carla\Unreal\CarlaUE4\Content\roadrunner\map</font> </p>
+<p>4.将 <font color="#00a6ed">light.umap</font> 引入到 <font color="#00a6ed">baidutest2test.umap</font>（虚幻编辑器中点“窗口”菜单中的“关卡”，将 <font color="#00a6ed">carla\Unreal\CarlaUE4\Content\roadrunner\map\light</font> 拖入到关卡窗口中-&gt;右键light，修改流送方式-&gt;固定加载）。</p>
+<p>5.将 <font color="#00a6ed">light.umap</font> 引入到 <font color="#00a6ed">carla\Unreal\CarlaUE4\Content\Carla\Maps\OpenDrive\baidutest2test.xodr</font> 拷贝到 <font color="#00a6ed">carla\Unreal\CarlaUE4\Content\roadrunner\map\OpenDrive\baidutest2test.xodr</font> </p>
 <h2 id="carla_1">倾斜模型导入Carla</h2>
 <p>1.下载并解压 <a href="https://github.com/CesiumGS/cesium-unreal/releases/download/v1.18.0-ue4/CesiumForUnreal-426-v1.18.0-ue4.zip">Cesium for Unreal 插件</a> 到CarlaUE引擎的plugins/Marketplace文件夹下：</p>
 <p><img alt="" src="../img/cesium/plugins.png" /></p>
 <p>2.如果CesiumForUnreal未启用，则在CarlaUE中添加插件</p>
-<div align=center>![](img/cesium/plugins_menu.png) </div>
 <blockquote>
 <blockquote>
-<p><img alt="" src="../img/cesium/add_plugin.png" />
+<p><img alt="" src="../img/cesium/plugins_menu.png" />
+<img alt="" src="../img/cesium/add_plugin.png" />
 添加完成后重启引擎。</p>
 </blockquote>
 </blockquote>
 <p>3.添加插件对象到场景中，配置参数和模型路径：</p>
-<p><code>CesiumGeoreference</code>设置为：<code>28.235238,  112.877178,  0</code></p>
-<p><code>Source</code>设置为<code>File:///D:/model1/model1/tileset.json</code>。<br></p>
+<p><font color="#00a6ed">CesiumGeoreference</font> 设置为：<code>28.235238,  112.877178,  0</code></p>
+<p><font color="#00a6ed">Source</font> 设置为<code>File:///D:/model1/model1/tileset.json</code>。<br></p>
 <blockquote>
 <blockquote>
 <blockquote>
@@ -104,12 +104,12 @@
 </blockquote>
 <div class="admonition 注意">
 <p class="admonition-title">注意</p>
-<p>从<a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的<code>map</code>文件夹内下载<code>中电软件园_cesium_model.zip</code>并解压。这里测试用的是本地路径，也可以用静态资源服务。</p>
+<p>从<a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中的 <font color="#00a6ed">map</font> 文件夹内下载<font color="#00a6ed">中电软件园_cesium_model.zip</font>并解压。这里测试用的是本地路径，也可以用静态资源服务。</p>
 </div>
-<p>去掉<code>Keep World Origin Near Camear</code>勾选。</p>
-<p>（4.将Trees.umap中放到本地文件夹下，菜单中点击<code>窗口-&gt;关卡</code>，从<code>内容浏览器</code>中将<code>Trees.umap</code>拖进导弹出界面，然后右键<code>Trees</code>关卡，选择<code>修改流送方法-&gt;固定加载</code>。）</p>
-<p>（5.在<code>世界大纲视图</code>中选中<code>Cesium3DTileset</code>，将<code>Cesium</code>中的<code>Mobility</code>修改为<code>可移动</code>。）</p>
-<p>（6.添加光源<code>DirectionalLight</code>、<code>ExponentialHeightFog</code>、<code>SkyAtmosphere</code>、<code>SkyLight</code>。）</p>
+<p>去掉 <font color="#00a6ed">Keep World Origin Near Camear</font> 勾选。</p>
+<p>（4.将 Trees.umap 中放到本地文件夹下，菜单中点击 <font color="#00a6ed">窗口-&gt;关卡</font> ，从 <font color="#00a6ed">内容浏览器</font> 中将 <font color="#00a6ed">Trees.umap</font> 拖进导弹出界面，然后右键 <font color="#00a6ed">Trees</font> ，选择 <font color="#00a6ed">修改流送方法-&gt;固定加载</font> 。）</p>
+<p>（5.在<font color="#00a6ed">世界大纲视图</font>中选中 <font color="#00a6ed">Cesium3DTileset</font> ，将 <font color="#00a6ed">Cesium</font> 中的 <font color="#00a6ed">Mobility</font> 修改为 <font color="#00a6ed">可移动</font> 。）</p>
+<p>（6.添加光源 <font color="#00a6ed">DirectionalLight</font> 、<font color="#00a6ed">ExponentialHeightFog</font>、<font color="#00a6ed">SkyAtmosphere</font>、<font color="#00a6ed">SkyLight</font>。）</p>
 <p>7.模型在CarlaUE中的场景效果</p>
 <p><img alt="" src="../img/cesium/scene_effect.png" /></p>
 <div class="admonition 注意">
@@ -121,23 +121,23 @@
 <h2 id="_3">导入中电软件园场景</h2>
 <p>1.<a href="../build_windows/">从源代码编译Carla</a>；</p>
 <p>2.导入插件：roadrunner插件（包括RoadRunnerCarlaContent、RoadRunnerCarlaDatasmith、RoadRunnerCarlaIntegration、RoadRunnerDatasmith、RoadRunnerImporter、RoadRunnerMaterials、RoadRunnerRuntime）、Cesium插件；</p>
-<p>3.导入fbx地图（导入选项都是默认），默认生成的地图是<code>Content/Carla/Maps/roadbuild</code>；</p>
+<p>3.导入 fbx 地图（导入选项都是默认），默认生成的地图是 <font color="#00a6ed">Content/Carla/Maps/roadbuild</font> ；</p>
 <p>4.根据<a href="./">倾斜模型导入Carla</a>的步骤添加除了建筑以外的其他资产；</p>
-<p>5.导入自己设计的关卡：虚幻编辑器-&gt;窗口-&gt;关卡，从<code>内容浏览器</code>中将<code>langan.umap</code>、<code>tafficsign.umap</code>、<code>Trees1.umap</code>等关卡拖到弹出的<code>关卡</code>页面，并<code>右键每个关卡-&gt;修改流送方法-&gt;固定加载</code>；</p>
+<p>5.导入自己设计的关卡：虚幻编辑器-&gt;窗口-&gt;关卡，从 <font color="#00a6ed">内容浏览器</font> 中将 <font color="#00a6ed">langan.umap</font> 、<font color="#00a6ed">tafficsign.umap</font>、<font color="#00a6ed">Trees1.umap</font>等关卡拖到弹出的 <font color="#00a6ed">关卡</font> 页面，并 <font color="#00a6ed">右键每个关卡-&gt;修改流送方法-&gt;固定加载</font> ；</p>
 <h2 id="_4">打包地图</h2>
 <p>1.参考 <a href="https://zhuanlan.zhihu.com/p/552983835">RoadRunner Scenario+CARLA联合仿真</a> 进行地图打包。</p>
-<p>2.将打包后场景的<code>WindowsNoEditor\CarlaUE4\Content\Carla\Maps\OpenDrive\baidutest2test.xodr</code>文件拷贝到<code>WindowsNoEditor\CarlaUE4\Content\RoadRunner\map\OpenDrive\baidutest2test.xodr</code>，否则调用<code>client.get_trafficmanager(args.tm_port)</code>会出现<code>failed to generate map</code>的错误。</p>
-<p>3.报警告<code>WARNING: requested 30 vehicles, but could only find 0 spawn points</code>，重新运行场景即可。</p>
+<p>2.将打包后场景的 <font color="#00a6ed">WindowsNoEditor\CarlaUE4\Content\Carla\Maps\OpenDrive\baidutest2test.xodr</font> 文件拷贝到 <font color="#00a6ed">WindowsNoEditor\CarlaUE4\Content\RoadRunner\map\OpenDrive\baidutest2test.xodr</font> ，否则调用<font color="#00a6ed">client.get_trafficmanager(args.tm_port)</font>会出现<font color="#00a6ed">failed to generate map</font> 的错误。</p>
+<p>3.报警告<font color="#00a6ed">WARNING: requested 30 vehicles, but could only find 0 spawn points</font>，重新运行场景即可。</p>
 <h3 id="_5">相对路径加载资产</h3>
-<p>1.在“世界大纲视图”中搜索<code>FbxScene_baidutest2test</code>，编辑编辑</p>
+<p>1.在“世界大纲视图”中搜索 <font color="#00a6ed">FbxScene_baidutest2test</font> ，编辑编辑</p>
 <p>2.事件开始运行</p>
 <p>3.右键加一个“根目录”</p>
-<p>4.右键“附加”（字符串-附件），由2个输入变成3个。其中 A 为:  <code>file:///</code>，B 从根目录连接来，C 为:   <code>ccsp/tileset.json</code></p>
+<p>4.右键“附加”（字符串-附件），由2个输入变成3个。其中 A 为: <font color="#00a6ed">file:///</font> ，B 从根目录连接来，C 为: <font color="#00a6ed">ccsp/tileset.json</font>  </p>
 <p>cesium：  </p>
 <p>5.在左边“我的蓝图”中新建一个变量 Cesium3DTileset（cesium）， 
-右边“细节”中的“变量类型”改变为 <code>Cesium3Dtiles</code></p>
+右边“细节”中的“变量类型”改变为 <font color="#00a6ed">Cesium3Dtiles</font></p>
 <p>6.右键 获取 Cesium 3DTileset   （组件 设置）  右边修改“默认值”（浏览）</p>
-<p>7.连接到 <code>SET url</code>（设置 Url）  Ceisium 3DTileset</p>
+<p>7.连接到 <font color="#00a6ed">SET url</font>（设置 Url）  Ceisium 3DTileset</p>
 <p>问题：不可编辑类默认对象中的此值。</p>
 <p>解决：将 Cesium3DTileset 拖动到不可编辑的地方（保存不了）。</p>
 <p>报错：图表被连接到外部映射中的对象。</p>
@@ -146,7 +146,7 @@
 <p>调出影响范围的函数</p>
 <p>RoutePlanner证明路口和路是断开的</p>
 <h4 id="_6">源代码分析</h4>
-<p>加载的逻辑位于<code>carla\Unreal\CarlaUE4\Plugins\Marketplace\CesiumForUnreal\Source\CesiumRuntime\Private\Cesium3DTileset.cpp</code>中的：
+<p>加载的逻辑位于 carla\Unreal\CarlaUE4\Plugins\Marketplace\CesiumForUnreal\Source\CesiumRuntime\Private\Cesium3DTileset.cpp 中的：
 <div class="highlight"><pre><span></span><code>this-&gt;_pTileset<span class="w"> </span><span class="o">=</span><span class="w"> </span>MakeUnique&lt;Cesium3DTilesSelection::Tileset&gt;<span class="o">(</span>
 <span class="w">    </span>externals,
 <span class="w">    </span>TCHAR_TO_UTF8<span class="o">(</span>*this-&gt;Url<span class="o">)</span>,
@@ -156,7 +156,7 @@ MakeShared（包括用于TUniquePtr的 <a href="https://zhuanlan.zhihu.com/p/433
 <p>MakeUnique 使用给定的参数分配一个类型 T 的新对象并将其作为 TUniquePtr 返回。</p>
 <p>TCHAR_TO_UTF8(const TCHAR*): unicode到utf8的转换</p>
 <h2 id="faq">FAQ</h2>
-<h6 id="vs-2022-engineenginepluginsmarketplacecesiumforunrealsourcethirdpartyincludecesiumgeospatials2cellidherror-2039-string-std"># VS 2022 编译时<code>engine\Engine\Plugins\Marketplace\CesiumForUnreal\Source\ThirdParty\include\CesiumGeospatial\S2CellID.h</code>报错：<code>error 2039: "string": 不是 "std" 的成员</code></h6>
+<h6 id="vs-2022-engineenginepluginsmarketplacecesiumforunrealsourcethirdpartyincludecesiumgeospatials2cellidh-error-2039-string-std"># VS 2022 编译时 engine\Engine\Plugins\Marketplace\CesiumForUnreal\Source\ThirdParty\include\CesiumGeospatial\S2CellID.h 报错：<code>error 2039: "string": 不是 "std" 的成员</code></h6>
 <blockquote>
 <p>原因：问题源于 VS2019 后的语法检查更加严格，缺少必要的头文件</p>
 <p>解决：增加头文件：
