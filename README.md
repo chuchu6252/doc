@@ -120,9 +120,9 @@ python -m pip install . -i http://mirrors.aliyun.com/pypi/simple --trusted-host 
 ```shell
 **<font color="#7fb800">method</font>**
 ```
-蓝色的函数参数名 <font color="#00a6ed">**self**</font>：
+蓝色的函数参数名 <font color="#00a6ed">self</font>：
 ```shell
-<font color="#00a6ed">**self**</font>
+**<font color="#00a6ed">self</font>**
 ```
 红色的 <font color="#ED2F2F"> 警告 </font>
 ```shell
