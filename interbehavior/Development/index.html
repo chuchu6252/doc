@@ -189,33 +189,39 @@ make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARL
 <p><code>DReyeVRData</code> 类是 <code>CarlaUE4/Plugin/Source/Carla/DReyeVRData.h</code> 中定义的一系列结构体，它定义了 DReyeVR 跟踪的各种数据类型的结构。例如，它包含了眼睛凝视数据、车辆输入、其他自车变量等结构体。这样的设计旨在鼓励未来的数据类型遵循类似的结构体设计，并与 DReyeVR 进行接口集成，以便将所有数据收集到 <code>AggregateData</code> 中，然后作为一个完整的数据包发送到 Python API 进行流式传输，或发送到记录器进行序列化。</p>
 <p>EgoSensor 还实现了其他一些不错的功能，例如相机屏幕截图和启用后带有注视点渲染的可变速率着色。</p>
 <h3 id="_5">继承关系图：</h3>
-<p>To clarify the structure of the inheritance at play here (Older generation to youngest):
-1. <a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/GameFramework/AActor/"><code>AActor</code></a> (UE4): Low-level unreal class for any object that can be spawned into the world
-2. <a href="https://github.com/carla-simulator/carla/blob/0.9.13/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/Sensor.h"><code>ASensor</code></a> (Carla): Carla actor that templates the structure for Sensors acting in the Carla world
-3. <a href="../Carla/Sensor/DReyeVRSensor.h"><code>ADReyeVRSensor</code></a> (DReyeVR): Our sensor instance that contains logic for all Carla related tasks
-    - Streaming to the PythonAPI
-    - Receiving data from replayer to reenact
-    - Contains instance of <code>DReyeVR::AggregateData</code> containing ALL the data
-4. <a href="../DReyeVR/EgoSensor.h"><code>AEgoSensor</code></a> (DReyeVR): Our primary actor containing all DReyeVR related logic for custom data variables/functions
-    - Eye tracking logic (SRanipal), ego vehicle tracking, etc. </p>
+<p>为了阐明这里涉及的继承结构（从老一代到年轻一代）：</p>
+<ol>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/GameFramework/AActor/"><code>AActor</code></a> (UE4): 用于在世界中生成任何对象的底层虚幻类</li>
+<li><a href="https://github.com/carla-simulator/carla/blob/0.9.13/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/Sensor.h"><code>ASensor</code></a> (Carla): Carla 参与者为Carla 世界中的传感器表现提供了结构模板</li>
+<li><a href="../Carla/Sensor/DReyeVRSensor.h"><code>ADReyeVRSensor</code></a> (DReyeVR): 我们的传感器实例包含所有与 Carla 相关的任务逻辑 <ul>
+<li>流式传输到 PythonAPI</li>
+<li>从回放器接收数据以进行进行重放</li>
+<li>包含 <code>DReyeVR::AggregateData</code> 实例，其中包含所有数据</li>
+</ul>
+</li>
+<li><a href="../DReyeVR/EgoSensor.h"><code>AEgoSensor</code></a> (DReyeVR): 我们的主要参与者包含了所有与 DReyeVR 相关的自定义数据变量/函数逻辑。<ul>
+<li>眼动跟踪逻辑（SRanipal）、自主车辆跟踪等。</li>
+</ul>
+</li>
+</ol>
 <h2 id="dreyevrpawn">DReyeVRPawn</h2>
 <ul>
-<li>Relevant files: <a href="../DReyeVR/DReyeVRPawn.h">DreyeVRPawn.h</a>, <a href="../DReyeVR/DReyeVRPawn.cpp">DreyeVRPawn.cpp</a></li>
+<li>相关文件： <a href="../DReyeVR/DReyeVRPawn.h">DreyeVRPawn.h</a>, <a href="../DReyeVR/DReyeVRPawn.cpp">DreyeVRPawn.cpp</a></li>
 </ul>
-<p>Getting back to our discussion on the EgoVehicle simultaneous input with player &amp; AI, the DReyeVRPawn is the actual entity that the <em>human player</em> possesses during the duration of the level. Unlike EgoVehicle/EgoSensor, the DReyeVRPawn is not tied to any particular object and can be thought of as <strong>an invisible floating camera that defines the viewport of the player</strong>. </p>
-<p>The DReyeVRPawn therefore manages the in-game <a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Camera/UCameraComponent/"><code>UCameraComponent</code></a> as well as visual and input logic that the player needs. The <a href="https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/XRDevelopment/VR/VRPlatforms/SteamVR/QuickStart/">SteamVR</a> integration is managed here, as well as the LogiWheel controls scheme mapping, since this is the object that the player possesses and thus gets first input priority to. We also add some visual eye-candy logic such as a visualization indicator for the eye gaze as a reticle that is drawn on the <a href="https://docs.unrealengine.com/4.26/en-US/SharingAndReleasing/XRDevelopment/VR/DevelopVR/VRSpectatorScreen/">SpectatorScreen</a> (not visible to the VR player) or flat-screen HUD. </p>
-<p>The EgoVehicle <em>AI and player</em> dual-input logic comes from the implementation that the DReyeVRPawn simply forwards commands to the EgoVehicle without directly possessing it, so the Carla AI can still possess and control the EgoVehicle. This enables simultaneous "possession" by the player and the Carla AI controller, since all human player inputs still reach the EgoVehicle and take precedence over the AI. </p>
+<p>回到我们之前关于玩家与 AI 同时输入 EgoVehicle 的讨论，DReyeVRPawn 是玩家在关卡期间实际控制的实体。与 EgoVehicle/EgoSensor 不同，DReyeVRPawn 不绑定任何特定物体，可以将其视为 <strong>一个定义玩家视口的隐形浮动摄像机</strong> 。</p>
+<p>因此，DReyeVRPawn 负责管理游戏内的 <a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Camera/UCameraComponent/"><code>UCameraComponent</code></a> 组件以及玩家所需的视觉和输入逻辑。<a href="https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/XRDevelopment/VR/VRPlatforms/SteamVR/QuickStart/">SteamVR</a> 集成和 LogiWheel 控制方案映射也由它管理，因为这是玩家拥有的对象，因此具有最高的输入优先级。我们还添加了一些视觉效果逻辑，例如用于显示注视轨迹的可视化指示器，该指示器以准星的形式绘制在 <a href="https://docs.unrealengine.com/4.26/en-US/SharingAndReleasing/XRDevelopment/VR/DevelopVR/VRSpectatorScreen/">观众屏幕(SpectatorScreen)</a> （VR 玩家不可见）或平面屏幕 HUD 上。</p>
+<p>EgoVehicle <em>AI 和玩家</em> 的双输入逻辑源于 DReyeVRPawn 的实现方式：它只是将指令转发给 EgoVehicle，而不直接控制它，因此 Carla AI 仍然可以控制 EgoVehicle。这使得玩家和 Carla AI 控制器能够同时“控制”EgoVehicle，因为所有玩家的输入仍然会到达 EgoVehicle，并且优先级高于 AI 的输入。</p>
 <h2 id="dreyevrgamemode">DReyeVRGameMode</h2>
 <ul>
-<li>Relevant files: <a href="../DReyeVR/DReyeVRGameMode.h">DReyeVRGameMode.h</a>, <a href="../DReyeVR/DReyeVRGameMode.cpp">DReyeVRGameMode.cpp</a></li>
+<li>相关文件： <a href="../DReyeVR/DReyeVRGameMode.h">DReyeVRGameMode.h</a>, <a href="../DReyeVR/DReyeVRGameMode.cpp">DReyeVRGameMode.cpp</a></li>
 </ul>
-<p>A <a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/HowTo/SettingUpAGameMode/"><code>GameMode</code></a> in UE4 is used to define game logic across levels, and this can be easily done in code (unlike <a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/ALevelScriptActor/"><code>LevelScripts</code></a>, which are tied to individual level blueprints). </p>
-<p>The gamemode class is useful because <strong>we can rely on it to always persist throughout any level instance</strong>, so we can define logic beyond the lifetime of a single EgoVehicle/EgoSensor and operate on a more global level. </p>
-<p>For instance, we have code to change the volume of the in-world sound effects, spawn the EgoVehicle in a particular location, transfer control to the default floating spectator (detatch from the EgoVehicle), and manage media controls for playback of a recording (play/pause/step/rewind/etc.). </p>
-<p>The most important thing that the DReyeVR gamemode does is spawn the DReyeVRPawn, so the human player can possess some actor and interact with the world at all.</p>
+<p>UE4 中的 <a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/HowTo/SettingUpAGameMode/"><code>GameMode</code></a> 用于定义跨关卡的游戏逻辑，这可以通过代码轻松完成（与 <a href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/ALevelScriptActor/"><code>LevelScripts</code></a> 不同，LevelScripts 与单个关卡蓝图绑定）。</p>
+<p>游戏模式(gamemode)类很有用，因为 <strong>我们可以依靠它在任何关卡实例中始终存在</strong>，因此我们可以定义超出单个 EgoVehicle/EgoSensor 生命周期的逻辑，并在更全局的层面上进行操作。</p>
+<p>例如，我们有代码可以改变游戏内音效的音量，在特定位置生成 EgoVehicle，将控制权转移给默认的浮动观察者（从 EgoVehicle 分离），以及管理记录播放的媒体控制（播放/暂停/单步/倒带等）。</p>
+<p>DReyeVR 游戏模式最重要的功能是生成 DReyeVRPawn，这样玩家就可以控制某个角色并与游戏世界进行互动。</p>
 <h2 id="dreyevrfactory">DReyeVRFactory</h2>
 <ul>
-<li>Relevant files: <a href="../DReyeVR/DReyeVRFactory.h">DReyeVRFactory.h</a>, <a href="../DReyeVR/DReyeVRFactory.cpp">DReyeVRFactory.cpp</a></li>
+<li>相关： <a href="../DReyeVR/DReyeVRFactory.h">DReyeVRFactory.h</a>, <a href="../DReyeVR/DReyeVRFactory.cpp">DReyeVRFactory.cpp</a></li>
 </ul>
 <p>Carla uses Factories to spawn all their relevent actors (See <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Actor/CarlaActorFactory.h"><code>CarlaActorFactory</code></a>, <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Actor/CarlaActorFactoryBlueprint.h"><code>CarlaActorFactoryBlueprint</code></a>, <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/SensorFactory.h"><code>SensorFactory</code></a>, etc.) which spawn everything from vehicles to pedestrians to sensors and props. This design allows Carla to handle all the dirty work of registering the actors with LibCarla so that LibCarla knows about each actor and they can be interacted with in Python. </p>
 <p>We follow suit with a similar design in our <code>DReyeVRFactory</code> which defines the important characteristics for our DReyeVR actors and provides the logic necessary to spawn them. For instance, here we define our actors are labeled uniquely such as <code>"harplab.dreyevr_vehicle.model3"</code> to avoid conflict with existing Carla <code>"vehicle.*"</code> queries. </p>
