@@ -106,13 +106,13 @@
 <li><strong><code>smooth_junctions</code></strong> <em>(default True)</em> — 如果 <strong>True</strong>，OpenDRIVE 的一些信息将被重新解释以平滑连接处的最终网格。这样做是为了防止在不同车道相遇时可能发生的一些不准确。如果设置为 <strong>False</strong>，网格将完全按照 OpenDRIVE 中的描述生成。</li>
 <li><strong><code>enable_mesh_visibility</code></strong> <em>(default True)</em> — 如果 <strong>False</strong>，网格将不会被渲染，这可以为模拟器节省大量渲染工作。</li>
 </ul>
-<p>为了轻松测试此功能，<code>PythonAPI/util/</code> 中的<code>config.py</code> 脚本有一个新参数，<code>-x</code> 或<code>--xodr-path</code>。此参数需要一个带有 <code>.xodr</code> 文件路径的字符串，例如 <code>path/example.xodr</code>。如果使用此脚本生成网格，则使用的参数将始终为默认参数。</p>
+<p>为了轻松测试此功能，<code>PythonAPI/util/</code> 中的 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 脚本有一个新参数，<code>-x</code> 或<code>--xodr-path</code>。此参数需要一个带有 <code>.xodr</code> 文件路径的字符串，例如 <code>path/example.xodr</code>。如果使用此脚本生成网格，则使用的参数将始终为默认参数。</p>
 <p>此功能可以使用 Carla 提供的新 <strong>TownBig</strong> 进行测试。</p>
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>config.py<span class="w"> </span>-x<span class="w"> </span>opendrive/TownBig.xodr
 </code></pre></div>
 <div class="admonition 重要的">
 <p class="admonition-title">重要的</p>
-<p><strong><a href="../python_api/#carla.Client.generate_opendrive_world">client.generate_opendrive_world()</a></strong> 使用 <strong>OpenDRIVE 文件的内容解析为字符串</strong> 。相反，<strong><code>config.py</code></strong> 脚本需要 <strong><code>.xodr</code> 文件的路径</strong>。</p>
+<p><strong><a href="../python_api/#carla.Client.generate_opendrive_world">client.generate_opendrive_world()</a></strong> 使用 <strong>OpenDRIVE 文件的内容解析为字符串</strong> 。相反，<strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a></strong> 脚本需要 <strong><code>.xodr</code> 文件的路径</strong>。</p>
 </div>
 <div class="admonition 笔记">
 <p class="admonition-title">笔记</p>

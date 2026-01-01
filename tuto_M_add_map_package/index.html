@@ -118,7 +118,7 @@ chmod<span class="w"> </span><span class="m">777</span><span class="w"> </span>i
 <p><strong>6.</strong> 包将在 <code>output_folder</code> 中生成为 <code>&lt;map_package&gt;.tar.gz</code>. 。这是独立包，现在可以导入到 Carla 中。将包移动到 Carla 根目录（您将在其中使用地图的包/二进制版本）中的 <code>Import</code> 文件夹，然后从根目录运行以下脚本将其导入：</p>
 <div class="highlight"><pre><span></span><code>./ImportAssets.sh
 </code></pre></div>
-<p><strong>7.</strong> 要使用新地图运行模拟，请运行 HUTB，然后使用 <code>config.py</code> 文件更改地图：</p>
+<p><strong>7.</strong> 要使用新地图运行模拟，请运行 HUTB，然后使用 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 文件更改地图：</p>
 <p><div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>PythonAPI/util
 python3<span class="w"> </span>config.py<span class="w"> </span>--map<span class="w"> </span>&lt;mapName&gt;
 </code></pre></div>

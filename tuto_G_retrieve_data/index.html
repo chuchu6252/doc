@@ -201,7 +201,14 @@ python3 config.py --map Town01
 </details>
 <p><br></p>
 <p><img alt="tuto_map" src="../img/tuto_map.jpg" /></p>
-<div style="text-align: center"><i>Town07 的空中视角</i></div>
+<div class="div" style="text-align: center"><i>Town07 的空中视角</i></div>
+
+<style>
+.div {
+    height: 10px;
+    line-height: 1px;
+}
+</style>
 
 <h3 id="_5">天气设置 <span id="weather-setting"></span></h3>
 <p>每个城镇都有适合它的特定天气，但是可以随意设置。有两个脚本提供了解决此问题的不同方法。第一个设置了动态天气，随着时间的推移，情况会发生变化。另一个设置自定义天气条件。还可以对天气条件进行编码。稍后 <a href="#change-the-weather">天气条件发生变化</a> 时将对此进行介绍。 </p>
@@ -240,7 +247,7 @@ python3<span class="w"> </span>environment.py<span class="w"> </span>--clouds<sp
 </details>
 <p><br></p>
 <p><img alt="tuto_weather" src="../img/tuto_weather.jpg" /></p>
-<div style="text-align: center"><i>使用天气改变</i></div>
+<div class="div" style="text-align: center"><i>使用天气改变</i></div>
 
 <hr />
 <h2 id="_6">设置交通流量 <span id="set-traffic"></span></h2>
@@ -268,9 +275,9 @@ python3<span class="w"> </span>spawn_npc.py<span class="w"> </span>-n<span class
 <span class="w">  </span>--async<span class="w">               </span>Asynchronous<span class="w"> </span>mode<span class="w"> </span>execution
 </code></pre></div>
 </details>
-<p><br>
-<img alt="tuto_spawning" src="../img/tuto_spawning.jpg" /></p>
-<div style="text-align: center"><i>生成车辆以模拟交通。</i></div>
+<p><br></p>
+<p><img alt="tuto_spawning" src="../img/tuto_spawning.jpg" /></p>
+<div class="div" style="text-align: center"><i>生成车辆以模拟交通</i></div>
 
 <h3 id="sumo">SUMO 协同模拟交通 <span id="sumo-co-simulation-traffic"></span></h3>
 <p>Carla 可以与 SUMO 运行联合模拟。这允许在 SUMO 中创建将传播到 Carla 的交通流量。这种联合模拟是双向的。在 Carla 中生成的车辆将在 SUMO 中生成。有关此功能的具体文档可以在 <a href="../adv_sumo/">此处</a> 找到。</p>
@@ -298,7 +305,7 @@ python3<span class="w"> </span>run_synchronization.py<span class="w"> </span>exa
 </ul>
 <p>该脚本生成的流量是 Carla 团队创建的示例。默认情况下，它会沿着相同的路线生成相同的车辆。用户可以在 SUMO 中更改这些内容。</p>
 <p><img alt="tuto_sumo" src="../img/tuto_sumo.jpg" /></p>
-<div style="text-align: center"><i>SUMO 和 Carla 协同模拟交通</i></div>
+<div class="div" style="text-align: center"><i>SUMO 和 Carla 协同模拟交通</i></div>
 
 <div class="admonition 警告">
 <p class="admonition-title">警告</p>
@@ -372,7 +379,7 @@ python3<span class="w"> </span>run_synchronization.py<span class="w"> </span>exa
 <span class="n">ego_cam</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="s1">&#39;tutorial/output/</span><span class="si">%.6d</span><span class="s1">.jpg&#39;</span> <span class="o">%</span> <span class="n">image</span><span class="o">.</span><span class="n">frame</span><span class="p">))</span>
 </code></pre></div>
 <img alt="tuto_rgb" src="../img/tuto_rgb.jpg" /></p>
-<div style="text-align: center"><i>RGB 相机输出</i></div>
+<div class="div" style="text-align: center"><i>RGB 相机输出</i></div>
 
 <h3 id="_11">检测器 <span id="viewing"></span></h3>
 <p>当它们所附加的对象注册特定事件时，这些传感器会检索数据。检测器传感器分为三种类型，每种都描述一种类型的事件。</p>
@@ -427,7 +434,7 @@ python3<span class="w"> </span>run_synchronization.py<span class="w"> </span>exa
 <span class="n">ego_obs</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">obs</span><span class="p">:</span> <span class="n">obs_callback</span><span class="p">(</span><span class="n">obs</span><span class="p">))</span>
 </code></pre></div>
 <img alt="tuto_detectors" src="../img/tuto_detectors.jpg" /></p>
-<div style="text-align: center"><i>检测传感器输出</i></div>
+<div class="div" style="text-align: center"><i>检测传感器输出</i></div>
 
 <h3 id="_12">其他传感器 <span id="other-sensors"></span></h3>
 <p>暂时只考虑该类别的两个传感器。</p>
@@ -467,7 +474,7 @@ python3<span class="w"> </span>run_synchronization.py<span class="w"> </span>exa
 <span class="n">ego_imu</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">imu</span><span class="p">:</span> <span class="n">imu_callback</span><span class="p">(</span><span class="n">imu</span><span class="p">))</span>
 </code></pre></div>
 <p><img alt="tuto_other" src="../img/tuto_other.jpg" /></p>
-<div style="text-align: center"><i>全球导航卫星系统和惯性测量单元传感器输出</i></div>
+<div class="div" style="text-align: center"><i>全球导航卫星系统和惯性测量单元传感器输出</i></div>
 
 <hr />
 <h2 id="_13">设置高级传感器 <span id="set-advanced-sensors"></span></h2>
@@ -493,7 +500,7 @@ python3<span class="w"> </span>run_synchronization.py<span class="w"> </span>exa
 <span class="n">depth_cam</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="s1">&#39;tutorial/new_depth_output/</span><span class="si">%.6d</span><span class="s1">.jpg&#39;</span> <span class="o">%</span> <span class="n">image</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span><span class="n">carla</span><span class="o">.</span><span class="n">ColorConverter</span><span class="o">.</span><span class="n">LogarithmicDepth</span><span class="p">))</span>
 </code></pre></div>
 <p><img alt="tuto_depths" src="../img/tuto_depths.jpg" /></p>
-<div style="text-align: center"><i>深度相机输出（左侧为简单转换，右侧为对数转换）</i></div>
+<div class="div" style="text-align: center"><i>深度相机输出（左侧为简单转换，右侧为对数转换）</i></div>
 
 <h3 id="_15">语义分割相机 <span id="语义分割相机"></span></h3>
 <p><a href="../ref_sensors/#semantic-segmentation-camera">语义分割相机</a> 根据元素的标记方式将场景中的元素渲染为不同的颜色。标签由模拟器根据用于生成的资源的路径创建。例如，标记为 <code>Pedestrians</code> 的网格体是使用存储在 <code>Unreal/CarlaUE4/Content/Static/Pedestrians</code> 中的内容生成的。</p>
@@ -515,7 +522,7 @@ python3<span class="w"> </span>run_synchronization.py<span class="w"> </span>exa
 <span class="n">sem_cam</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="s1">&#39;tutorial/new_sem_output/</span><span class="si">%.6d</span><span class="s1">.jpg&#39;</span> <span class="o">%</span> <span class="n">image</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span><span class="n">carla</span><span class="o">.</span><span class="n">ColorConverter</span><span class="o">.</span><span class="n">CityScapesPalette</span><span class="p">))</span>
 </code></pre></div>
 <p><img alt="tuto_sem" src="../img/tuto_sem.jpg" /></p>
-<div style="text-align: center"><i>语义分割相机输出</i></div>
+<div class="div" style="text-align: center"><i>语义分割相机输出</i></div>
 
 <h3 id="_16">激光雷达光线投射传感器 <span id="激光雷达光线投射传感器"></span></h3>
 <p><a href="../ref_sensors/#lidar-raycast-sensor">激光雷达传感器</a> 模拟旋转激光雷达。它创建了一个以三维形式映射场景的点云。激光雷达包含一组以特定频率旋转的激光器。激光投射撞击距离，并将每次射击存储为一个点。</p>
@@ -556,7 +563,7 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w
 </code></pre></div>
 <strong>3.</strong> 打开其中一个 <em>.ply</em> 文件。 <code>File &gt; Import mesh...</code> </p>
 <p><img alt="tuto_lidar" src="../img/tuto_lidar.jpg" /></p>
-<div style="text-align: center"><i>经过Meshlab处理后的激光雷达输出。</i></div>
+<div class="div" style="text-align: center"><i>经过Meshlab处理后的激光雷达输出。</i></div>
 
 <h3 id="_17">雷达传感器 <span id="雷达传感器"></span></h3>
 <p><a href="../ref_sensors/#radar-sensor">雷达传感器</a> 与 激光雷达类似。它创建一个圆锥视图，并向内部发射激光以射线投射其影响。输出是<a href="../python_api/#carlaradarmeasurement">carla.RadarMeasurement</a>。它包含由激光器检索到的 <a href="../python_api/#carlaradardetection">carla.RadarDetection</a> 的列表。这些不是空间中的点，而是使用有关传感器的数据进行的检测：</p>
@@ -617,7 +624,7 @@ sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w
 <span class="n">rad_ego</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="k">lambda</span> <span class="n">radar_data</span><span class="p">:</span> <span class="n">rad_callback</span><span class="p">(</span><span class="n">radar_data</span><span class="p">))</span>
 </code></pre></div>
 <p><img alt="tuto_radar" src="../img/tuto_radar.jpg" /></p>
-<div style="text-align: center"><i>雷达输出。车辆停在交通信号灯处，因此其前面的静态元素显示为白色。</i></div>
+<div class="div" style="text-align: center"><i>雷达输出。车辆停在交通信号灯处，因此其前面的静态元素显示为白色。</i></div>
 
 <hr />
 <h2 id="_18">非渲染模式 <span id="no-rendering-mode"></span></h2>
@@ -658,7 +665,7 @@ python3 no_rendering_mode.py --no-rendering
 </details>
 <p><br></p>
 <p><img alt="tuto_no_rendering" src="../img/tuto_no_rendering.jpg" /></p>
-<div style="text-align: center"><i>no_rendering_mode.py 在 Town07 中运行</i></div>
+<div class="div" style="text-align: center"><i>no_rendering_mode.py 在 Town07 中运行</i></div>
 
 <div class="admonition 笔记">
 <p class="admonition-title">笔记</p>
@@ -730,13 +737,13 @@ python3 manual_control.py
 <p>记录器不需要打开即可进行查询。</p>
 </div>
 <p><img alt="tuto_query_frames" src="../img/tuto_query_frames.jpg" /></p>
-<div style="text-align: center"><i>显示重要事件的查询。这是自主车辆产生的框架。</i></div>
+<div class="div" style="text-align: center"><i>显示重要事件的查询。这是自主车辆产生的框架。</i></div>
 
 <p><img alt="tuto_query_blocked" src="../img/tuto_query_blocked.jpg" /></p>
-<div style="text-align: center"><i>查询显示参与者被阻止。在此模拟中，自主车辆保持阻塞状态 100 秒。</i></div>
+<div class="div" style="text-align: center"><i>查询显示参与者被阻止。在此模拟中，自主车辆保持阻塞状态 100 秒。</i></div>
 
 <p><img alt="tuto_query_collisions" src="../img/tuto_query_collisions.jpg" /></p>
-<div style="text-align: center"><i>显示自主车辆与“其他”类型的对象之间的碰撞的查询。</i></div>
+<div class="div" style="text-align: center"><i>显示自主车辆与“其他”类型的对象之间的碰撞的查询。</i></div>
 
 <div class="admonition 笔记">
 <p class="admonition-title">笔记</p>

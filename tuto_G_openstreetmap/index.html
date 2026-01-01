@@ -110,11 +110,11 @@
 <p><strong>可用 <code>.xodr</code> 格式选项：</strong></p>
 <ul>
 <li>在您自己的脚本中生成地图。 <strong>该方法允许参数化。</strong></li>
-<li>将文件作为参数传递给 Carla 的 <code>config.py</code>。 <strong>此方法不允许参数化。</strong></li>
+<li>将文件作为参数传递给 Carla 的 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 。 <strong>此方法不允许参数化。</strong></li>
 </ul>
 <p><strong>可用 <code>.osm</code> 格式选项：</strong></p>
 <ul>
-<li>将文件作为参数传递给 Carla 的 <code>config.py</code>。 <strong>此方法不允许参数化。</strong></li>
+<li>将文件作为参数传递给 Carla 的 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 。 <strong>此方法不允许参数化。</strong></li>
 </ul>
 <p>以下部分将提供有关上面列出的选项的更多详细信息。</p>
 <hr />
@@ -179,11 +179,11 @@
 </code></pre></div>
 <hr />
 <h2 id="carla">导入 Carla <span id="ingest-into-carla"></span></h2>
-<p>本节介绍如何使用可用的不同选项，通过 <a href="../adv_opendrive/">OpenDRIVE 独立模式</a>将 Open Street Map 信息提取到 Carla 中。</p>
+<p>本节介绍如何使用可用的不同选项，通过 <a href="../adv_opendrive/">OpenDRIVE 独立模式</a> 将 Open Street Map 信息提取到 Carla 中。</p>
 <p>有以下三个选项可供选择：</p>
 <p><a href="#a-use-your-own-script"><strong>A)</strong></a> 使用您自己的自定义 Python 脚本中的转换 <code>.xodr</code> 文件 <strong>生成地图该方法允许参数化</strong>。 
-<a href="#b-pass-xodr-to-configpy"><strong>B)</strong></a> 将转换后的<code>.xodr</code>文件作为参数传递给 Carla <code>config.py</code> 脚本。<strong>此方法不允许参数化。</strong>
-<a href="#c-pass-osm-to-configpy"><strong>C)</strong></a> 将原始<code>.osm</code>文件作为参数传递给 Carla <code>config.py</code> 脚本。<strong>此方法不允许参数化。</strong></p>
+<a href="#b-pass-xodr-to-configpy"><strong>B)</strong></a> 将转换后的<code>.xodr</code>文件作为参数传递给 Carla <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 脚本。<strong>此方法不允许参数化。</strong>
+<a href="#c-pass-osm-to-configpy"><strong>C)</strong></a> 将原始<code>.osm</code>文件作为参数传递给 Carla <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a> 脚本。<strong>此方法不允许参数化。</strong></p>
 <h6 id="a">A) 使用您自己的脚本</h6>
 <p>生成新地图并阻止模拟，直到通过调用 <a href="../python_api/#carla.Client.generate_opendrive_world"><code>client.generate_opendrive_world()</code></a> 准备就绪。使用<a href="../python_api/#carla.OpendriveGenerationParameters">carla.OpendriveGenerationParameters</a>类配置网格生成。请参阅下面的示例：</p>
 <div class="highlight"><pre><span></span><code><span class="n">vertex_distance</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># 以米为单位</span>
@@ -203,14 +203,14 @@
 <p class="admonition-title">笔记</p>
 <p>强烈推荐<code>wall_height = 0.0</code>。OpenStreetMap 将相反方向的车道定义为不同的道路。如果生成墙壁，这将导致墙壁重叠和意外的碰撞。</p>
 </div>
-<h6 id="b-xodr-configpy">B) 将 <code>.xodr</code> 传递给 <code>config.py</code></h6>
+<h6 id="b-xodr-configpy">B) 将 <code>.xodr</code> 传递给 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a></h6>
 <p>启动 Carla 服务器后，在单独的终端中运行以下命令来加载 Open Street Map：</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>PythonAPI/util
 
 python3<span class="w"> </span>config.py<span class="w"> </span>-x<span class="o">=</span>/path/to/xodr/file
 </code></pre></div>
 <p>将使用 <a href="../python_api/#carla.OpendriveGenerationParameters">默认参数</a> 。</p>
-<h6 id="c-osm-configpy">C) 将 <code>.osm</code> 传递给 <code>config.py</code></h6>
+<h6 id="c-osm-configpy">C) 将 <code>.osm</code> 传递给 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/util/config.py">config.py</a></h6>
 <p>启动 Carla 服务器后，在单独的终端中运行以下命令来加载 Open Street Map：</p>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>PythonAPI/util
 
