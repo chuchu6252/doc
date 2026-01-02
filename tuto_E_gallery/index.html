@@ -102,7 +102,9 @@
 <p><a href="https://github.com/OpenHUTB/doc/blob/master/src/examples/dynamic_weather.py">示例 11</a> ：太阳高度的快速变化</p>
 <p><img alt="" src="../img/tuto_E_gallery/11_sun_position.png" /></p>
 <p>示例 12 ：<a href="../src/examples/invertedai_traffic_ue5.py">反向AI控制</a></p>
-<p>报错：<code>{ProxyError}HTTPSConnectionPool(host='api.inverted.ai', port=443): Max retries exceeded with url: /v0/aws/m1 (Caused by ProxyError('Unable to connect to proxy', SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:1135)'))))</code></p>
+<p>报错信息：
+<div class="highlight"><pre><span></span><code>{ProxyError}HTTPSConnectionPool(host=&#39;api.inverted.ai&#39;, port=443): Max retries exceeded with url: /v0/aws/m1 (Caused by ProxyError(&#39;Unable to connect to proxy&#39;, SSLError(SSLZeroReturnError(6, &#39;TLS/SSL connection has been closed (EOF) (_ssl.c:1135)&#39;))))
+</code></pre></div></p>
 <p>解决：
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">urllib3</span><span class="o">==</span><span class="m">1</span>.25.11
 </code></pre></div></p>

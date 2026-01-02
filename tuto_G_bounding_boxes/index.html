@@ -361,7 +361,7 @@
 </code></pre></div>
 <p><img alt="2D_bbox_vehicles" src="../img/tuto_G_bounding_box/2d_bbox.gif" /></p>
 <h2 id="_8">导出边界框</h2>
-<p>渲染边界框对于我们确保边界框对于调试目的是正确的很有用。然而，如果我们想在训练神经网络时实际使用它们，我们将需要导出它们。用于自动驾驶和物体检测的常见数据存储库使用多种不同的格式，例如<a href="http://www.cvlibs.net/datasets/kitti/"><strong>KITTI</strong></a> 或 <a href="http://host.robots.ox.ac.uk/pascal/VOC/"><strong>PASCAL VOC</strong></a> 或 <a href="https://cocodataset.org/#home"><strong>MicroSoft COCO</strong></a> 。</p>
+<p>渲染边界框对于我们确保边界框对于调试目的是正确的很有用。然而，如果我们想在训练神经网络时实际使用它们，我们将需要导出它们。用于自动驾驶和物体检测的常见数据存储库使用多种不同的格式，例如 <a href="http://www.cvlibs.net/datasets/kitti/"><strong>KITTI</strong></a> 或 <a href="http://host.robots.ox.ac.uk/pascal/VOC/"><strong>PASCAL VOC</strong></a> 或 <a href="https://cocodataset.org/#home"><strong>MicroSoft COCO</strong></a> 。</p>
 <h3 id="pascal-voc">Pascal VOC 格式</h3>
 <p>这些数据集通常使用 JSON 或 XML 格式来存储注释。PASCAL VOC 格式有一个方便的 Python 库。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pascal_voc_writer</span> <span class="kn">import</span> <span class="n">Writer</span>

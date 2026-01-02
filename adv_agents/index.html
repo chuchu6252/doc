@@ -85,18 +85,18 @@
 </ul>
 <hr />
 <h2 id="_1">代理脚本概述 <span id="overview-of-agent-scripts"></span></h2>
-<p>Carla 代理中涉及的主要脚本位于<code>PythonAPI/carla/agents/navigation</code>中。它们分为两类； <strong>规划和控制</strong> 和 <strong>代理行为</strong>。</p>
+<p>Carla 代理中涉及的主要脚本位于 <a href="https://github.com/OpenHUTB/hutb/tree/hutb/PythonAPI/carla/agents/navigation">PythonAPI/carla/agents/navigation</a> 中，它们分为两类： <strong>规划与控制</strong> 和 <strong>代理行为</strong>。</p>
 <h3 id="_2">规划与控制 <span id="planning-and-control"></span></h3>
 <ul>
-<li><strong><code>controller.py</code>:</strong> 将纵向和横向 PID 控制器组合成一个类，<strong>VehiclePIDController</strong>，用于从 Carla 客户端对车辆进行低级控制。</li>
-<li><strong><code>global_route_planner.py</code>:</strong> 从 Carla 服务器获取详细的拓扑结构以构建世界地图的图形表示，为 <strong>Local Planner</strong> 提供路径点和道路选项信息。</li>
-<li><strong><code>local_planner.py</code>:</strong> 根据来自 <strong>VehiclePIDController</strong> 的控制输入跟踪路径点。路径点可以由 <strong>Global Route Planner</strong> 提供，也可以动态计算，在路口选择随机路径，类似于 <a href="../adv_traffic_manager/">Traffic Manager</a>。</li>
+<li><strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/controller.py">controller.py</a>:</strong> 将纵向和横向 PID 控制器组合成一个类 <strong><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/controller.py#L15">VehiclePIDController</a></strong>，用于从 Carla 客户端对车辆进行低层控制。</li>
+<li><strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/global_route_planner.py">global_route_planner.py</a>:</strong> 从 Carla 服务器获取详细的拓扑结构以构建世界地图的图形表示，为 <strong><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/local_planner.py#L31">局部规划器</a></strong> 提供路径点和道路选项信息。</li>
+<li><strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/local_planner.py">local_planner.py</a>:</strong> 根据来自 <strong><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/controller.py#L15">VehiclePIDController</a></strong> 的控制输入跟踪路径点。路径点可以由 <strong><a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/global_route_planner.py#L53">全局路径规划器</a></strong> 提供，也可以动态计算，在路口选择随机路径，类似于 <a href="../adv_traffic_manager/">交通管理器</a>。</li>
 </ul>
 <h3 id="_3">代理行为 <span id="agent-behaviors"></span></h3>
 <ul>
-<li><strong><code>basic_agent.py</code>:</strong> 包含一个代理基类，它实现了一个 <strong>Basic Agent</strong>，它在地图上漫游或以尽可能短的距离到达目标目的地，避开其他车辆，响应交通信号灯但忽略停车标志。</li>
-<li><strong><code>behavior_agent.py</code>:</strong> 包含一个实现更复杂的 <strong>Behavior Agent</strong> 的类，它可以在尽可能短的距离内到达目标目的地，跟随交通信号灯、标志和速度限制，同时尾随其他车辆。有三种预定义的类型决定了代理的行为方式。</li>
-<li><strong><code>behavior_types.py</code>:</strong> 包含影响 <strong>Behavior Agent</strong> 的行为类型的参数；谨慎、正常和野蛮。</li>
+<li><strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/basic_agent.py">basic_agent.py</a>:</strong> 包含一个代理基类，它实现了一个 <strong>基础代理</strong>，它在地图上漫游或以尽可能短的距离到达目标目的地，避开其他车辆，响应交通信号灯但忽略停车标志。</li>
+<li><strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/behavior_agent.py">behavior_agent.py</a>:</strong> 包含一个实现更复杂的 <strong>行为代理</strong> 的类，它可以在尽可能短的距离内到达目标目的地，跟随交通信号灯、标志和速度限制，同时尾随其他车辆。有三种预定义的类型决定了代理的行为方式。</li>
+<li><strong><a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/behavior_types.py">behavior_types.py</a>:</strong> 包含影响 <strong>行为代理</strong> 的行为类型的参数：<a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/behavior_types.py#L7">谨慎</a> 、<a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/behavior_types.py#L18">正常</a> 和 <a href="https://github.com/OpenHUTB/hutb/blob/04b87b07133148b660d0bbb773f58e754bb20cd7/PythonAPI/carla/agents/navigation/behavior_types.py#L29">野蛮</a> 。</li>
 </ul>
 <hr />
 <h2 id="_4">实现一个代理 <span id="implement-an-agent"></span></h2>
@@ -150,7 +150,7 @@
 <li><strong><code>ignore_stop_signs(active=True)</code>:</strong> 设置代理忽略或服从停车标志。</li>
 <li><strong><code>ignore_vehicles(active=True)</code>:</strong> 设置代理忽略或对其他车辆作出反应。</li>
 </ul>
-<p>在 <code>PythonAPI/examples</code> 中找到的 <code>automatic_control.py</code> 脚本是基本和行为代理的一个示例。要尝试该脚本，请导航到示例目录并运行以下命令：</p>
+<p>在 <a href="https://github.com/OpenHUTB/hutb/tree/hutb/PythonAPI/examples">PythonAPI/examples</a> 中找到的 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/examples/automatic_control.py">automatic_control.py</a> 脚本是基本和行为代理的一个示例。要尝试该脚本，请导航到示例目录并运行以下命令：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># 使用基本代理运行</span>
 python3<span class="w"> </span>automatic_control.py<span class="w"> </span>--agent<span class="o">=</span>Basic
 
@@ -159,7 +159,7 @@ python3<span class="w"> </span>automatic_control.py<span class="w"> </span>--age
 </code></pre></div>
 <hr />
 <h2 id="_5">行为类型 <span id="behavior-types"></span></h2>
-<p>行为代理的行为类型在 <code>behavior_types.py</code> 中定义。三个预配置的配置文件是 <strong>'cautious'</strong>、<strong>'normal'</strong> 和 <strong>'aggressive'</strong>。您可以使用设置的配置文件、修改它们或创建您自己的配置文件。可以调整以下变量：</p>
+<p>行为代理的行为类型在 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/behavior_types.py">behavior_types.py</a> 中定义。三个预配置的配置文件是 <strong>'cautious'</strong>、<strong>'normal'</strong> 和 <strong>'aggressive'</strong>。您可以使用设置的配置文件、修改它们或创建您自己的配置文件。可以调整以下变量：</p>
 <ul>
 <li><strong><code>max_speed</code></strong>：您的车辆能够达到的最高速度（以公里/小时为单位）。</li>
 <li><strong><code>speed_lim_dist</code></strong>：以 千米/小时 为单位的值，用于定义车辆的目标速度与当前限速的距离（例如，如果限速为 30 千米/小时 且 <code>speed_lim_dist</code> 为 10千米/小时，则目标速度将是20千米/小时）。</li>
@@ -171,11 +171,11 @@ python3<span class="w"> </span>automatic_control.py<span class="w"> </span>--age
 </ul>
 <h3 id="_6">创建自己的行为类型 <span id="create-your-own-behavior-type"></span></h3>
 <p>要创建自己的行为类型：</p>
-<p><strong>1.</strong> 在 <code>behavior_types.py</code> 中为您的行为类型创建类：</p>
+<p><strong>1.</strong> 在 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/behavior_types.py" title="行为类型">behavior_types.py</a> 中为您的行为类型创建类：</p>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">ProfileName</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span><span class="err">：</span>
     <span class="c1"># 完整的值定义</span>
 </code></pre></div>
-<p><strong>2.</strong> 在 <code>behavior_agent.py</code> 脚本中定义和实例化你的行为类型：</p>
+<p><strong>2.</strong> 在 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/behavior_agent.py" title="行为代理">behavior_agent.py</a> 脚本中定义和实例化你的行为类型：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># 代理行为参数</span>
 <span class="k">if</span> <span class="n">behavior</span> <span class="o">==</span> <span class="s1">&#39;cautious&#39;</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_behavior</span> <span class="o">=</span> <span class="n">Cautious</span><span class="p">()</span>
@@ -191,7 +191,7 @@ python3<span class="w"> </span>automatic_control.py<span class="w"> </span>--age
 </code></pre></div>
 <hr />
 <h2 id="_7">创建代理 <span id="creating-an-agent"></span></h2>
-<p>Carla 代理只是用户可以运行的代理类型的示例。用户可以在 <strong>Basic Agent</strong> 的基础上创建自己的代理。可能性是无穷的。每个代理只需要两个元素，<strong>初始化</strong> <code>__init__</code> 和 <strong>运行步</strong> <code>run_step</code>。</p>
+<p>Carla 代理只是用户可以运行的代理类型的示例。用户可以在 <strong>基础代理</strong> 的基础上创建自己的代理。可能性是无穷的。每个代理只需要两个元素，<strong>初始化</strong> <code>__init__</code> 和 <strong>运行步</strong> <code>run_step</code>。</p>
 <p>在下面查找自定义代理的最小布局示例：</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">carla</span>
 
@@ -214,7 +214,7 @@ python3<span class="w"> </span>automatic_control.py<span class="w"> </span>--age
         <span class="n">control</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">VehicleControl</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">control</span>
 </code></pre></div>
-<p>查看 <code>basic_agent.py</code> 和 <code>behavior_agent.py</code> 脚本以探索它们的结构和功能，以获取有关如何创建自己的更多想法。</p>
+<p>查看 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/basic_agent.py" title="基本代理">basic_agent.py</a> 和 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/PythonAPI/carla/agents/navigation/behavior_agent.py" title="行为代理">behavior_agent.py</a> 脚本以探索它们的结构和功能，以获取有关如何创建自己的更多想法。</p>
 <hr />
 <p>您可以探索提供的代理脚本、扩展它们或将它们用作创建自己的基准。如果您对代理有任何疑问，请随时在 <a href="https://github.com/OpenHUTB/hutb/discussions">论坛</a> 发帖。</p>
               
