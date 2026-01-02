@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>概念 - 人车模拟</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u6982\u5ff5";
+        var mkdocs_page_input_path = "concept.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">简介</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../introduction/">入门</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pedestrian/">人</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vehicle/">车</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">模拟</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">概念</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modules/">模块</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../development/">开发</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">简介</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../map_twin/">地图孪生</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../assert_twin/">资产孪生</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../unreal_engine/">模拟引擎</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">其他</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ref/">参考目录</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ecology/">生态系统</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contribution/">贡献指南</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">模拟</li>
+      <li class="breadcrumb-item active">概念</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/concept.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h3 id="_1">概念 <span id="concept"></span></h3>
+<!-- Carla 原理 -->
+
+<p><a href="../coordinates/"><strong>坐标和转换</strong></a> - 模拟器使用的坐标约定以及如何通过 Python API 处理坐标</p>
+<p><a href="../adv_recorder/"><strong>记录器</strong></a> — 在模拟中记录事件并再次播放</p>
+<p><a href="../adv_synchrony_timestep/"><strong>同步和时间步长</strong></a> — 客户端-服务器通信和模拟时间</p>
+<p><a href="../adv_multigpu/"><strong>多 GPU</strong></a> — 设置 HUTB 模拟器以使用多个 GPU 进行处理</p>
+<p><a href="../carla_headless/"><strong>无显示屏运行 HUTB 并选择 GPU</strong></a> — 使用未插在屏幕上的GPU来渲染 HUTB 的桌面</p>
+<p><a href="../carla_settings/"><strong>HUTB 配置</strong></a> — HUTB 参数配置设置</p>
+<p><a href="../adv_rendering_options/"><strong>渲染选项</strong></a> — 从质量设置到不渲染或离屏模式</p>
+<p><a href="../tuto_G_texture_streaming/"><strong>通过 API 更改纹理</strong></a> — 实时修改地图对象的纹理以添加变化</p>
+<p><a href="../adv_opendrive/"><strong>OpenDRIVE 独立模式</strong></a> — 使用任何 OpenDRIVE 文件作为 HUTB 地图</p>
+<p><a href="../tuto_G_instance_segmentation_sensor/"><strong>实例分割相机</strong></a> — 使用实例分割相机来区分同一类的对象</p>
+<p><a href="../adv_rss/"><strong>责任敏感安全</strong></a> — HUTB 客户端库中的责任敏感安全实现</p>
+<p><a href="../simulator_keyboard_input/"><strong>HUTB 模拟器键盘输入</strong></a> — 在模拟器窗口中玩游戏时使用的按键绑定</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../vehicle/" class="btn btn-neutral float-left" title="车"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../modules/" class="btn btn-neutral float-right" title="模块">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2025</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../vehicle/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../modules/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../js/umlconvert.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
