@@ -38,12 +38,12 @@ plugins:
   - search:
       lang: ja
       separator: '[\s\-\.]+'
-      min_search_length: 3
+      min_search_length: 1
 
 extra:
   generator: false
 
-copyright: OpenHUTB 版权所有 &copy; 2025
+copyright: OpenHUTB 版权所有 &copy; 2026
 
 nav:
 - 简介:
