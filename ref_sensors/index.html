@@ -949,7 +949,6 @@ in_meters = 1000 * normalized
 </tr>
 </tbody>
 </table>
-<p><br></p>
 <h4 id="_22">输出属性</h4>
 <table>
 <thead>
@@ -967,7 +966,6 @@ in_meters = 1000 * normalized
 </tr>
 </tbody>
 </table>
-<p><br></p>
 <table>
 <thead>
 <tr>
@@ -1005,8 +1003,8 @@ in_meters = 1000 * normalized
 <li><strong>蓝图：</strong> sensor.camera.rgb</li>
 <li><strong>输出：</strong> 每一步 <a href="../python_api/#carla.Image">carla.Image</a> （除非<code>sensor_tick</code>另有说明）。</li>
 </ul>
-<p>“RGB”相机充当捕获场景图像的常规相机。
-<a href="../python_api/#carla.ColorConverter">carla.colorConverter</a></p>
+<p>“RGB”相机充当捕获场景图像的常规相机。使用
+<a href="../python_api/#carla.ColorConverter">carla.colorConverter</a> 将深度检测的浮点数转换为 0 到 255 之间的灰度值。</p>
 <p>如果 <code>enable_postprocess_effects</code> 启用，为了真实感，一组后处理效果将应用于图像：</p>
 <ul>
 <li><strong>Vignette:</strong> 使屏幕边框变暗。</li>
