@@ -226,9 +226,8 @@ twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"
 </ol>
 <p>解决：将 3.9~3.13 版本的whl文件用7zip打开，并编辑（F4）<code>hutb-2.2.dist-info\METADATA</code>，将<code>Metadata-Version</code>改为2.2，然后保存。</p>
 <hr />
-<ul>
-<li>其他：发布自定义mkdocs
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenHUTB/mkdocs.git
+<h3 id="mkdocs">发布自定义mkdocs</h3>
+<p><div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OpenHUTB/mkdocs.git
 <span class="nb">cd</span><span class="w"> </span>mkdocs
 pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;build&lt;0.10.0&#39;</span>
 python<span class="w"> </span>-m<span class="w"> </span>build
@@ -237,10 +236,14 @@ twine<span class="w"> </span>upload<span class="w"> </span>dist/*
 上传报错：
 <div class="highlight"><pre><span></span><code>requests.exceptions.ProxyError: HTTPSConnectionPool(host=&#39;upload.pypi.org&#39;, port=443): Max retries exceeded with url: /legacy/ (Caused by ProxyError(&#39;Unable to connect to proxy&#39;, SSLError(SSLZeroReturnError(6, &#39;TLS/SSL connection has been closed (EOF) (_ssl.c:1149)&#39;))))
 </code></pre></div>
-关闭系统代理即可解决。</li>
-</ul>
+关闭系统代理即可解决。</p>
+<p>用户名为<code>__token__</code>，密码为token。</p>
 <p>上传权限不够：
-<div class="highlight"><pre><span></span><code>twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"> </span>--repository-url<span class="w"> </span>https://pypi.org/manage/project/hutb-doc/releases/
+<div class="highlight"><pre><span></span><code><span class="c1"># 如果报错 requests.exceptions.ChunkedEncodingError: (&#39;Connection broken: IncompleteRead(13780 bytes read, 8681 more expected)&#39;, IncompleteRead(13780 bytes read, 8681 more expected))</span>
+<span class="c1"># 注意版本号+1</span>
+twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"> </span>--repository-url<span class="w"> </span>https://pypi.org/project/hutb-doc/
+<span class="c1"># 或者</span>
+twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"> </span>--repository-url<span class="w"> </span>https://pypi.org/manage/project/hutb-doc/releases/
 </code></pre></div></p>
 <p>使用方法：
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>hubt-doc<span class="w"> </span>-i<span class="w"> </span>https://pypi.org/simple
