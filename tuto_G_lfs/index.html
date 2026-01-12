@@ -106,15 +106,21 @@
 git<span class="w"> </span>lfs<span class="w"> </span>install
 git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*&quot;</span>
 git<span class="w"> </span>add<span class="w"> </span>.gitattributes
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add \&quot;*.bigfile\&quot; LFS config &quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;init LFS config&quot;</span>
 
 <span class="c1"># 添加大文件</span>
 git<span class="w"> </span>add<span class="w"> </span>dyrone.bigfile
 git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Add a really big file&quot;</span>
 <span class="c1"># 查看跟踪的大文件</span>
 git<span class="w"> </span>lfs<span class="w"> </span>track
-git<span class="w"> </span>push
+<span class="c1"># 推送</span>
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://git.code.tencent.com/OpenHUTB/dependencies.git
+git<span class="w"> </span>push<span class="w"> </span>--set-upstream<span class="w"> </span>origin<span class="w"> </span>master
 </code></pre></div>
+<p>.gitattributes文件内容为（除了该文件其他都用大文件跟踪）：
+<div class="highlight"><pre><span></span><code>*               filter=lfs diff=lfs merge=lfs -text
+.gitattributes  filter= diff= merge= text
+</code></pre></div></p>
 <p>常用命令
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>lfs<span class="w"> </span>status<span class="w">  </span>//<span class="w"> </span>查看当前git<span class="w"> </span>lfs对象的状态
 
