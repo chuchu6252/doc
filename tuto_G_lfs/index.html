@@ -147,6 +147,16 @@ git<span class="w"> </span>pull
 <span class="c1"># 获取二进制文件</span>
 git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></p>
+<h6 id="remote-error-tls-handshake-failure">拉取大文件报错： remote error: tls: handshake failure</h6>
+<p>显示更多调试信息：
+<div class="highlight"><pre><span></span><code><span class="nb">set</span><span class="w"> </span><span class="nv">GIT_TRACE</span><span class="o">=</span><span class="nb">true</span>
+<span class="nb">set</span><span class="w"> </span><span class="nv">GIT_CURL_VERBOSE</span><span class="o">=</span><span class="nb">true</span>
+<span class="c1"># 显示git配置</span>
+git<span class="w"> </span>config<span class="w"> </span>-l<span class="w"> </span>--show-origin
+
+git<span class="w"> </span>lfs<span class="w"> </span>pull
+</code></pre></div>
+解决：安装最新的git版本<code>Git-2.52.0-64-bit.exe</code>报错，回退到版本<code>Git-2.40.0-64-bit.exe</code>后拉取大文件成功。</p>
 <h2 id="_6">参考</h2>
 <ul>
 <li>

@@ -285,7 +285,8 @@ GenerateProjectFiles.bat
 <h3 id="_7">获取资产 <span id="get-assets"></span></h3>
 <p>下载 <a href="https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb">链接</a> 中<code>software/data/Content.zip</code> 的 <strong>最新的</strong> 资产，或者通过下面命令克隆和修改资产
 （原 Carla 资产通过在根文件夹中运行<code>Update.bat</code>脚本）。</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://OpenHUTB:T8w6TYB_r71gGTP3A02B@git.code.tencent.com/OpenHUTB/Content.git<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w">  </span><span class="nb">cd</span><span class="w"> </span>Content<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>lfs<span class="w"> </span>pull
+<div class="highlight"><pre><span></span><code><span class="nb">set</span><span class="w"> </span><span class="nv">GIT_LFS_SKIP_SMUDGE</span><span class="o">=</span><span class="m">1</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://OpenHUTB:T8w6TYB_r71gGTP3A02B@git.code.tencent.com/OpenHUTB/Content.git<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w">  </span><span class="nb">cd</span><span class="w"> </span>Content<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div>
 <p>如果安装了 7zip，资源将被下载并解压到适当的位置。如果您没有安装此软件，则需要手动将文件内容解压到<code>Unreal\CarlaUE4\Content\Carla</code>。</p>
 <p>要下载 <strong>特定版本</strong> Carla 的资源：</p>
