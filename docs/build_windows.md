@@ -208,6 +208,7 @@ git clone https://github.com/OpenHUTB/hutb
 （原 Carla 资产通过在根文件夹中运行`Update.bat`脚本）。
 
 ```shell
+set GIT_LFS_SKIP_SMUDGE=1
 git clone https://OpenHUTB:T8w6TYB_r71gGTP3A02B@git.code.tencent.com/OpenHUTB/Content.git  &&  cd Content  && git lfs pull
 ```
 

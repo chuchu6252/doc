@@ -65,6 +65,18 @@ git pull
 git lfs pull
 ```
 
+###### 拉取大文件报错： remote error: tls: handshake failure
+显示更多调试信息：
+```shell
+set GIT_TRACE=true
+set GIT_CURL_VERBOSE=true
+# 显示git配置
+git config -l --show-origin
+
+git lfs pull
+```
+解决：安装最新的git版本`Git-2.52.0-64-bit.exe`报错，回退到版本`Git-2.40.0-64-bit.exe`后拉取大文件成功。
+
 
 
 ## 参考
