@@ -66,7 +66,7 @@ git lfs pull
 ```
 
 ###### 拉取大文件报错： remote error: tls: handshake failure
-显示更多调试信息：
+显示更多调试信息（无效尝试）：
 ```shell
 set GIT_TRACE=true
 set GIT_CURL_VERBOSE=true
@@ -77,6 +77,11 @@ git lfs pull
 ```
 解决：安装最新的git版本`Git-2.52.0-64-bit.exe`报错，回退到版本`Git-2.40.0-64-bit.exe`后拉取大文件成功。
 
+
+## 依赖的大文件仓库
+
+* MinGit-2.40.0-busybox-64-bit.zip
+ [下载地址](https://github.com/git-for-windows/git/releases/tag/v2.40.0.windows.1) 
 
 
 ## 参考
