@@ -148,7 +148,7 @@ git<span class="w"> </span>pull
 git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div></p>
 <h6 id="remote-error-tls-handshake-failure">拉取大文件报错： remote error: tls: handshake failure</h6>
-<p>显示更多调试信息：
+<p>显示更多调试信息（无效尝试）：
 <div class="highlight"><pre><span></span><code><span class="nb">set</span><span class="w"> </span><span class="nv">GIT_TRACE</span><span class="o">=</span><span class="nb">true</span>
 <span class="nb">set</span><span class="w"> </span><span class="nv">GIT_CURL_VERBOSE</span><span class="o">=</span><span class="nb">true</span>
 <span class="c1"># 显示git配置</span>
@@ -157,7 +157,12 @@ git<span class="w"> </span>config<span class="w"> </span>-l<span class="w"> </sp
 git<span class="w"> </span>lfs<span class="w"> </span>pull
 </code></pre></div>
 解决：安装最新的git版本<code>Git-2.52.0-64-bit.exe</code>报错，回退到版本<code>Git-2.40.0-64-bit.exe</code>后拉取大文件成功。</p>
-<h2 id="_6">参考</h2>
+<h2 id="_6">依赖的大文件仓库</h2>
+<ul>
+<li>MinGit-2.40.0-busybox-64-bit.zip
+ <a href="https://github.com/git-for-windows/git/releases/tag/v2.40.0.windows.1">下载地址</a> </li>
+</ul>
+<h2 id="_7">参考</h2>
 <ul>
 <li>
 <p><a href="https://www.cnblogs.com/88223100/p/How-do-I-store-large-Git-files.html">如何存储 Git 大文件？</a> </p>
