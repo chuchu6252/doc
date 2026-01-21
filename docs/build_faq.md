@@ -238,6 +238,11 @@ D:/work/workspace/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/Fishey
 <!-- ======================================================================= -->
 
 
+###### 在新系统中使用VS2022打开CarlaUE4.sln，提示安装时已经不提供.NET Framework 5.0的目标框架了，打开VS也提示不支持目标框架
+
+> [解决方法](https://www.cnblogs.com/bdqczhl/p/18670152) ：手动加载下载.NET Framework 5.0 框架。
+
+
 ###### 换个用户执行 git 命令时候报错：git config --global --add safe.directory "*"
 > ```shell
 > git config --global --add safe.directory "*"
