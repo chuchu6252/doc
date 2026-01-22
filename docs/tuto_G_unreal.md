@@ -67,7 +67,8 @@ PPT编辑文字，导出PDF，然后裁剪，导出为图片。
 
 * 增加`matlab`插件进行虚幻引擎编译，导致启动虚幻编辑器启动失败，原因不明。
 
-* 如果启动虚幻编辑器时出现选择`renderdocui.exe`的选项，则从 [RenderDoc](https://renderdoc.org/) 中下载并安装软件，然后选择相应的exe文件即可启动。
+* 如果启动虚幻编辑器时出现选择`renderdocui.exe`的选项，则从 [RenderDoc](https://renderdoc.org/) 中下载并安装软件，然后选择相应的exe文件即可启动。 
+或者将工程文件 [CarlaUE4.uproject](https://github.com/OpenHUTB/hutb/blob/03c608eb6715267f70270b3412a3aa2ef8d90d57/Unreal/CarlaUE4/CarlaUE4.uproject#L113) 的 `RenderDocPlugin` 配置设置为 `false`，将 RenderDocPlugin 插件禁用。
 
 
 
