@@ -2821,11 +2821,13 @@ IF (ReceivedPower &gt;= receiver_sensitivity)
 </ul>
 </li>
 </ul>
-<p>自定义 V2X 消息传感器的工作方式与其他传感器略有不同，因为它除了<em>监听</em>函数之外还具有<em>发送</em>函数，需要先调用发送函数，然后其他此类传感器才能接收任何内容。只有在调用<em>发送</em>时才会触发自定义消息的传输。发送给<em>发送</em>函数的每条消息仅向当前生成的所有自定义 V2X 消息传感器传输一次。</p>
+<p>自定义 V2X 消息传感器的工作方式与其他传感器略有不同，因为它除了<em>监听(listen)</em>函数之外还具有<em>发送(send)</em>函数，需要先调用发送函数，然后其他此类传感器才能接收任何内容。只有在调用<em>发送(send)</em>时才会触发自定义消息的传输。发送给 <em>发送(send)</em> 函数的每条消息仅向当前生成的所有自定义 V2X 消息传感器传输一次。可以通过传感器的“channel_id”属性创建独立的通信通道。只有具有相同“channel_id”的传感器才能相互通信。这允许在系统中创建不同的发送方/接收方组。</p>
 <p>示例：</p>
 <pre><code>bp = world.get_blueprint_library().find('sensor.other.v2x_custom')
 sensor = world.spawn_actor(bp, carla.Transform(), attach_to=parent)
-sensor.send("Hello CARLA")
+message = carla.CustomV2XBytes()
+message.set_bytes(bytearray("Hello CARLA", 'utf-8'))
+sensor.send(message)
 </code></pre>
 <h3 id="v2x_2">V2X 传感器蓝图属性</h3>
 <table>
@@ -2838,6 +2840,12 @@ sensor.send("Hello CARLA")
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>channel_id</td>
+<td>string</td>
+<td>''</td>
+<td>只有具有相同 channel_id 的发送方/接收方才能相互通信。</td>
+</tr>
 <tr>
 <td>transmit_power</td>
 <td>float</td>

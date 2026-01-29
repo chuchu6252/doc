@@ -384,9 +384,77 @@
 </li>
 </ul>
 </li>
-<li><strong><font color="#498efc">sensor.other.rss</font></strong> （自 Carla 0.9.15 起已被弃用）<ul>
+<li>
+<p><strong><font color="#498efc">sensor.other.rss</font></strong> （自 Carla 0.9.15 起已被弃用）</p>
+<ul>
 <li><strong>属性：</strong><ul>
 <li><code>role_name</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><font color="#498efc">sensor.other.v2x</font></strong>  </p>
+<ul>
+<li><strong>属性:</strong><ul>
+<li><code>channel_id</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>combined_antenna_gain</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>custom_fading_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>d_ref</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>filter_distance</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>fixed_rate</code> (<em>Bool</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>frequency_ghz</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>gen_cam_max</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>gen_cam_min</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_accel_stddev_x</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_accel_stddev_y</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_accel_stddev_z</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_alt_bias</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_alt_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_head_bias</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_head_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_lat_bias</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_lat_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_lon_bias</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_lon_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_seed</code> (<em>Int</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_vel_stddev_x</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_yawrate_bias</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_yawrate_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>path_loss_exponent</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>path_loss_model</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>receiver_sensitivity</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>role_name</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>ros_frame_id</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>ros_name</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>ros_publish_tf</code> (<em>Bool</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>scenario</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>sensor_tick</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>transmit_power</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>use_etsi_fading</code> (<em>Bool</em>) <sub><em>- 可修改</em></sub></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><font color="#498efc">sensor.other.v2x_custom</font></strong>  <ul>
+<li><strong>属性:</strong><ul>
+<li><code>channel_id</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>combined_antenna_gain</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>custom_fading_stddev</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>d_ref</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>filter_distance</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>frequency_ghz</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>noise_seed</code> (<em>Int</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>path_loss_exponent</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>path_loss_model</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>receiver_sensitivity</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>role_name</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>ros_frame_id</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>ros_name</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>ros_publish_tf</code> (<em>Bool</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>scenario</code> (<em>String</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>sensor_tick</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
+<li><code>transmit_power</code> (<em>Float</em>) <sub><em>- 可修改</em></sub></li>
 </ul>
 </li>
 </ul>
