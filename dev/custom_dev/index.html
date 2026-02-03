@@ -173,17 +173,41 @@ git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </
 git<span class="w"> </span>push<span class="w"> </span>hutb
 </code></pre></div>
 <h2 id="_4">其他</h2>
+<h5 id="_5"><a href="https://www.zhihu.com/question/51987041/answer/3059575358">获取公众号的主页链接</a></h5>
+<ol>
+<li>
+<p>复制文章的链接，在电脑端浏览器打开。</p>
+</li>
+<li>
+<p>查看网页源代码。在浏览器打开文章之后，鼠标右键单击，并选择【查看页面源代码】。</p>
+</li>
+<li>
+<p>查找Biz 值：在页面源代码界面，按住ctrl+F 快捷键，搜索Biz, 找到如下的位置，并复制图中这个双引号里面的信息： MzI2ODk5MzE5Ng==</p>
+</li>
+<li>
+<p>将前面复制的Biz 值，放入下面这个链接里面正确的位置就好了。</p>
+</li>
+</ol>
+<p>万能公式：
+<div class="highlight"><pre><span></span><code>https://mp.weixin.qq.com/mp/profile_ext?action<span class="o">=</span>home<span class="p">&amp;</span><span class="nv">__biz</span><span class="o">=</span>替换biz的值<span class="p">&amp;</span><span class="nv">scene</span><span class="o">=</span><span class="m">124</span><span class="c1">#wechat_redirect</span>
+</code></pre></div></p>
+<p>所以获得的 OpenHUTB 公众号链接就是：
+<div class="highlight"><pre><span></span><code>https://mp.weixin.qq.com/mp/profile_ext?action<span class="o">=</span>home<span class="p">&amp;</span><span class="nv">__biz</span><span class="o">=</span><span class="nv">MzI2ODk5MzE5Ng</span><span class="o">==</span><span class="p">&amp;</span><span class="nv">scene</span><span class="o">=</span><span class="m">124</span><span class="c1">#wechat_redirect</span>
+</code></pre></div></p>
+<ol>
+<li>在微信中打开公众号链接（注意不能在电脑浏览器中打开）。</li>
+</ol>
 <h5 id="commit"><a href="https://blog.csdn.net/zi__li/article/details/106604872">修改commit的记录</a></h5>
 <p>如果要只是要修改上一次commit的信息，如果是用TortoiseGit，在Commit界面选择Amend Last Commit即可修改。</p>
-<h5 id="_5">使用旧仓库存放新的提交记录</h5>
+<h5 id="_6">使用旧仓库存放新的提交记录</h5>
 <blockquote>
 <p>1.删除所有文件</p>
 <p>2.复制新的仓库文件到旧仓库（包括.git文件夹）</p>
 <p>3.修改.git/config文件，指向旧仓库的地址</p>
 </blockquote>
-<h5 id="_6">补充</h5>
+<h5 id="_7">补充</h5>
 <p><a href="../cicd/">持续集成</a></p>
-<h2 id="_7">参考</h2>
+<h2 id="_8">参考</h2>
 <p><a href="https://blog.csdn.net/xiewenhao12/article/details/117923288">git 生成补丁文件及打补丁</a></p>
               
             </div>
