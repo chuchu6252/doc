@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>如何用 Python 打造一款超大文件下载器（以 HUTB 模拟器下载为例） - 人车模拟</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u5982\u4f55\u7528 Python \u6253\u9020\u4e00\u6b3e\u8d85\u5927\u6587\u4ef6\u4e0b\u8f7d\u5668\uff08\u4ee5 HUTB \u6a21\u62df\u5668\u4e0b\u8f7d\u4e3a\u4f8b\uff09";
+        var mkdocs_page_input_path = "dev/hutb_release.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 人车模拟
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">简介</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../introduction/">入门</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pedestrian/">人</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../vehicle/">车</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">模拟</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concept/">概念</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../modules/">模块</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../development/">开发</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">场景</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../map_twin/">地图孪生</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../assert_twin/">资产孪生</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../unreal_engine/">模拟引擎</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">其他</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ref/">参考目录</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ecology/">生态系统</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contribution/">贡献指南</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">人车模拟</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">如何用 Python 打造一款超大文件下载器（以 HUTB 模拟器下载为例）</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/dev/hutb_release.md" class="icon icon-github"> 在 GitHub 上编辑</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="python-hutb">如何用 Python 打造一款超大文件下载器（以 HUTB 模拟器下载为例）</h1>
+<p>为大家分享一个实用的 Python 工具（HUTB 模拟器发行版下载工具），它能自动从仓库下载发行版，合并分块文件并解压，最终为用户提供可执行的完整软件包。</p>
+<p><img alt="" src="../img/dev/hutb_downloader.jpg" /></p>
+<div class="admonition 注意">
+<p class="admonition-title">注意</p>
+<p>如果不想了解实现原理，可以直接从该链接直接下载使用： https://gitee.com/OpenHUTB/sw/releases/download/up/hutb_downloader.exe ，双击 hutb_download.exe 后会在当前目录下载整个模拟器（下载或运行时可能会报警告，忽视即可），点击<code>hutb/CarlaUE4.exe</code>即可启动模拟器。</p>
+</div>
+<h2 id="_1">一、为什么需要这样的工具？</h2>
+<p>在开源项目分发中，开发者常常面临一个难题：如何让用户方便地获取最新的发行版？传统的方式是提供直接的下载链接，但这种方式有几个明显的缺点：</p>
+<ol>
+<li>
+<p>更新麻烦：每次发布新版本都需要手动更新下载链接</p>
+</li>
+<li>
+<p>大文件传输问题：Git对于大文件支持不够友好</p>
+</li>
+<li>
+<p>下载体验差：用户需要手动执行多个步骤才能使用软件</p>
+</li>
+</ol>
+<p>我们的解决方案是：将大文件分割成小块上传到仓库（大文件仓库对最大文件有限制），然后通过一个智能下载器自动下载、合并并解压这些文件。这样既解决了大文件存储问题，又为用户提供了便捷的一键下载体验。</p>
+<h2 id="_2">二、工具的核心设计</h2>
+<h3 id="21-python">2.1 技术选型：为什么选择Python？</h3>
+<p>Python 以其简洁的语法和丰富的第三方库而闻名。对于这个项目，我们主要利用了以下几个库：</p>
+<ul>
+<li>
+<p>GitPython：提供与Git仓库交互的高级接口</p>
+</li>
+<li>
+<p>shutil：用于文件和目录的高级操作</p>
+</li>
+<li>
+<p>zipfile：处理ZIP压缩文件</p>
+</li>
+<li>
+<p>os：提供操作系统相关功能</p>
+</li>
+</ul>
+<p>这些库的组合使得我们能够以相对简单的代码实现复杂的功能。</p>
+<h3 id="22">2.2 架构设计</h3>
+<p>整个工具的核心是一个名为 GitRepository 的类，它封装了与Git仓库交互的所有操作。让我们看看这个类的设计亮点：</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">GitRepository</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    git仓库管理</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_path</span><span class="p">,</span> <span class="n">repo_url</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="s1">&#39;master&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">local_path</span> <span class="o">=</span> <span class="n">local_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo_url</span> <span class="o">=</span> <span class="n">repo_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="p">(</span><span class="n">repo_url</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+</code></pre></div>
+这个类采用了面向对象的设计思想，将Git操作封装为对象的方法，提高了代码的可读性和可维护性。</p>
+<h2 id="_3">三、关键技术实现</h2>
+<h3 id="31">3.1 智能下载：断点续传与进度显示</h3>
+<p>为了提升用户体验，我们实现了下载进度显示功能。通过继承<code>git.remote.RemoteProgress</code>类，我们可以实时获取下载进度：</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Progress</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">remote</span><span class="o">.</span><span class="n">RemoteProgress</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">op_code</span><span class="p">,</span> <span class="n">cur_count</span><span class="p">,</span> <span class="n">max_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s1">&#39;Download (operation code: </span><span class="si">%s</span><span class="s1">, current count: </span><span class="si">%s</span><span class="s1">, max count: </span><span class="si">%s</span><span class="s1">, percentage: </span><span class="si">%s</span><span class="s1">, message: </span><span class="si">%s</span><span class="s1">)...&#39;</span><span class="o">%</span><span class="p">(</span>
+                <span class="n">op_code</span><span class="p">,</span>
+                <span class="n">cur_count</span><span class="p">,</span>
+                <span class="n">max_count</span><span class="p">,</span>
+                <span class="n">cur_count</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_count</span> <span class="ow">or</span> <span class="mf">100.0</span><span class="p">),</span>
+                <span class="n">message</span> <span class="ow">or</span> <span class="s2">&quot;NO MESSAGE&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+</code></pre></div>
+这个进度显示不仅告诉用户下载的百分比，还提供了操作代码、当前计数和最大计数等详细信息，让用户清楚地知道下载过程的状态。</p>
+<h3 id="32">3.2 大文件处理：分块与合并</h3>
+<p>由于Git对单个文件大小有限制，我们需要将大文件分割成多个小块。这里我们实现了两个关键函数：</p>
+<p><strong>文件分割函数</strong>：</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">split_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">chunk_size</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">chunk</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># 按0对齐为了保证合并时也是按顺序进行合并</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;hutb_</span><span class="si">{</span><span class="n">index</span><span class="si">:</span><span class="s1">05d</span><span class="si">}</span><span class="s1">.dat&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+<p><strong>文件合并函数</strong>：</p>
+<p>python
+def merge_files(input_dir, output_file):
+    files = os.listdir(input_dir)
+    files.sort()</p>
+<pre><code>with open(output_file, 'wb') as out:
+    for file_name in files:
+        print("Merging file: ", file_name)
+        file_path = os.path.join(input_dir, file_name)
+        with open(file_path, 'rb') as f:
+            chunk = f.read()
+            out.write(chunk)
+</code></pre>
+<p>这种分块策略有以下几个优点：</p>
+<ol>
+<li>
+<p>避免了Git对大文件的限制</p>
+</li>
+<li>
+<p>可以并行下载多个小块，提高下载速度</p>
+</li>
+<li>
+<p>如果某个小块下载失败，可以只重新下载该部分，实现类似断点续传的功能</p>
+</li>
+</ol>
+<h3 id="33">3.3 权限管理：安全删除只读文件</h3>
+<p>在Windows系统中，Git创建的某些文件可能被设置为只读属性，这会导致在删除.git文件夹时出现权限错误。我们通过定义一个回调函数解决了这个问题：</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">remove_readonly</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="s2">&quot;Clear the readonly bit and reattempt the removal&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IWRITE</span><span class="p">)</span>
+    <span class="n">func</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
+这个函数会在删除文件前修改其权限，确保删除操作能够成功执行。</p>
+<h2 id="_4">四、完整工作流程</h2>
+<h3 id="41">4.1 初始化阶段</h3>
+<ol>
+<li>
+<p>检查本地目录是否存在，如果存在则先删除旧版本</p>
+</li>
+<li>
+<p>克隆Git仓库到本地（使用浅克隆以加快下载速度）</p>
+</li>
+<li>
+<p>显示下载进度</p>
+</li>
+</ol>
+<h3 id="42">4.2 清理阶段</h3>
+<ol>
+<li>
+<p>删除.git文件夹和.gitattributes文件，这些是版本控制相关文件，普通用户不需要</p>
+</li>
+<li>
+<p>确保下载目录的干净整洁</p>
+</li>
+</ol>
+<h3 id="43">4.3 文件处理阶段</h3>
+<ol>
+<li>
+<p>检查是否存在已合并的ZIP文件，如果没有则合并所有.dat文件</p>
+</li>
+<li>
+<p>解压ZIP文件到当前目录</p>
+</li>
+<li>
+<p>删除中间文件（ZIP文件和所有的.dat文件）</p>
+</li>
+</ol>
+<h3 id="44">4.4 完成阶段</h3>
+<ol>
+<li>
+<p>计算并显示整个下载过程耗时</p>
+</li>
+<li>
+<p>准备就绪的软件可以直接使用</p>
+</li>
+</ol>
+<h4 id="_5">五、打包为可执行文件</h4>
+<p>为了让没有Python环境的用户也能使用这个工具，我们将其打包为独立的EXE文件。使用PyInstaller可以轻松实现这一目标：</p>
+<p><div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyinstaller
+pyinstaller<span class="w"> </span>download_from_git.py<span class="w"> </span>--onefile<span class="w"> </span>--name<span class="w"> </span>hutb_downloader.exe
+</code></pre></div>
+这里有几个需要注意的地方：</p>
+<ol>
+<li>
+<p>单文件模式：--onefile参数将所有依赖打包到一个EXE文件中</p>
+</li>
+<li>
+<p>避免杀毒软件误报：某些杀毒软件可能会将PyInstaller打包的程序误报为病毒。可以通过代码签名或调整打包参数来减少误报</p>
+</li>
+<li>
+<p>图标定制：可以使用-i参数指定程序图标</p>
+</li>
+</ol>
+<h2 id="_6">六、实际应用场景</h2>
+<h3 id="61">6.1 开源项目分发</h3>
+<p>对于开源项目维护者，这个工具可以集成到项目的发行流程中。每次发布新版本时，只需要将分块文件上传到Git仓库，用户就可以通过下载器获取最新版本。</p>
+<h3 id="62">6.2 企业内部软件更新</h3>
+<p>在企业环境中，可以使用这个工具来分发内部软件。通过控制Git仓库的访问权限，可以确保只有授权用户能够下载软件。</p>
+<h3 id="63">6.3 教育用途</h3>
+<p>在计算机教育中，教师可以使用这个工具分发教学材料和软件环境，学生只需要运行一个简单的命令就能获得完整的学习环境。</p>
+<h2 id="_7">七、性能测试</h2>
+<p>根据实际测试，在网络带宽足够的情况下，整个下载过程大约需要4-5分钟。这个时间主要包括：</p>
+<ol>
+<li>
+<p>Git仓库克隆：2-3分钟</p>
+</li>
+<li>
+<p>文件合并：1-2分钟</p>
+</li>
+<li>
+<p>文件解压：30秒-1分钟</p>
+</li>
+</ol>
+<h2 id="_8">八、总结</h2>
+<p>通过这个Python实现的Git发行版下载器，我们解决了大文件通过Git分发的难题，为用户提供了便捷的一键下载体验。这个工具展示了Python在自动化任务处理方面的强大能力，也体现了模块化的软件设计原则。</p>
+<p>无论是对于开源项目维护者，还是企业内部的软件分发，这个工具都提供了一个高效、可靠的解决方案。随着Git在软件开发中的普及，类似的工具将会在软件分发领域发挥越来越重要的作用。</p>
+<p>随着技术的不断发展，我们还可以在这个基础上添加更多高级功能，如自动更新、多线程下载、图形界面等，使其成为一个更加完善的软件分发解决方案。希望这个工具的开发思路和实现方法能够给大家带来启发，也期待看到更多基于这个思想的创新应用。</p>
+<p>版权声明：本文介绍的代码仅供学习参考，工具代码遵循 MIT 开源协议。</p>
+<ul>
+<li>源代码：https://github.com/OpenHUTB/hutb</li>
+<li>文档：https://openhutb.github.io</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2026</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../../js/umlconvert.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
