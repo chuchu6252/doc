@@ -35,7 +35,8 @@
 
 * [像素流](ue/pixel_streaming.md)
 
-## 下载发行版的可执行程序
+## [下载发行版的可执行程序](./dev/hutb_release.md)
+
 
 
 
