@@ -105,7 +105,7 @@
 <p><img alt="" src="../img/dev/hutb_downloader.jpg" /></p>
 <div class="admonition 注意">
 <p class="admonition-title">注意</p>
-<p>如果不想了解实现原理，可以直接从该链接直接下载使用： https://gitee.com/OpenHUTB/sw/releases/download/up/hutb_downloader.exe ，双击 hutb_download.exe 后会在当前目录下载整个模拟器（下载或运行时可能会报警告，忽视即可），点击<code>hutb/CarlaUE4.exe</code>即可启动模拟器。</p>
+<p>如果仅使用，可以直接从该链接直接下载： https://gitee.com/OpenHUTB/sw/releases/download/up/hutb_downloader.exe ，双击 hutb_download.exe 后会在当前目录下载整个模拟器（下载或运行时可能会报警告，忽视即可），点击<code>hutb/CarlaUE4.exe</code>即可启动模拟器。</p>
 </div>
 <h2 id="_1">一、为什么需要这样的工具？</h2>
 <p>在开源项目分发中，开发者常常面临一个难题：如何让用户方便地获取最新的发行版？传统的方式是提供直接的下载链接，但这种方式有几个明显的缺点：</p>
@@ -145,11 +145,28 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    git仓库管理</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_path</span><span class="p">,</span> <span class="n">repo_url</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="s1">&#39;master&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">local_path</span> <span class="o">=</span> <span class="n">local_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">repo_url</span> <span class="o">=</span> <span class="n">repo_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initial</span><span class="p">(</span><span class="n">repo_url</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">initial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_url</span><span class="p">,</span> <span class="n">branch</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        初始化git仓库</span>
+<span class="sd">        :param repo_url:</span>
+<span class="sd">        :param branch:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">)</span>
+
+        <span class="n">git_local_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">,</span> <span class="s1">&#39;.git&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_git_dir</span><span class="p">(</span><span class="n">git_local_path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="o">.</span><span class="n">clone_from</span><span class="p">(</span><span class="n">repo_url</span><span class="p">,</span> <span class="n">to_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">,</span> <span class="n">branch</span><span class="o">=</span><span class="n">branch</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="n">Progress</span><span class="p">(),</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">)</span>
 </code></pre></div>
 这个类采用了面向对象的设计思想，将Git操作封装为对象的方法，提高了代码的可读性和可维护性。</p>
 <h2 id="_3">三、关键技术实现</h2>
@@ -185,19 +202,19 @@
             <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
 </code></pre></div>
 <p><strong>文件合并函数</strong>：</p>
-<p>python
-def merge_files(input_dir, output_file):
-    files = os.listdir(input_dir)
-    files.sort()</p>
-<pre><code>with open(output_file, 'wb') as out:
-    for file_name in files:
-        print("Merging file: ", file_name)
-        file_path = os.path.join(input_dir, file_name)
-        with open(file_path, 'rb') as f:
-            chunk = f.read()
-            out.write(chunk)
-</code></pre>
-<p>这种分块策略有以下几个优点：</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">merge_files</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">input_dir</span><span class="p">)</span>
+    <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Merging file: &quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">chunk</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</code></pre></div>
+这种分块策略有以下几个优点：</p>
 <ol>
 <li>
 <p>避免了Git对大文件的限制</p>
@@ -285,7 +302,7 @@ pyinstaller<span class="w"> </span>download_from_git.py<span class="w"> </span>-
 <h3 id="63">6.3 教育用途</h3>
 <p>在计算机教育中，教师可以使用这个工具分发教学材料和软件环境，学生只需要运行一个简单的命令就能获得完整的学习环境。</p>
 <h2 id="_7">七、性能测试</h2>
-<p>根据实际测试，在网络带宽足够的情况下，整个下载过程大约需要4-5分钟。这个时间主要包括：</p>
+<p>根据实际测试，在网络带宽足够的情况下，整个下载过程大约 2 分钟，合并和解压等操作大约需要 2 分钟。这个时间主要包括：</p>
 <ol>
 <li>
 <p>Git仓库克隆：2-3分钟</p>
