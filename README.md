@@ -1,4 +1,4 @@
-# <p align=center> 人车模拟  </p>
+# <p align=center> 人车孪创  </p>
 
 <!-- Badges (flat): https://github.com/pudding0503/github-badge-collection -->
 <p align=center>
@@ -19,9 +19,6 @@
     </a>
     <a href="https://github.com/OpenHUTB/doc/graphs/contributors">
         <img src="https://img.shields.io/github/contributors/OpenHUTB/doc" alt="ZenHub Badge">
-    </a>
-    <a href="https://github.com/OpenHUTB/doc">
-        <img src="https://camo.githubusercontent.com/a2746db9952e0d9515498da4e1fb68e9101e40d534de5c644e22afa1e997964a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d61726b646f776e2d3030303030303f7374796c653d666c6174266c6f676f3d4d61726b646f776e266c6f676f436f6c6f723d666666666666" alt="ZenHub Badge">
     </a>
     <a href="https://github.com/OpenHUTB/doc">
         <img src="https://img.shields.io/github/forks/OpenHUTB/doc" alt="ZenHub Badge">

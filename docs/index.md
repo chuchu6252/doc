@@ -1,8 +1,8 @@
 title: 主页
 
-# <center> [人车模拟](https://carla.readthedocs.io/en/latest/)
+# <center> [人车孪创](https://github.com/OpenHUTB/doc)
 
-&emsp;&emsp; 欢迎使用人车模拟文档，该页面包含 [具身人](pedestrian.md) 、[无人车](vehicle.md)、[无人机](https://openhutb.github.io/air_doc/) 所有内容的索引。阅读 [基础](introduction.md) 部分相关内容后可以按自己喜欢的顺序随意阅读。
+&emsp;&emsp; 欢迎使用人车孪创文档，该页面包含 [具身人](pedestrian.md) 、[无人车](vehicle.md)、[无人机](https://openhutb.github.io/air_doc/) 所有内容的索引。阅读 [基础](introduction.md) 部分相关内容后可以按自己喜欢的顺序随意阅读。
 
 <!-- 参考：https://github.com/squidfunk/mkdocs-material/issues/6845#issuecomment-2192879200 -->
 /// html | div[style='float: left; width: 50%;']
