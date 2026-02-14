@@ -1456,13 +1456,13 @@ Alpha 通道。</li>
 </ul>
 <hr />
 <h2 id="carlageolocation">carla.GeoLocation<a name="carla.GeoLocation"></a></h2>
-<p>包含地理坐标模拟数据的类。<a href="#carla.Map">carla.Map</a> 可以使用以下方法转换模拟位置 OpenDRIVE 文件中的 <b><georeference></b> 标记。</p>
+<p>包含地理（Geographical）坐标模拟数据的类。<a href="#carla.Map">carla.Map</a> 可以通过使用 OpenDRIVE 文件中的标签 <b> &lt;georeference&gt;</b> 来转换模拟位置。</p>
 <h3 id="_72">实例变量</h3>
 <ul>
-<li><a name="carla.GeoLocation.latitude"></a><strong><font color="#f8805a">latitude</font></strong> (<em>float<small> - 度</small></em>)<br />
-地图上某个点的北/南值。  </li>
-<li><a name="carla.GeoLocation.longitude"></a><strong><font color="#f8805a">longitude</font></strong> (<em>float<small> - 度</small></em>)<br />
-地图上某个点的西/东值。  </li>
+<li><a name="carla.GeoLocation.latitude"></a><strong><font color="#f8805a">latitude</font></strong> (<em>float<small> - 角度</small></em>)<br />
+地图上某个点的纬度值（北/南）。  </li>
+<li><a name="carla.GeoLocation.longitude"></a><strong><font color="#f8805a">longitude</font></strong> (<em>float<small> - 角度</small></em>)<br />
+地图上某个点的经度值（西/东）。  </li>
 <li><a name="carla.GeoLocation.altitude"></a><strong><font color="#f8805a">altitude</font></strong> (<em>float<small> - 米</small></em>)<br />
 相对于地面的高度。 </li>
 </ul>
@@ -2307,6 +2307,15 @@ Z 轴上从原点到点的距离。</li>
 <li><strong>返回：</strong> <em>list(<a href="#carla.Waypoint">carla.Waypoint</a>)</em>  </li>
 </ul>
 </li>
+<li><a name="carla.Map.geolocation_to_transform"></a><strong><font color="#7fb800">geolocation_to_transform</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>geo_location</strong></font>)<br />
+将给定的以经纬度坐标形式给出的<a href="https://baike.baidu.com/item/%E5%9C%B0%E7%90%86%E5%9D%90%E6%A0%87/798099">地理坐标</a> 点<code>geo_location</code>转换为模拟器中的位置 <a href="#carla.Location">carla.Location</a> 。地图的地理位置在 OpenDRIVE 内的 <b> &lt;georeference&gt;</b> 标签中定义。<ul>
+<li><strong>参数：</strong><ul>
+<li><code>geo_location</code> (<em><a href="#carla.GeoLocation">carla.GeoLocation</a></em>)  </li>
+</ul>
+</li>
+<li><strong>返回：</strong> <em><a href="#carla.Location">carla.Location</a></em>  </li>
+</ul>
+</li>
 <li><a name="carla.Map.save_to_disk"></a><strong><font color="#7fb800">save_to_disk</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>path</strong></font>)<br />
 将当前映射的 .xodr OpenDRIVE 文件保存到磁盘。<ul>
 <li><strong>参数：</strong><ul>
@@ -2316,12 +2325,12 @@ Z 轴上从原点到点的距离。</li>
 </ul>
 </li>
 <li><a name="carla.Map.to_opendrive"></a><strong><font color="#7fb800">to_opendrive</font></strong>(<font color="#00a6ed"><strong>self</strong></font>)<br />
-以字符串形式返回当前地图的 .xodr OpenDRIVe 文件。<ul>
+以字符串形式返回当前地图的 .xodr OpenDRIVE 文件。<ul>
 <li><strong>返回：</strong> <em>str</em>  </li>
 </ul>
 </li>
 <li><a name="carla.Map.transform_to_geolocation"></a><strong><font color="#7fb800">transform_to_geolocation</font></strong>(<font color="#00a6ed"><strong>self</strong></font>, <font color="#00a6ed"><strong>location</strong></font>)<br />
-将模拟中一个点的给定位置 <code>location</code> 转换为 <a href="#carla.GeoLocation">carla.GeoLocation</a>，他表示世界坐标系。地图的地理位置在 OpenDRIVE 标签<b><georeference></b>内定义。<ul>
+将模拟器中一个给定点的位置 <code>location</code> 转换为世界坐标系中的地理位置 <a href="#carla.GeoLocation">carla.GeoLocation</a>。地图的地理位置在 OpenDRIVE 的 <b> &lt;georeference&gt;</b> 标签内定义。<ul>
 <li><strong>参数：</strong><ul>
 <li><code>location</code> (<em><a href="#carla.Location">carla.Location</a></em>)  </li>
 </ul>
