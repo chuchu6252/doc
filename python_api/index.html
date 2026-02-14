@@ -221,8 +221,7 @@
 <li><a name="carla.Actor.destroy"></a><strong><font color="#7fb800">destroy</font></strong>(<font color="#00a6ed"><strong>self</strong></font>)<br />
 告诉模拟器销毁这个参与者，如果成功则 <b>True</b> 。如果已经被破坏则没有任何效果。<ul>
 <li><strong>返回:</strong> <em>bool</em>  </li>
-<li><strong>警告:</strong> <font color="#ED2F2F"><em>此方法会阻止脚本，直到模拟器完成销毁为止。
-</em></font>  </li>
+<li><strong>警告:</strong> <font color="#ED2F2F"><em>此方法会阻止脚本，直到模拟器完成销毁为止。</em></font></li>
 </ul>
 </li>
 <li><a name="carla.Actor.disable_constant_velocity"></a><strong><font color="#7fb800">disable_constant_velocity</font></strong>(<font color="#00a6ed"><strong>self</strong></font>)<br />
@@ -5760,6 +5759,381 @@ OpenDRIVE当前位置的 <b>s</b> 值 。</li>
 <li><code>command</code> (<em>任何 carla 命令</em>) - 一个 Carla 命令。  </li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="airsimclientmultirotorclient">airsim.client.MultirotorClient<a name="airsim.client.MultirotorClient"></a></h2>
+<p>多旋翼无人机的客户端类，其基类为 VehicleClient, object。</p>
+<h3 id="_308">方法</h3>
+<ul>
+<li>
+<p><a name="getMultirotorState"></a><strong><font color="#7fb800">getMultirotorState</font></strong>(<font color="#00a6ed"><strong>vehicle_name=''</strong></font>)<br />
+返回的多旋翼无人机状态 <code>MultirotorState</code> 中的位置是以载具起始点为基准的坐标系中的位置。</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>vehicle_name</code>(<em>str,optional</em>) - 获得的载具状态</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>MultirotorState</em> </li>
+</ul>
+</li>
+<li>
+<p><a name="getRotorStates"></a><strong><font color="#7fb800">getRotorStates</font></strong>(<font color="#00a6ed"><strong>vehicle_name=''</strong></font>)<br />
+用于获取多旋翼无人机所有旋翼的当前状态。该状态包括所有旋翼的转速、推力和扭矩。</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 获得的载具旋翼状态</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>RotorStates</em> - 包含时间戳以及所有旋翼的速度、推力和扭矩。</li>
+</ul>
+</li>
+<li>
+<p><a name="goHomeAsync"></a><strong><font color="#7fb800">goHomeAsync</font></strong>(<font color="#00a6ed"><strong>timeout_sec=3e+38, vehicle_name=''</strong></font>)<br />
+返回载具起飞点的位置。</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>timeout_sec</code> (<em>int, optional</em>) - 车辆达到所需高度的超时时间</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的载具名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="hoverAsync"></a><strong><font color="#7fb800">hoverAsync</font></strong>(<font color="#00a6ed"><strong>vehicle_name=''</strong></font>)  </p>
+</li>
+<li>
+<p><a name="landAsync"></a><strong><font color="#7fb800">landAsync</font></strong>(<font color="#00a6ed"><strong>timeout_sec=60, vehicle_name=''</strong></font>)<br />
+降落载具。</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>timeout_sec</code> (<em>int, optional</em>) - 载具着陆的超时时间</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的载具名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByAngleRatesThrottleAsync"></a><strong><font color="#7fb800">moveByAngleRatesThrottleAsync</font></strong>(<font color="#00a6ed"><strong>roll_rate, pitch_rate, yaw_rate, throttle, duration, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>期望的油门(throttle)介于 0.0 到 1.0 之间。</li>
+<li>横滚速率、俯仰速率和偏航速率设定值以<strong>弧度</strong>表示（在机身坐标系中）。</li>
+<li>机身坐标系遵循前左上（Front Left Up, FLU）的惯例，并且是右利手。</li>
+<li>坐标系惯例：<ul>
+<li>X 轴方向与四旋翼无人机的<strong>前方</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>横滚</strong>角。因此，相对于我们的前左上机身坐标系，正的横滚角等效于沿<strong>右</strong>方向的平移。</li>
+<li>Y 轴方向与四旋翼无人机的<strong>左侧</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>俯仰</strong>角。因此，正的俯仰角相当于相对于我们的前左上机身坐标系<strong>向前</strong>平移。</li>
+<li>Z 轴沿<strong>向上</strong>方向。绕此轴顺时针旋转定义了一个正的<strong>偏航</strong>角。因此，正的偏航角相当于相对于我们的前左上机身坐标系<strong>向左</strong>旋转。或者说，在机身 XY/FL 平面内逆时针旋转。</li>
+</ul>
+</li>
+<li><strong>参数：</strong><ul>
+<li><code>roll_rate</code> (<em>float</em>) - 期望的横滚速率，单位为弧度/秒</li>
+<li><code>pitch_rate</code> (<em>float</em>) - 期望的俯仰角变化率，单位为弧度/秒</li>
+<li><code>yaw_rate</code> (<em>float</em>) - 期望的偏航率，单位为弧度/秒</li>
+<li><code>throttle</code> (<em>float</em>) - 期望的油门范围（介于 0.0 至 1.0 之间）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByAngleRatesZAsync"></a><strong><font color="#7fb800">moveByAngleRatesZAsync</font></strong>(<font color="#00a6ed"><strong>roll_rate, pitch_rate, yaw_rate, z, duration, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>z 是在载具的局部<a href="https://baike.baidu.com/item/NED/22375709">北东地坐标系</a>（North East Down, NED）中给出的。</li>
+<li>横滚速率、俯仰速率和偏航速率设定值以<strong>弧度</strong>表示（在机身坐标系中）。</li>
+<li>机身坐标系遵循前左上（Front Left Up, FLU）的惯例，并且是右利手。</li>
+<li>坐标系惯例：<ul>
+<li>X 轴方向与四旋翼无人机的<strong>前方</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>横滚</strong>角。因此，相对于我们的前左上机身坐标系，正的横滚角等效于沿<strong>右</strong>方向的平移。</li>
+<li>Y 轴方向与四旋翼无人机的<strong>左侧</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>俯仰</strong>角。因此，正的俯仰角相当于相对于我们的前左上机身坐标系<strong>向前</strong>平移。</li>
+<li>Z 轴沿<strong>向上</strong>方向。绕此轴顺时针旋转定义了一个正的<strong>偏航</strong>角。因此，正的偏航角相当于相对于我们的前左上机身坐标系<strong>向左</strong>旋转。或者说，在机身 XY/FL 平面内逆时针旋转。</li>
+</ul>
+</li>
+<li><strong>参数：</strong><ul>
+<li><code>roll_rate</code> (<em>float</em>) - 期望的横滚速率，单位为弧度/秒</li>
+<li><code>pitch_rate</code> (<em>float</em>) - 期望的俯仰角变化率，单位为弧度/秒</li>
+<li><code>yaw_rate</code> (<em>float</em>) - 期望的偏航率，单位为弧度/秒</li>
+<li><code>z</code> (<em>float</em>) - 期望的 Z 值（在载具的本地北东地坐标系中）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByAngleThrottleAsync"></a><strong><font color="#7fb800">moveByAngleThrottleAsync</font></strong>(<font color="#00a6ed"><strong>pitch, roll, throttle, yaw_rate, duration, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveByAngleZAsync"></a><strong><font color="#7fb800">moveByAngleZAsync</font></strong>(<font color="#00a6ed"><strong>pitch, roll, z, yaw, duration, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveByManualAsync"></a><strong><font color="#7fb800">moveByManualAsync</font></strong>(<font color="#00a6ed"><strong>vx_max, vy_max, z_min, duration, drivetrain=0, yaw_mode=&lt;YawMode&gt; {'is_rate': True, 'yaw_or_rate': 0.0}, vehicle_name=''</strong></font>)</p>
+<ul>
+<li>读取当前遥控器状态并用它来控制载具。</li>
+<li>参数设置飞行时的速度和最小高度限制。如果检测到遥控器状态违反这些限制，则该遥控器状态将被忽略。</li>
+<li><strong>参数：</strong><ul>
+<li><code>vx_max</code> (<em>float</em>) - x 方向上允许的最大速度</li>
+<li><code>vy_max</code> (<em>float</em>) - y 方向上允许的最大速度</li>
+<li><code>vz_max</code> (<em>float</em>) - z 方向上允许的最大速度</li>
+<li><code>z_min</code> (<em>float</em>) - 载具位置允许的最小 z 值</li>
+<li><code>duration</code> (<em>float</em>) - 这段时间过后，车辆将切换回非手动模式。</li>
+<li><code>drivetrain</code> (<em>DrivetrainType</em>) - 当设置为 ForwardOnly 时，载具会旋转自身，使其车头始终朝向行驶方向。如果设置为 MaxDegreeOfFreedom，则不会进行此操作（载具会像螃蟹一样横着移动）。</li>
+<li><code>yaw_mode</code> (<em>YawMode</em>) - 指定载具是否应以给定角度朝向目标（is_rate=False）或应以给定速率绕其轴线旋转（is_rate=True）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByRC"></a><strong><font color="#7fb800">moveByRC</font></strong>(<font color="#00a6ed"><strong>rcdata=<RCData> {'is_initialized': False, 'is_valid': False, 'pitch': 0.0, 'roll': 0.0, 'switch1': 0, 'switch2': 0, 'switch3': 0, 'switch4': 0, 'switch5': 0, 'switch6': 0, 'switch7': 0, 'switch8': 0, 'throttle': 0.0, 'timestamp': 0, 'yaw': 0.0}, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveByRollPitchYawThrottleAsync"></a><strong><font color="#7fb800">moveByRollPitchYawThrottleAsync</font></strong>(<font color="#00a6ed"><strong>roll, pitch, yaw, throttle, duration, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>期望油门范围介于 0.0 到 1.0 之间。</li>
+<li>在使用 PX4 时，横滚角、俯仰角和偏航角以<strong>角度</strong>为单位给出；在使用 SimpleFlight 时，以<strong>弧度</strong>为单位给出（均在机身坐标系中）。</li>
+<li>机身坐标系遵循前左上（Front Left Up, FLU）的惯例，并且是右利手。</li>
+<li>坐标系惯例：<ul>
+<li>X 轴方向与四旋翼无人机的<strong>前方</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>横滚</strong>角。因此，相对于我们的前左上机身坐标系，正的横滚角等效于沿<strong>右</strong>方向的平移。</li>
+<li>Y 轴方向与四旋翼无人机的<strong>左侧</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>俯仰</strong>角。因此，正的俯仰角相当于相对于我们的前左上机身坐标系<strong>向前</strong>平移。</li>
+<li>Z 轴沿<strong>向上</strong>方向。绕此轴顺时针旋转定义了一个正的<strong>偏航</strong>角。因此，正的偏航角相当于相对于我们的前左上机身坐标系<strong>向左</strong>旋转。或者说，在机身 XY/FL 平面内逆时针旋转。</li>
+</ul>
+</li>
+<li><strong>参数：</strong><ul>
+<li><code>roll</code> (<em>float</em>) - 期望的横滚</li>
+<li><code>pitch</code> (<em>float</em>) - 期望的俯仰角</li>
+<li><code>yaw</code> (<em>float</em>) - 期望的偏航角</li>
+<li><code>throttle</code> (<em>float</em>) - 所需油门范围（介于 0.0 至 1.0 之间）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByRollPitchYawZAsync"></a><strong><font color="#7fb800">moveByRollPitchYawZAsync</font></strong>(<font color="#00a6ed"><strong>roll, pitch, yaw, z, duration, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>z 是在载具的局部北东地坐标系中给出的。</li>
+<li>横滚角、俯仰角和偏航角设定值以<strong>弧度</strong>表示，在机身坐标系中。</li>
+<li>机身坐标系遵循前左上（Front Left Up, FLU）的惯例，并且是右利手。</li>
+<li>坐标系惯例：<ul>
+<li>X 轴方向与四旋翼无人机的<strong>前方</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>横滚</strong>角。因此，相对于我们的前左上机身坐标系，正的横滚角等效于沿<strong>右</strong>方向的平移。</li>
+<li>Y 轴方向与四旋翼无人机的<strong>左侧</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>俯仰</strong>角。因此，正的俯仰角相当于相对于我们的前左上机身坐标系<strong>向前</strong>平移。</li>
+<li>Z 轴沿<strong>向上</strong>方向。绕此轴顺时针旋转定义了一个正的<strong>偏航</strong>角。因此，正的偏航角相当于相对于我们的前左上机身坐标系<strong>向左</strong>旋转。或者说，在机身 XY/FL 平面内逆时针旋转。</li>
+</ul>
+</li>
+<li><strong>参数：</strong><ul>
+<li><code>roll</code> (<em>float</em>) - 期望的横滚</li>
+<li><code>pitch</code> (<em>float</em>) - 期望的俯仰角</li>
+<li><code>yaw</code> (<em>float</em>) - 期望的偏航角</li>
+<li><code>z</code> (<em>float</em>) - 期望的 Z 值（在载具的本地北东地坐标系中）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByRollPitchYawrateThrottleAsync"></a><strong><font color="#7fb800">moveByRollPitchYawrateThrottleAsync</font></strong>(<font color="#00a6ed"><strong>roll, pitch, yaw_rate, throttle, duration, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>期望油门范围介于 0.0 到 1.0 之间。</li>
+<li>横滚角、俯仰角和偏航角率设定值以<strong>弧度</strong>表示，在机身坐标系中。</li>
+<li>机身坐标系遵循前左上（Front Left Up, FLU）的惯例，并且是右利手。</li>
+<li>坐标系惯例：<ul>
+<li>X 轴方向与四旋翼无人机的<strong>前方</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>横滚</strong>角。因此，相对于我们的前左上机身坐标系，正的横滚角等效于沿<strong>右</strong>方向的平移。</li>
+<li>Y 轴方向与四旋翼无人机的<strong>左侧</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>俯仰</strong>角。因此，正的俯仰角相当于相对于我们的前左上机身坐标系<strong>向前</strong>平移。</li>
+<li>Z 轴沿<strong>向上</strong>方向。绕此轴顺时针旋转定义了一个正的<strong>偏航</strong>角。因此，正的偏航角相当于相对于我们的前左上机身坐标系<strong>向左</strong>旋转。或者说，在机身 XY/FL 平面内逆时针旋转。</li>
+</ul>
+</li>
+<li><strong>参数：</strong><ul>
+<li><code>roll</code> (<em>float</em>) - 期望的横滚，单位为弧度/秒。</li>
+<li><code>pitch</code> (<em>float</em>) - 期望的俯仰角，单位为弧度/秒。</li>
+<li><code>yaw_rate</code> (<em>float</em>) - 期望的偏航率，单位为弧度/秒。</li>
+<li><code>throttle</code> (<em>float</em>) - 期望的油门范围（介于 0.0 至 1.0 之间）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByRollPitchYawrateZAsync"></a><strong><font color="#7fb800">moveByRollPitchYawrateZAsync</font></strong>(<font color="#00a6ed"><strong>roll, pitch, yaw_rate, z, duration, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>z 是在载具的局部北东地坐标系中给出的。</li>
+<li>横滚角、俯仰角和偏航角设定值以<strong>弧度</strong>表示，在机身坐标系中。</li>
+<li>机身坐标系遵循前左上（Front Left Up, FLU）的惯例，并且是右利手。</li>
+<li>坐标系惯例：<ul>
+<li>X 轴方向与四旋翼无人机的<strong>前方</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>横滚</strong>角。因此，相对于我们的前左上机身坐标系，正的横滚角等效于沿<strong>右</strong>方向的平移。</li>
+<li>Y 轴方向与四旋翼无人机的<strong>左侧</strong>方向一致。绕此轴顺时针旋转定义了一个正的<strong>俯仰</strong>角。因此，正的俯仰角相当于相对于我们的前左上机身坐标系<strong>向前</strong>平移。</li>
+<li>Z 轴沿<strong>向上</strong>方向。绕此轴顺时针旋转定义了一个正的<strong>偏航</strong>角。因此，正的偏航角相当于相对于我们的前左上机身坐标系<strong>向左</strong>旋转。或者说，在机身 XY/FL 平面内逆时针旋转。</li>
+</ul>
+</li>
+<li><strong>参数：</strong><ul>
+<li><code>roll</code> (<em>float</em>) - 期望的横滚，单位为弧度/秒。</li>
+<li><code>pitch</code> (<em>float</em>) - 期望的俯仰角，单位为弧度/秒。</li>
+<li><code>yaw_rate</code> (<em>float</em>) - 期望的偏航角，单位为弧度/秒。</li>
+<li><code>z</code> (<em>float</em>) - 期望的 Z 值（在载具的本地北东地坐标系中）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByVelocityAsync"></a><strong><font color="#7fb800">moveByVelocityAsync</font></strong>(<font color="#00a6ed"><strong>vx, vy, vz, duration, drivetrain=0, yaw_mode=&lt;YawMode&gt; {'is_rate': True, 'yaw_or_rate': 0.0}, vehicle_name=''</strong></font>)</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>vx_max</code> (<em>float</em>) - 北东地世界坐标系中 x 方向上期望的速度</li>
+<li><code>vy_max</code> (<em>float</em>) - 北东地世界坐标系中 y 方向上期望的速度</li>
+<li><code>vz_max</code> (<em>float</em>) - 北东地世界坐标系中 z 方向上期望的速度</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>drivetrain</code> (<em>DrivetrainType</em>) - 当设置为 ForwardOnly 时，载具会旋转自身，使其车头始终朝向行驶方向。如果设置为 MaxDegreeOfFreedom，则不会进行此操作（载具会像螃蟹一样横着移动）。</li>
+<li><code>yaw_mode</code> (<em>YawMode</em>) - 指定载具是否应以给定角度朝向目标（is_rate=False）或应以给定速率绕其轴线旋转（is_rate=True）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByVelocityBodyFrameAsync"></a><strong><font color="#7fb800">moveByVelocityBodyFrameAsync</font></strong>(<font color="#00a6ed"><strong>vx, vy, vz, duration, drivetrain=0, yaw_mode=&lt;YawMode&gt; {   'is_rate': True, 'yaw_or_rate': 0.0}, vehicle_name=''</strong></font>)</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>vx_max</code> (<em>float</em>) - 载具局部北东地坐标系中 X 轴方向的期望速度。</li>
+<li><code>vy_max</code> (<em>float</em>) - 载具局部北东地坐标系中 Y 轴方向的期望速度。</li>
+<li><code>vz_max</code> (<em>float</em>) - 载具局部北东地坐标系中 Z 轴方向的期望速度。</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>drivetrain</code> (<em>DrivetrainType</em>) - 当设置为 ForwardOnly 时，载具会旋转自身，使其车头始终朝向行驶方向。如果设置为 MaxDegreeOfFreedom，则不会进行此操作（载具会像螃蟹一样横着移动）。</li>
+<li><code>yaw_mode</code> (<em>YawMode</em>) - 指定载具是否应以给定角度朝向目标（is_rate=False）或应以给定速率绕其轴线旋转（is_rate=True）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveByVelocityZAsync"></a><strong><font color="#7fb800">moveByVelocityZAsync</font></strong>(<font color="#00a6ed"><strong>vx, vy, vz, duration, drivetrain=0, yaw_mode=&lt;YawMode&gt; {   'is_rate': True, 'yaw_or_rate': 0.0}, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveByVelocityZBodyFrameAsync"></a><strong><font color="#7fb800">moveByVelocityZBodyFrameAsync</font></strong>(<font color="#00a6ed"><strong>vx, vy, z, duration, drivetrain=0, yaw_mode=&lt;YawMode&gt; {   'is_rate': True, 'yaw_or_rate': 0.0}, vehicle_name=''</strong></font>)</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>vx</code> (<em>float</em>) - 载具局部北东地坐标系中 X 轴方向的期望速度。</li>
+<li><code>vy</code> (<em>float</em>) - 载具局部北东地坐标系中 Y 轴方向的期望速度。</li>
+<li><code>z</code> (<em>float</em>) - 期望的 Z 值（在载具的局部北东地坐标系中）</li>
+<li><code>duration</code> (<em>float</em>) - 发送此命令所需的时间（秒）</li>
+<li><code>drivetrain</code> (<em>DrivetrainType</em>) - 当设置为 ForwardOnly 时，载具会旋转自身，使其车头始终朝向行驶方向。如果设置为 MaxDegreeOfFreedom，则不会进行此操作（载具会像螃蟹一样横着移动）。</li>
+<li><code>yaw_mode</code> (<em>YawMode</em>) - 指定载具是否应以给定角度朝向目标（is_rate=False）或应以给定速率绕其轴线旋转（is_rate=True）</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
+</ul>
+</li>
+<li>
+<p><a name="moveOnPathAsync"></a><strong><font color="#7fb800">moveOnPathAsync</font></strong>(<font color="#00a6ed"><strong>path, velocity, timeout_sec=3e+38, drivetrain=0, yaw_mode=&lt;YawMode&gt; {'is_rate': True, 'yaw_or_rate': 0.0}, lookahead=-1, adaptive_lookahead=1, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveToGPSAsync"></a><strong><font color="#7fb800">moveToGPSAsync</font></strong>(<font color="#00a6ed"><strong>latitude, longitude, altitude, velocity, timeout_sec=3e+38, drivetrain=0, yaw_mode=&lt;YawMode&gt; {'is_rate': True, 'yaw_or_rate': 0.0}, lookahead=-1, adaptive_lookahead=1, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveToPositionAsync"></a><strong><font color="#7fb800">moveToPositionAsync</font></strong>(<font color="#00a6ed"><strong>x, y, z, velocity, timeout_sec=3e+38, drivetrain=0, yaw_mode=&lt;YawMode&gt; {   'is_rate': True, 'yaw_or_rate': 0.0}, lookahead=-1, adaptive_lookahead=1, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="moveToZAsync"></a><strong><font color="#7fb800">moveToZAsync</font></strong>(<font color="#00a6ed"><strong>z, velocity, timeout_sec=3e+38, yaw_mode=&lt;YawMode&gt; { 'is_rate': True, 'yaw_or_rate': 0.0}, lookahead=-1, adaptive_lookahead=1, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="rotateByYawRateAsync"></a><strong><font color="#7fb800">rotateByYawRateAsync</font></strong>(<font color="#00a6ed"><strong>yaw_rate, duration, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="rotateToYawAsync"></a><strong><font color="#7fb800">rotateToYawAsync</font></strong>(<font color="#00a6ed"><strong>yaw, timeout_sec=3e+38, margin=5, vehicle_name=''</strong></font>)</p>
+</li>
+<li>
+<p><a name="setAngleLevelControllerGains"></a><strong><font color="#7fb800">setAngleLevelControllerGains</font></strong>(<font color="#00a6ed"><strong>angle_level_gains=<airsim.types.AngleLevelControllerGains object>, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>设置角度层次控制器增益（供任何设置角度引用的 API 使用 - 例如：moveByRollPitchYawZAsync()、moveByRollPitchYawThrottleAsync() 等）</li>
+<li><strong>修改这些增益也会影响 moveByVelocityAsync() API 的行为</strong>。这是因为 AirSim 飞行控制器会通过将速度设定点转换为角度设定点来跟踪速度设定点。</li>
+<li>仅当需要修改默认角度层次控制 PID 增益时才应调用此函数。</li>
+<li>传递 AngleLevelControllerGains() 参数会将增益设置为 Airsim 的默认值。</li>
+<li><strong>参数：</strong><ul>
+<li><code>angle_level_gains</code> (<em>AngleLevelControllerGains</em>) - 角度层次控制器增益。<ul>
+<li>与机体坐标系中定义的横滚轴、俯仰轴、偏航轴相对应。</li>
+<li>传递 AngleLevelControllerGains() 函数可将增益重置为默认推荐值。</li>
+</ul>
+</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a name="setAngleRateControllerGains"></a><strong><font color="#7fb800">setAngleRateControllerGains</font></strong>(<font color="#00a6ed"><strong>angle_rate_gains=<airsim.types.AngleRateControllerGains object>, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li><strong>警告:</strong> <font color="#ED2F2F"><em>修改这些增益将对所有 move*() API 产生影响。</em></font> 这是因为任何速度设定值都会被转换为角度设定值，然后由角度控制器跟踪该角度设定值。该角度设定值本身又由角度速率控制器跟踪。</li>
+<li>仅当需要修改默认角度速率控制 PID 增益时才应调用此函数。</li>
+<li><strong>参数：</strong><ul>
+<li><code>angle_rate_gains</code> (<em>AngleRateControllerGains</em>) - 角度速率控制器增益。<ul>
+<li>与机体坐标系中定义的横滚轴、俯仰轴、偏航轴相对应。</li>
+<li>传递 AngleRateControllerGains() 函数可将增益重置为默认推荐值。</li>
+</ul>
+</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a name="setPositionControllerGains"></a><strong><font color="#7fb800">setPositionControllerGains</font></strong>(<font color="#00a6ed"><strong>position_gains=<airsim.types.PositionControllerGains object>, vehicle_name=''</strong></font>)<br />
+    设置 moveByPositionAsync 的位置控制器增益。仅当需要修改默认位置控制 PID 增益时才应调用此函数。</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>position_gains</code> (<em>PositionControllerGains</em>) - 位置控制器增益。<ul>
+<li>分别对应 X、Y、Z 轴。</li>
+<li>传递 PositionControllerGains() 函数可将增益重置为默认推荐值。</li>
+</ul>
+</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a name="setVelocityControllerGains"></a><strong><font color="#7fb800">setVelocityControllerGains</font></strong>(<font color="#00a6ed"><strong>velocity_gains=<airsim.types.VelocityControllerGains object>, vehicle_name=''</strong></font>)  </p>
+<ul>
+<li>设置 moveByVelocityAsync() 的速度控制器增益。</li>
+<li>只有在需要修改默认速度控制 PID 增益时才应调用此函数。</li>
+<li>传递 VelocityControllerGains() 参数会将增益设置为默认的 airsim 值。</li>
+<li><strong>参数：</strong><ul>
+<li><code>velocity_gains</code> (<em>VelocityControllerGains</em>) - 速度控制器增益。<ul>
+<li>分别对应 X、Y、Z 轴。</li>
+<li>传递 VelocityControllerGains() 函数可将增益重置为默认推荐值。</li>
+<li>修改速度控制器增益会对 moveOnSplineAsync() 和 moveOnSplineVelConstraintsAsync() 的行为产生影响，因为它们都使用速度控制来跟踪轨迹。</li>
+</ul>
+</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a name="takeoffAsync"></a><strong><font color="#7fb800">takeoffAsync</font></strong>(<font color="#00a6ed"><strong>timeout_sec=20, vehicle_name=''</strong></font>)<br />
+    将载具起飞至离地 3 米处。使用此 API 时，载具不应处于移动状态。</p>
+<ul>
+<li><strong>参数：</strong><ul>
+<li><code>timeout_sec</code> (<em>int, optional</em>) - 载具达到所需高度的超时时间</li>
+<li><code>vehicle_name</code> (<em>str, optional</em>) - 要向其发送此命令的多旋翼无人机的名称</li>
+</ul>
+</li>
+<li><strong>返回:</strong> <em>msgpackrpc.future.Future</em> - 使用 future.call.join() 等待方法执行完毕。例如：client.METHOD().join()</li>
 </ul>
 </li>
 </ul>
