@@ -276,14 +276,40 @@ twine<span class="w"> </span>upload<span class="w"> </span>dist/*<span class="w"
 <h3 id="gitee">发布到gitee</h3>
 <p><a href="../dev/gitee/">解决上传出熬过100M大文件的问题</a> 。</p>
 <h3 id="huggingface">发布到 huggingface</h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># 添加远程仓库链接</span>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># 添加远程仓库链接</span>
 git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>huggingface<span class="w"> </span>https://huggingface.co/datasets/OpenHUTB/Content.git
 git<span class="w"> </span>push<span class="w"> </span>huggingface
 <span class="c1"># 配置 Token</span>
 python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span><span class="s2">&quot;huggingface_hub[cli]&quot;</span>
 huggingface-cli<span class="w"> </span>login
 </code></pre></div>
-<h2 id="_11">问题</h2>
+注意：不能使用用户名密码进行推送，配置Token方法：
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>xet<span class="w"> </span>install
+git<span class="w"> </span>clone<span class="w"> </span>https://huggingface.co/datasets/OpenHUTB/hutb
+git<span class="w"> </span>add<span class="w"> </span>hutb.zip
+<span class="c1"># git lfs ls-files</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;init&quot;</span>
+git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w">  </span>https://OpenHUTB:&lt;token&gt;@huggingface.co/datasets/OpenHUTB/hutb
+<span class="c1"># git remote set-url origin https://&lt;user_name&gt;:&lt;token&gt;@huggingface.co/&lt;repo_path&gt;</span>
+git<span class="w"> </span>push
+</code></pre></div></p>
+<h3 id="_11"><a href="https://blog.csdn.net/csdn_ad986ad/article/details/135417415">发布到微软商城</a></h3>
+<ol>
+<li>
+<p>打开操作系统的 <a href="https://blog.csdn.net/2301_77171572/article/details/146528815">开发者选项</a> 。</p>
+</li>
+<li>
+<p>双击安装<code>.pfx</code>证书，必须放入<code>本地计算机</code>（而不是<code>当前用户</code>）的“受信任的根证书颁发机构”，然后选择<code>将所有的证书都放入下列存储(P)</code>-&gt;<code>受信任的根证书颁发机构</code>。</p>
+</li>
+</ol>
+<p>确认 makeappx.exe 是否存在，比如：
+<div class="highlight"><pre><span></span><code>C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64
+</code></pre></div></p>
+<p>问题：
+<div class="highlight"><pre><span></span><code>包 URL 应以 https:// 开头，并且应指向版本控制、可下载的包。
+</code></pre></div></p>
+<p><a href="https://www.cnblogs.com/oboth-zl/p/17638705.html">使用MSIX Packaging Tool工具修改msix程序包</a></p>
+<h2 id="_12">问题</h2>
 <p>点击打包后的文件出现错误：
 <div class="highlight"><pre><span></span><code>TypeError: expected str, bytes or os.PathLike object, not _io.BytesIO
 </code></pre></div>
@@ -291,7 +317,7 @@ huggingface-cli<span class="w"> </span>login
 <div class="highlight"><pre><span></span><code><span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">get_default_font</span><span class="p">(),</span> <span class="mi">20</span><span class="p">)</span>
 </code></pre></div>
 获得的字体文件为<code>freesansbold.ttf</code>，最后将字体文件拷贝到和exe文件相同的路径，然后执行即可。</p>
-<h2 id="_12">参考</h2>
+<h2 id="_13">参考</h2>
 <ul>
 <li><a href="https://natapp.cn/article/config_ini">内网穿透</a></li>
 <li><a href="https://stackoverflow.com/questions/79791079/twine-error-with-recent-setuptools-build-but-previous-ones-fine-invaliddistribu">元数据检查</a></li>
