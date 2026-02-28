@@ -300,6 +300,17 @@ export PYTHONPATH=$PYTHONPATH:${CARLA_ROOT}/PythonAPI/carla
 <h2 id="windows_1">Windows 构建</h2>
 <!-- ======================================================================= -->
 
+<h6 id="error-systemargumentexception-staged-filesystem-reference-may-not-start-with-a-path-separator-or-contain-an-empty-path-fragment-carlaue4contentgameroadrunnermapopendrive">打包报错：ERROR: System.ArgumentException: Staged filesystem reference may not start with a path separator or contain an empty path fragment (CarlaUE4/Content//Game/roadrunner/map/OpenDrive)</h6>
+<p>解决：原始的 <code>DefaultGame.ini</code>为：
+<div class="highlight"><pre><span></span><code>+DirectoriesToAlwaysStageAsUFS=(Path=&quot;/Game/roadrunner/map/OpenDrive&quot;)
+</code></pre></div>
+前面不能以<code>/Game/</code>开头，直接以目录开头，和<code>+DirectoriesToAlwaysCook</code>不同。</p>
+<p>报错信息：
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+2026-02-28T00:46:51.4815772Z   LogPackageName: Error: DoesPackageExist: DoesPackageExist FAILED: '/RoadRunnerMaterials/BaseMaterial' is not a standard unreal filename or a long path name. Reason: ????????????????'/Engine/', '/Game/', '/Paper2D/', '/AnimationSharing/', '/GeometryMode/', '/Niagara/', '/ChaosSolverPlugin/', '/ChaosClothEditor/', '/SpeedTreeImporter/', '/ChaosNiagara/', '/GeometryCollectionPlugin/', '/GeometryProcessing/', '/DatasmithContent/', '/MotoSynth/', '/PythonScriptPlugin/', '/MediaCompositing/', '/PixelStreaming/', '/AudioSynesthesia/', '/HairStrands/', '/PostSplashScreen/', '/Synthesis/', '/MagicLeap/', '/MagicLeapPassableWorld/', '/SteamVR/', '/AirSim/', '/Carla/', '/CarlaTools/', '/StreetMap/', '/Config/', '/Script/', '/Extra/', '/Memory/', or '/Temp/'??
+<div class="highlight"><pre><span></span><code>
+</code></pre></div></p>
 <h6 id="osm2odr-unknown-error-0x80092012-">下载 osm2odr 报错：Unknown error (0x80092012) - 吊销功能无法检查证书是否吊销</h6>
 <div class="highlight"><pre><span></span><code><span class="c1"># 添加 --ssl-no-revoke 参数</span>
 curl<span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>--retry-max-time<span class="w"> </span>--ssl-no-revoke<span class="w"> </span><span class="m">120</span><span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>OSM2ODR.zip<span class="w"> </span>https://github.com/carla-simulator/sumo/archive/%CURRENT_OSM2ODR_COMMIT%.zip
