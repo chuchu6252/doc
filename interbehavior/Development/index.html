@@ -143,31 +143,31 @@ Done<span class="w"> </span>Reverse<span class="w"> </span>Install!
 <p><br></p>
 <p>请注意，复制回 DReyeVR 的文件遵循 <a href="../Scripts/Paths/"><code>Paths/*.csv</code></a> 中定义的 DReyeVR &lt;--&gt; Carla 文件对应关系，因此，如果您修改了一个全新的文件（DReyeVR 未跟踪的文件），则需要手动将该文件添加到 DReyeVR 存储库并更新对应关系文件 (.csv)。</p>
 <h2 id="_3">典型工作流程</h2>
-<p>The workflow we have designed for our development process on DReyeVR includes using our fork of carla (<code>DReyeVR-0.9.13</code> branch) alongside a cloned <code>DReyeVR</code> repo that we can use to both push and pull from upstream.</p>
+<p>我们在 DReyeVR 上设计的开发流程包括使用我们 fork 的 carla（<code>DReyeVR-0.9.13</code> 分支）以及一个克隆的 <code>DReyeVR</code> 仓库，我们可以使用该仓库从上游推送和拉取代码。</p>
 <details>
 
-<summary>Click to open terminal example</summary>
+<summary>点击打开终端命令示例</summary>
 
 <div class="highlight"><pre><span></span><code>&gt;<span class="w"> </span>ls
-carla.harp/<span class="w">    </span><span class="c1"># our HarpLab fork for primary development</span>
-DReyeVR<span class="w">        </span><span class="c1"># our DReyeVR installation</span>
+carla.harp/<span class="w">    </span><span class="c1"># 我们为主要开发项目创建了 HarpLab 分支</span>
+DReyeVR<span class="w">        </span><span class="c1"># 我们的 DReyeVR 安装</span>
 
 <span class="nb">cd</span><span class="w"> </span>carla.harp
-...<span class="w"> </span><span class="c1"># make some changes in carla.harp</span>
-make<span class="w"> </span>launch<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>package<span class="w"> </span><span class="c1"># ensure carla still works with these changes</span>
+...<span class="w"> </span><span class="c1"># 对 carla.harp 进行一些更改</span>
+make<span class="w"> </span>launch<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>package<span class="w"> </span><span class="c1"># 确保 carla 在这些变化后仍然能够正常工作</span>
 
 <span class="nb">cd</span><span class="w"> </span>../DReyeVR
 make<span class="w"> </span>rev<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla.harp<span class="w"> </span><span class="c1"># &quot;reverse-install&quot; changes from carla.harp to DReyeVR</span>
 git<span class="w"> </span>stuff<span class="w"> </span><span class="c1"># do all sorts of upstreaming and whatnot.</span>
 
------------------<span class="w"> </span><span class="c1"># if changes have been made upstream for you to install</span>
+-----------------<span class="w"> </span><span class="c1"># 如果上游已进行更改，则需要您进行安装。</span>
 <span class="nb">cd</span><span class="w"> </span>DReyeVR/
-git<span class="w"> </span>pull<span class="w"> </span><span class="c1"># upstream changes</span>
-make<span class="w"> </span>clean<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla.harp<span class="w">   </span><span class="c1"># optional to reset carla.harp to a clean git state</span>
-make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla.harp<span class="w"> </span><span class="c1"># install new DReyeVR changes over it</span>
+git<span class="w"> </span>pull<span class="w"> </span><span class="c1"># 上游变化</span>
+make<span class="w"> </span>clean<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla.harp<span class="w">   </span><span class="c1"># （可选）将 carla.harp 重置为干净的 git 状态</span>
+make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla.harp<span class="w"> </span><span class="c1"># 安装新的 DReyeVR 更改</span>
 <span class="nb">cd</span><span class="w"> </span>../carla.harp<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>launch<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>package<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>etc.
 
-<span class="c1"># optionally, you can keep a carla.vanilla around to test that a fresh install of your updated DReyeVR repo works on carla</span>
+<span class="c1"># 您也可以选择保留一个 carla.vanilla 文件，以便测试您更新后的 DReyeVR 仓库的全新安装是否能在 carla 上运行。</span>
 make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARLA</span><span class="o">=</span>../carla.vanilla
 </code></pre></div>
 
@@ -255,18 +255,18 @@ make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARL
 <ul>
 <li>相关： <a href="../DReyeVR/DReyeVRFactory.h">DReyeVRFactory.h</a>, <a href="../DReyeVR/DReyeVRFactory.cpp">DReyeVRFactory.cpp</a></li>
 </ul>
-<p>Carla uses Factories to spawn all their relevent actors (See <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Actor/CarlaActorFactory.h"><code>CarlaActorFactory</code></a>, <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Actor/CarlaActorFactoryBlueprint.h"><code>CarlaActorFactoryBlueprint</code></a>, <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/SensorFactory.h"><code>SensorFactory</code></a>, etc.) which spawn everything from vehicles to pedestrians to sensors and props. This design allows Carla to handle all the dirty work of registering the actors with LibCarla so that LibCarla knows about each actor and they can be interacted with in Python. </p>
-<p>We follow suit with a similar design in our <code>DReyeVRFactory</code> which defines the important characteristics for our DReyeVR actors and provides the logic necessary to spawn them. For instance, here we define our actors are labeled uniquely such as <code>"harplab.dreyevr_vehicle.model3"</code> to avoid conflict with existing Carla <code>"vehicle.*"</code> queries. </p>
-<p>This is class you'll want to modify if you're looking to create new DReyeVR actors (such as new vehicle models), walkers, sensors, etc. </p>
+<p>Carla 使用工厂（Factory）来生成所有相关的 Actor（参见 <a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Actor/CarlaActorFactory.h"><code>CarlaActorFactory</code></a>、<a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Actor/CarlaActorFactoryBlueprint.h"><code>CarlaActorFactoryBlueprint</code></a>、<a href="https://github.com/carla-simulator/carla/blob/master/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/SensorFactory.h"><code>SensorFactory</code></a> 等），这些 Actor 可以生成从车辆、行人到传感器和道具等各种对象。这种设计使得 Carla 能够处理向 LibCarla 注册 Actor 的所有繁琐工作，从而使 LibCarla 能够识别每个 Actor，并允许在 Python 中与它们进行交互。</p>
+<p>我们在 <code>DReyeVRFactory</code> 中采用了类似的设计，它定义了 DReyeVR 参与者的重要特征，并提供了生成这些参与者所需的逻辑。例如，我们为角色定义了唯一的标签，例如<code>"harplab.dreyevr_vehicle.model3"</code>，以避免与现有的 Carla <code>"vehicle.*"</code> 查询冲突。</p>
+<p>如果您想创建新的 DReyeVR 参与者（例如新的车辆模型）、步行者、传感器等，则需要修改此类。</p>
 <hr />
 <h1 id="ego-sensor">向自我传感器(ego-sensor)添加自定义数据</h1>
-<p>While we provide a fairly comprehensive suite of data in our DReyeVRSensor, you may be interested in also tracking other data that we don't currently enable. </p>
-<p>The first file you'll want to look at is <code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/</code><a href="../Carla/Sensor/DReyeVRData.h"><code>DReyeVRData.h</code></a> which contains the data structures that compose the contents of the ego sensor. Here you'll define the variable and its serialization methods (read/write/print). </p>
+<p>虽然我们的 DReyeVRSensor 提供了一套相当全面的数据，但您可能也有兴趣跟踪我们目前尚未启用的其他数据。</p>
+<p>首先要查看的文件是 <code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/</code><a href="../Carla/Sensor/DReyeVRData.h"><code>DReyeVRData.h</code></a> ，其中包含构成自我传感器内容的数据结构。在这里，您需要定义变量及其序列化方法（读/写/打印）。</p>
 <div class="highlight"><pre><span></span><code><span class="c1">/// DReyeVRData.h</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">AggregateData</span><span class="w"> </span><span class="c1">// all DReyeVR sensor data is held here</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AggregateData</span><span class="w"> </span><span class="c1">// 所有 DReyeVR 传感器数据都保存在这里。</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">GetNewVariable</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 <span class="w">    </span><span class="c1">////////////////////:SETTERS://////////////////////</span>
 
@@ -278,15 +278,15 @@ make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARL
 
 <span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">Write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="w"> </span><span class="o">&amp;</span><span class="n">OutFile</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
 
-<span class="w">    </span><span class="n">FString</span><span class="w"> </span><span class="nf">ToString</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"> </span><span class="c1">// this printing is used when showing recorder info</span>
+<span class="w">    </span><span class="n">FString</span><span class="w"> </span><span class="nf">ToString</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"> </span><span class="c1">// 此打印方式用于显示记录器信息</span>
 
 <span class="k">private</span><span class="o">:</span>
 <span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
-<span class="kt">float</span><span class="w"> </span><span class="n">NewVariable</span><span class="p">;</span><span class="w"> </span><span class="c1">// &lt;-- Your new variable</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">NewVariable</span><span class="p">;</span><span class="w"> </span><span class="c1">// &lt;-- 新变量</span>
 <span class="p">};</span>
 </code></pre></div>
-<p>Then, you'll want to write the implementation in <code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/</code><a href="../Carla/Sensor/DReyeVRData.cpp"><code>DReyeVRData.cpp</code></a> as inline funcitons. 
-<div class="highlight"><pre><span></span><code><span class="c1">/// DReyeVRData.cpp</span>
+<p>然后，您需要将实现代码编写为 <code>Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/</code><a href="../Carla/Sensor/DReyeVRData.cpp"><code>DReyeVRData.cpp</code></a> 中的内联函数。</p>
+<p><div class="highlight"><pre><span></span><code><span class="c1">/// DReyeVRData.cpp</span>
 <span class="p">...</span>
 <span class="kt">float</span><span class="w"> </span><span class="n">AggregateData</span><span class="o">::</span><span class="n">GetNewVariable</span><span class="p">()</span><span class="w"> </span><span class="k">const</span>
 <span class="p">{</span>
@@ -301,75 +301,75 @@ make<span class="w"> </span>install<span class="w"> </span><span class="nv">CARL
 
 <span class="kt">void</span><span class="w"> </span><span class="n">AggregateData</span><span class="o">::</span><span class="n">Read</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="w"> </span><span class="o">&amp;</span><span class="n">InFile</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="c1">/// CAUTION: make sure the order of writes/reads is the same</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">    </span><span class="c1">/// CAUTION: 确保读写操作的顺序相同</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">    </span><span class="n">ReadValue</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">InFile</span><span class="p">,</span><span class="w"> </span><span class="n">NewVariable</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="n">AggregateData</span><span class="o">::</span><span class="n">Write</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="w"> </span><span class="o">&amp;</span><span class="n">OutFile</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="c1">/// CAUTION: make sure the order of writes/reads is the same</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">    </span><span class="c1">/// CAUTION: 确保读写操作的顺序相同</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">    </span><span class="n">WriteValue</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">OutFile</span><span class="p">,</span><span class="w"> </span><span class="n">GetNewVariable</span><span class="p">());</span>
 <span class="p">}</span>
 
-<span class="n">FString</span><span class="w"> </span><span class="n">AggregateData</span><span class="o">::</span><span class="n">ToString</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="c1">// this printing is used when showing recorder info</span>
+<span class="n">FString</span><span class="w"> </span><span class="n">AggregateData</span><span class="o">::</span><span class="n">ToString</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="c1">// 此打印方式用于显示记录器信息</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="n">FString</span><span class="w"> </span><span class="n">print</span><span class="p">;</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">    </span><span class="n">print</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">FString</span><span class="o">::</span><span class="n">Printf</span><span class="p">(</span><span class="n">TEXT</span><span class="p">(</span><span class="s">&quot;[DReyeVR]NewVariable:%.3f,</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">GetNewVariable</span><span class="p">());</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">print</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="p">...</span>
 </code></pre></div>
-Notes:
-- It is nice to contain collections of relevant variables together in structures so they can be better organized. To facilitate this we designed our DReyeVRData to contain various <code>DReyeVR::DataSerializer</code> objects, which each implement their own serialization methods. Our  <code>AggregateData</code> instance contains all our structs and a lightweight API to access member variables. 
-- The above is an example of modifying/adding a new variable directly to a <code>DReyeVR::AggregateData</code>. But it would be better to either modify an existing <code>DReyeVR::DReyeVRSerializer</code> object or create a new one (inheriting from the virtual class) and define all the abstract methods yourself. This enables a more granular sub-class/struct abstraction like most of our variables.</p>
-<p>With this step complete, you are free to read/write to this variable by getting the single global (<code>static</code>) instance of the <code>DReyeVR::AggregateData</code> class using the <code>GetData()</code> function of the EgoSensor as follows:
-<div class="highlight"><pre><span></span><code><span class="c1">// In some other file, for example EgoVehicle.cpp:</span>
+注意：
+- 将相关的变量集合放在结构体中便于更好地组织。为此，我们将 DReyeVRData 设计为包含多个 <code>DReyeVR::DataSerializer</code> 对象，每个对象都实现了各自的序列化方法。我们的 <code>AggregateData</code> 实例包含了所有结构体以及一个用于访问成员变量的轻量级 API。 
+- 以上示例展示了如何直接修改/添加新变量到 <code>DReyeVR::AggregateData</code> 对象。但更好的做法是修改现有的 <code>DReyeVR::DReyeVRSerializer</code> 对象，或者创建一个新的对象（继承自虚类），并自行定义所有抽象方法。这样可以实现更细粒度的子类/结构体抽象，就像我们大多数变量那样。</p>
+<p>完成此步骤后，您可以通过使用 EgoSensor 的 <code>GetData()</code> 函数获取 <code>DReyeVR::AggregateData</code> 类的唯一全局（静态<code>static</code>）实例来自由读取/写入此变量，如下所示：</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// 例如，在其他文件中，例如 EgoVehicle.cpp：</span>
 <span class="kt">float</span><span class="w"> </span><span class="n">NewVariable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EgoSensor</span><span class="o">-&gt;</span><span class="n">GetData</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetNewVariable</span><span class="p">();</span>
-<span class="p">...</span><span class="w"> </span><span class="c1">// your code</span>
-<span class="n">EgoSensor</span><span class="o">-&gt;</span><span class="n">GetData</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetNewVariable</span><span class="p">(</span><span class="n">NewVariable</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">5.f</span><span class="p">);</span><span class="w"> </span><span class="c1">// update the new variable</span>
-</code></pre></div></p>
+<span class="p">...</span><span class="w"> </span><span class="c1">// 你的代码</span>
+<span class="n">EgoSensor</span><span class="o">-&gt;</span><span class="n">GetData</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetNewVariable</span><span class="p">(</span><span class="n">NewVariable</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">5.f</span><span class="p">);</span><span class="w"> </span><span class="c1">// 更新新变量</span>
+</code></pre></div>
 <h2 id="pythonapi">[可选] 向 PythonAPI 客户端传输数据：</h2>
-<p>In order to see the new data from a PythonAPI client, you'll need to duplicate the code to the LibCarla serializer. This requires looking at <code>LibCarla/Sensor/s11n/</code><a href="../LibCarla/Sensor/s11n/DReyeVRSerializer.h"><code>DReyeVRSerializer.h</code></a> and following the same template as all the other variables:
-<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DReyeVRSerializer</span>
+<p>要从 PythonAPI 客户端查看新数据，您需要将代码复制到 LibCarla 序列化器中。这需要查看  <code>LibCarla/Sensor/s11n/</code><a href="../LibCarla/Sensor/s11n/DReyeVRSerializer.h"><code>DReyeVRSerializer.h</code></a> 文件，并遵循与其他变量相同的模板：</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DReyeVRSerializer</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="o">:</span>
 <span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Data</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">        </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">        </span><span class="kt">float</span><span class="w"> </span><span class="n">NewVariable</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">MSGPACK_DEFINE_ARRAY</span><span class="p">(</span>
-<span class="w">        </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
-<span class="w">        </span><span class="n">NewVariable</span><span class="p">,</span><span class="w"> </span><span class="c1">// &lt;-- New variable</span>
+<span class="w">        </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
+<span class="w">        </span><span class="n">NewVariable</span><span class="p">,</span><span class="w"> </span><span class="c1">// &lt;-- 新变量</span>
 <span class="w">        </span><span class="p">)</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">};</span>
-<span class="c1">///NOTE: you&#39;ll also need to interface with this updated struct:</span>
+<span class="c1">///注意：您还需要与这个更新后的结构体进行交互：</span>
 </code></pre></div>
-Then, to actually interface with the DReyeVR sensor, you'll need to modify the call to the LibCarla stream to include your <code>NewVariable</code>.
+然后，要真正与 DReyeVR 传感器进行交互，您需要修改对 LibCarla 流的调用，以包含您的 <code>NewVariable</code>。
 <div class="highlight"><pre><span></span><code><span class="c1">// in Carla/Sensor/DReyeVRSensor.cpp</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">ADReyeVRSensor::PostPhysTick</span><span class="p">(</span><span class="n">UWorld</span><span class="w"> </span><span class="o">*</span><span class="n">W</span><span class="p">,</span><span class="w"> </span><span class="n">ELevelTick</span><span class="w"> </span><span class="n">TickType</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">DeltaSeconds</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">    </span><span class="n">Stream</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">,</span>
 <span class="w">                </span><span class="n">carla</span><span class="o">::</span><span class="n">sensor</span><span class="o">::</span><span class="n">s11n</span><span class="o">::</span><span class="n">DReyeVRSerializer</span><span class="o">::</span><span class="n">Data</span><span class="p">{</span>
-<span class="w">                    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
-<span class="w">                    </span><span class="n">Data</span><span class="o">-&gt;</span><span class="n">GetNewVariable</span><span class="p">(),</span><span class="w"> </span><span class="c1">// &lt;-- New variable</span>
+<span class="w">                    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
+<span class="w">                    </span><span class="n">Data</span><span class="o">-&gt;</span><span class="n">GetNewVariable</span><span class="p">(),</span><span class="w"> </span><span class="c1">// &lt;-- 新变量</span>
 <span class="w">                </span><span class="p">});</span>
 <span class="p">}</span><span class="w"> </span>
 </code></pre></div>
-And finally, to actually get the data from a PythonAPI call, you'll need to modify the list of available attributes to the DReyeVR sensor object as follows:
+最后，要实际从 PythonAPI 调用中获取数据，您需要按如下方式修改 DReyeVR 传感器对象的可用属性列表：
 <div class="highlight"><pre><span></span><code><span class="c1">// in LibCarla/source/carla/sensor/data/DReyeVREvent.h</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DReyeVREvent</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">SensorData</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="p">...</span>
 
 <span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
-<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">GetNewVariable</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="c1">// &lt;-- new code</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">GetNewVariable</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="c1">// &lt;-- 新代码</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">InternalData</span><span class="p">.</span><span class="n">NewVariable</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
@@ -378,24 +378,24 @@ And finally, to actually get the data from a PythonAPI call, you'll need to modi
 <span class="w">    </span><span class="n">carla</span><span class="o">::</span><span class="n">sensor</span><span class="o">::</span><span class="n">s11n</span><span class="o">::</span><span class="n">DReyeVRSerializer</span><span class="o">::</span><span class="n">Data</span><span class="w"> </span><span class="n">InternalData</span><span class="p">;</span>
 <span class="p">};</span>
 </code></pre></div>
-Then finally here you'll define what function to call (the variable getter) to get that data from a PythonAPI client. 
+最后，在这里您将定义要调用哪个函数（变量获取器）来从 PythonAPI 客户端获取数据。
 <div class="highlight"><pre><span></span><code><span class="c1">// in PythonAPI/carla/source/libcarla/SensorData.cpp</span>
 <span class="n">class_</span><span class="o">&lt;</span><span class="n">csd</span><span class="o">::</span><span class="n">DReyeVREvent</span><span class="p">,</span><span class="w"> </span><span class="n">bases</span><span class="o">&lt;</span><span class="n">cs</span><span class="o">::</span><span class="n">SensorData</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">boost</span><span class="o">::</span><span class="n">noncopyable</span><span class="p">,</span><span class="w"> </span><span class="n">boost</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">csd</span><span class="o">::</span><span class="n">DReyeVREvent</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="s">&quot;DReyeVREvent&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">no_init</span><span class="p">)</span>
-<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// existing code</span>
+<span class="w">    </span><span class="p">...</span><span class="w"> </span><span class="c1">// 现有代码</span>
 <span class="w">    </span><span class="p">.</span><span class="n">add_property</span><span class="p">(</span><span class="s">&quot;new_variable&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CALL_RETURNING_COPY</span><span class="p">(</span><span class="n">csd</span><span class="o">::</span><span class="n">DReyeVREvent</span><span class="p">,</span><span class="w"> </span><span class="n">GetNewVariable</span><span class="p">))</span>
 <span class="w">    </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="n">self_ns</span><span class="o">::</span><span class="n">str</span><span class="p">(</span><span class="n">self_ns</span><span class="o">::</span><span class="n">self</span><span class="p">))</span>
 <span class="p">;</span>
 </code></pre></div>
-After you modify files in <code>PythonAPI</code> or <code>LibCarla</code> the PythonAPI will need to be rebuilt in order for your changes to take effect:
-<div class="highlight"><pre><span></span><code>conda<span class="w"> </span>activate<span class="w"> </span>carla13<span class="w"> </span><span class="c1"># if using conda</span>
+修改 <code>PythonAPI</code> 或 <code>LibCarla</code> 中的文件后，需要重新构建 PythonAPI 才能使更改生效：
+<div class="highlight"><pre><span></span><code>conda<span class="w"> </span>activate<span class="w"> </span>carla13<span class="w"> </span><span class="c1"># 如果使用 conda</span>
 <span class="o">(</span>carla13<span class="o">)</span><span class="w"> </span>make<span class="w"> </span>PythonAPI
-<span class="c1"># make sure to fix any build errors that may occur!</span>
+<span class="c1"># 请务必修复可能出现的任何构建错误！</span>
 </code></pre></div></p>
 <h1 id="todo">TODO: 添加更多开发笔记</h1>
 <h1 id="_6">技巧与诀窍</h1>
 <h2 id="1">1. 启用交付模式下的日志记录</h2>
-<p>It is super useful to see the CarlaUE4.log file in shipping mode and this is not the default in Carla (or Unreal) perhaps for performance reasons?</p>
-<p>If you want to enable these features then you'll need to add the flag for <code>bUseLoggingInShipping</code> in the <code>Carla/Unreal/CarlaUE4/Source/CarlaUE4.Target.cs</code> file.</p>
+<p>在发布模式下查看 CarlaUE4.log 文件非常有用，但这可能是出于性能方面的考虑，Carla（或 Unreal）默认不会这样做？</p>
+<p>如果你想启用这些功能，那么你需要在 <code>Carla/Unreal/CarlaUE4/Source/CarlaUE4.Target.cs</code> 文件中添加 <code>bUseLoggingInShipping</code> 标志。</p>
 <div class="highlight"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CarlaUE4Target</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">TargetRules</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">CarlaUE4Target</span><span class="p">(</span><span class="n">TargetInfo</span><span class="w"> </span><span class="n">Target</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="n">Target</span><span class="p">)</span>
@@ -406,18 +406,18 @@ After you modify files in <code>PythonAPI</code> or <code>LibCarla</code> the Py
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Then you should be able to find the CarlaUE4.log files (timestamped to avoid overwrite) at <code>C:\Users\%YOUR_USER_NAME%\AppData\Local\CarlaUE4\Saved\Logs\CarlaUE4.log</code> (on Windows). Also works for Mac/Linux. See <a href="https://forums.unrealengine.com/t/how-to-debug-shipping-build-exclusive-crash/411138">this</a> for more information.</p>
+<p>然后您应该可以在 <code>C:\Users\%YOUR_USER_NAME%\AppData\Local\CarlaUE4\Saved\Logs\CarlaUE4.log</code> 找到 CarlaUE4.log 文件（已添加时间戳以避免覆盖）（Windows 系统）。此方法也适用于 Mac/Linux 系统。更多信息请参见 <a href="https://forums.unrealengine.com/t/how-to-debug-shipping-build-exclusive-crash/411138">此处</a> 。</p>
 <hr />
 <h2 id="2-log">2. 如何执行 <code>LOG</code></h2>
-<p>Logging is useful to track code logic and debug (especially since debugging UE4 code can be a bit rough). By default in Unreal C++ you can always use <code>UE_LOG(LogTemp, Log, TEXT("some text and %d here"), 55);</code> but we streamlined this for DReyeVR specific logging. You can use our <code>LOG</code> macros (defined in <a href="../CarlaUE4/CarlaUE4.h"><code>CarlaUE4.h</code></a>) when you are editing <code>CarlaUE4/DReyeVR/*.[cpp|h]</code> files.</p>
-<p>The main benefits include:
-- Less boilerplate code for the programmer (thats you!)
-- All logs have the prefix <code>DReyeVRLog</code> so they are easy to filter in the overall <code>CarlaUE4.log</code> file
-- We also attached neat compile-time prefixes to include <code>"[{INVOKED_FILE}::{INVOKED_FUNCTION}:{LINE_NUMBER}] {message}"</code> so you can quickly find where this log was invoked from and differentiate from others
-    - A typical DReyeVR log using our macros looks like this:
+<p>日志记录对于跟踪代码逻辑和调试非常有用（尤其是在调试 UE4 代码时，调试起来可能比较棘手）。在 Unreal C++ 中，您始终可以使用 <code>UE_LOG(LogTemp, Log, TEXT("some text and %d here"), 55);</code>，但我们针对 DReyeVR 的日志记录进行了简化。您可以在编辑 <code>CarlaUE4/DReyeVR/*.[cpp|h]</code> 文件时使用我们的 <code>LOG</code> 宏（定义在 <a href="../CarlaUE4/CarlaUE4.h"><code>CarlaUE4.h</code></a> 中）。</p>
+<p>主要优势包括：
+- 减少程序员（也就是你！）需要编写的样板代码！
+- 所有日志都以 <code>DReyeVRLog</code> 为前缀，因此可以轻松地在 <code>CarlaUE4.log</code> 文件中进行筛选。
+- 我们还添加了清晰的编译时前缀，例如<code>"[{INVOKED_FILE}::{INVOKED_FUNCTION}:{LINE_NUMBER}] {message}"</code>，以便您可以快速找到此日志的调用位置并将其与其他日志区分开来。 
+    - 使用我们宏生成的典型 DReyeVR 日志如下所示：
         <div class="highlight"><pre><span></span><code>LogDReyeVR: [DReyeVRUtils.h::ReadConfigValue:141] &quot;your message here&quot;
 </code></pre></div></p>
-<div class="highlight"><pre><span></span><code><span class="p">...</span><span class="w"> </span><span class="c1">// in CarlaUE4/DReyeVR files</span>
+<div class="highlight"><pre><span></span><code><span class="p">...</span><span class="w"> </span><span class="c1">// 在 CarlaUE4/DReyeVR 文件中</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">example</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">LOG</span><span class="p">(</span><span class="s">&quot;some text and %d (this text is grey)&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">55</span><span class="p">);</span>
 <span class="w">    </span><span class="n">FString</span><span class="w"> </span><span class="n">warning_str</span><span class="p">(</span><span class="s">&quot;warning&quot;</span><span class="p">);</span>
@@ -426,12 +426,12 @@ After you modify files in <code>PythonAPI</code> or <code>LibCarla</code> the Py
 <span class="p">}</span>
 <span class="p">...</span>
 </code></pre></div>
-<p>If you are working instead in the <code>CarlaUE4/Plugins/Source/Carla</code> codebase then you'll be able to use similar macros but prefixed with <code>DReyeVR_</code>: <code>DReyeVR_LOG("blah blah")</code>, <code>DReyeVR_LOG_WARN("blah blah warning")</code>, etc. </p>
+<p>如果您使用的是 <code>CarlaUE4/Plugins/Source/Carla</code> 代码库，则可以使用类似的宏，但要加上 <code>DReyeVR_</code> 前缀：<code>DReyeVR_</code>: <code>DReyeVR_LOG("blah blah")</code>、<code>DReyeVR_LOG_WARN("blah blah warning")</code> 等。</p>
 <hr />
 <h2 id="3-carladreyevr">3. 管理多个 Carla/DReyeVR 版本</h2>
 <ul>
-<li>Having separate <code>python</code> environments (such as <code>conda</code>) is extremely useful to have different <code>carla</code> Python packages on the same machine with different versions (such as <code>LibCarla</code>). To do this, you can simply create an individual conda environment for each Carla version as described in <a href="../Install/"><code>Install.md</code></a>. Remember to activate your new <code>conda</code> environment on a per-shell basis!</li>
-<li>If you plan on having multiple CARLA's installed, you'll need to keep them updated with the appropriate <code>Content</code>. Rather than calling the <code>Update</code> script every time to update this, you can save the <code>Content.tar.gz</code> file and copy it into new <code>Unreal/CarlaUE4/Content/Carla</code> directories whenever you have a new repo.</li>
+<li>使用独立的 <code>python</code> 环境（例如 <code>conda</code>）对于在同一台机器上运行不同版本的 Carla Python 包（例如 <code>LibCarla</code>）非常有用。为此，您可以按照 <a href="../Install/"><code>Install.md</code></a> 中的说明，为每个 Carla 版本创建一个单独的 conda 环境。请记住，需要针对每个 shell 激活新的 <code>conda</code> 环境！</li>
+<li>如果您计划安装多个 CARLA 版本，则需要使用相应的 <code>Content</code> 更新它们。与其每次都调用<code>Update</code>脚本来更新，不如保存 <code>Content.tar.gz</code> 文件，并在每次创建新仓库时将其复制到新的 <code>Unreal/CarlaUE4/Content/Carla</code> 目录中。</li>
 </ul>
 <hr />
 <h2 id="4-todo">4. TODO 添加更多技巧和诀窍</h2>

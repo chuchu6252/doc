@@ -255,9 +255,9 @@
 <p>在打开的<code>Bulk Edit</code>窗口中，验证左侧所有正确的骨架网格体，然后在右侧的 <code>LODSettings</code> 中，单击 3x3 网格图标（选择资产）并选择新创建的 <code>SM_Vehicle_LODSettings.uasset</code> 资产。</p>
 </li>
 <li>
-<p>To apply this to all the selected skeletal meshes, go to the top bar -&gt; <code>File</code> -&gt; <code>Save</code></p>
+<p>要将此设置应用于所有选定的骨骼网格，请转到顶部菜单栏 -&gt; <code>File</code> -&gt; <code>Save</code></p>
 </li>
-<li>The end result should look something like this:
+<li>最终结果应该类似于这样：
     <img alt="BulkEdit" src="../../Figures/LODs/bulk_edit.jpg" /></li>
 </ol>
 <p>As mentioned in step 4, some particular vehicles cause a seg-fault after giving them this <code>LODSettings</code>. We are still investigating why exactly but for now its safer to just manually go into each vehicle and tune the individual <code>LOD</code> settings after checking <code>Custom</code> and seeing the <code>LOD0</code>, <code>LOD1</code>, <code>LOD2</code>, ... etc. options. </p>
