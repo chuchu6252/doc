@@ -305,12 +305,17 @@ export PYTHONPATH=$PYTHONPATH:${CARLA_ROOT}/PythonAPI/carla
 <div class="highlight"><pre><span></span><code>+DirectoriesToAlwaysStageAsUFS=(Path=&quot;/Game/roadrunner/map/OpenDrive&quot;)
 </code></pre></div>
 前面不能以<code>/Game/</code>开头，直接以目录开头，和<code>+DirectoriesToAlwaysCook</code>不同。</p>
-<p>报错信息：
-<div class="highlight"><pre><span></span><code>
+<h5 id="doespackageexist-failed-roadrunnermaterialsbasematerial-is-not-a-standard-unreal-filename-or-a-long-path-name">打包报错信息：DoesPackageExist FAILED: '/RoadRunnerMaterials/BaseMaterial' is not a standard unreal filename or a long path name.</h5>
+<p><div class="highlight"><pre><span></span><code>2026-02-28T00:46:51.4815772Z   LogPackageName: Error: DoesPackageExist: DoesPackageExist FAILED: &#39;/RoadRunnerMaterials/BaseMaterial&#39; is not a standard unreal filename or a long path name. Reason: ????????????????&#39;/Engine/&#39;, &#39;/Game/&#39;, &#39;/Paper2D/&#39;, &#39;/AnimationSharing/&#39;, &#39;/GeometryMode/&#39;, &#39;/Niagara/&#39;, &#39;/ChaosSolverPlugin/&#39;, &#39;/ChaosClothEditor/&#39;, &#39;/SpeedTreeImporter/&#39;, &#39;/ChaosNiagara/&#39;, &#39;/GeometryCollectionPlugin/&#39;, &#39;/GeometryProcessing/&#39;, &#39;/DatasmithContent/&#39;, &#39;/MotoSynth/&#39;, &#39;/PythonScriptPlugin/&#39;, &#39;/MediaCompositing/&#39;, &#39;/PixelStreaming/&#39;, &#39;/AudioSynesthesia/&#39;, &#39;/HairStrands/&#39;, &#39;/PostSplashScreen/&#39;, &#39;/Synthesis/&#39;, &#39;/MagicLeap/&#39;, &#39;/MagicLeapPassableWorld/&#39;, &#39;/SteamVR/&#39;, &#39;/AirSim/&#39;, &#39;/Carla/&#39;, &#39;/CarlaTools/&#39;, &#39;/StreetMap/&#39;, &#39;/Config/&#39;, &#39;/Script/&#39;, &#39;/Extra/&#39;, &#39;/Memory/&#39;, or &#39;/Temp/&#39;??
 </code></pre></div>
-2026-02-28T00:46:51.4815772Z   LogPackageName: Error: DoesPackageExist: DoesPackageExist FAILED: '/RoadRunnerMaterials/BaseMaterial' is not a standard unreal filename or a long path name. Reason: ????????????????'/Engine/', '/Game/', '/Paper2D/', '/AnimationSharing/', '/GeometryMode/', '/Niagara/', '/ChaosSolverPlugin/', '/ChaosClothEditor/', '/SpeedTreeImporter/', '/ChaosNiagara/', '/GeometryCollectionPlugin/', '/GeometryProcessing/', '/DatasmithContent/', '/MotoSynth/', '/PythonScriptPlugin/', '/MediaCompositing/', '/PixelStreaming/', '/AudioSynesthesia/', '/HairStrands/', '/PostSplashScreen/', '/Synthesis/', '/MagicLeap/', '/MagicLeapPassableWorld/', '/SteamVR/', '/AirSim/', '/Carla/', '/CarlaTools/', '/StreetMap/', '/Config/', '/Script/', '/Extra/', '/Memory/', or '/Temp/'??
-<div class="highlight"><pre><span></span><code>
-</code></pre></div></p>
+前面还有异常：
+<div class="highlight"><pre><span></span><code>2026-03-01T15:47:46.9162418Z   LogHttp: Warning: 00000231E1AB3900: request failed, libcurl error: 37 (Couldn&#39;t read a file:// file)
+2026-03-01T15:47:46.9163766Z   LogHttp: Warning: 00000231E1AB3900: libcurl info message cache 0 (Couldn&#39;t open file /D:/model1/model1//tileset.json)
+2026-03-01T15:47:46.9165181Z   LogHttp: Warning: 00000231E1AB3900: libcurl info message cache 1 (Closing connection -1)
+2026-03-01T15:47:46.9267071Z   LogCesium: Error: [2026-03-01 23:47:46.924] [error] [TilesetContentManager.cpp:713] An unexpected error occurs when loading tile: Request failed.
+</code></pre></div>
+原因：中电软件园场景的依赖瓦片<code>D:/model1/model1//tileset.json</code>不存在。</p>
+<p>原因：<code>hutb\Unreal\CarlaUE4\Plugins</code>中未安装RoadRunner插件。</p>
 <h6 id="osm2odr-unknown-error-0x80092012-">下载 osm2odr 报错：Unknown error (0x80092012) - 吊销功能无法检查证书是否吊销</h6>
 <div class="highlight"><pre><span></span><code><span class="c1"># 添加 --ssl-no-revoke 参数</span>
 curl<span class="w"> </span>--retry<span class="w"> </span><span class="m">5</span><span class="w"> </span>--retry-max-time<span class="w"> </span>--ssl-no-revoke<span class="w"> </span><span class="m">120</span><span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>OSM2ODR.zip<span class="w"> </span>https://github.com/carla-simulator/sumo/archive/%CURRENT_OSM2ODR_COMMIT%.zip
