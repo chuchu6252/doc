@@ -237,6 +237,25 @@ D:/work/workspace/carla/Unreal/CarlaUE4/Plugins/Carla/Source/Carla/Sensor/Fishey
 ## Windows 构建
 <!-- ======================================================================= -->
 
+###### 编译调试模式 LibCarla
+```log
+  D:\hutb\Unreal\CarlaUE4\Plugins\Carla\Source\Carla/Vehicle/MovementComponents/ChronoMovementComponent.h(21): fatal error C1083: �޷��򿪰����ļ�: ��chrono/physics/ChSystemNSC.h��: No such file or directory
+  [2/17] Module.Carla.5_of_5.cpp
+  D:\hutb\Build\engine\Engine\Source\Runtime\Core\Public\HAL/Platform.h(1082): note: �μ���TEXT����ǰһ������
+  D:\hutb\Unreal\CarlaUE4\Plugins\Carla\Source\Carla\Vehicle\MovementComponents\ChronoMovementComponent.h(21): fatal error C1083: �޷��򿪰����ļ�: ��chrono/physics/ChSystemNSC.h��: No such file or directory
+  D:\hutb\Unreal\CarlaUE4\Plugins\Carla\Source\Carla\Vegetation\SpringBasedVegetationComponent.h(22): fatal error C1083: �޷��򿪰����ļ�: ��Eigen/Dense��: No such file or directory
+  D:/hutb/Unreal/CarlaUE4/Plugins/CarlaTools/Source/CarlaTools/Private/Online/CustomFileDownloader.cpp(11): fatal error C1083: �޷��򿪰����ļ�: ��OSM2ODR.h��: No such file or directory
+```
+`Build/*-install` 目录下有，但是`hutb\Unreal\CarlaUE4\Plugins\Carla\CarlaDependencies`目录下没有。
+
+
+###### 湖工商场景没有生成点
+```text
+There are no spawn points available in your map/town.
+Please add some Vehicle Spawn Point to your UE4 scene.
+```
+
+分析：.xodr文件位于：Content\Carla\RoadRunner\Maps\OpenDrive\HutbCarlaCity1.xodr
 
 ###### 打包报错：ERROR: System.ArgumentException: Staged filesystem reference may not start with a path separator or contain an empty path fragment (CarlaUE4/Content//Game/roadrunner/map/OpenDrive)
 

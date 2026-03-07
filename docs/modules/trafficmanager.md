@@ -230,49 +230,23 @@ client.apply_batch(batch)
 
 5. **车灯控制阶段**：根据运动规划的结果（如是否刹车、转向）设置车辆灯光状态。例如：当车辆计划左转时，激活左转向灯；减速时激活刹车灯；在夜间或低光照区域自动打开前照灯等。
 
+
+## 各个模块分析
+
+### 内存地图 [InMemoryMap](https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/trafficmanager/InMemoryMap.cpp)
+
+* 为每个航点分配道路选项: [InMemoryMap::SetUpRoadOption()](https://github.com/OpenHUTB/hutb/blob/e0cebb0dd84a498616c2d5407f9092abf82d0a0f/LibCarla/source/carla/trafficmanager/InMemoryMap.cpp#L378)
+
+SetUpRoadOption 方法为交通管理器中的每个航点(waypoint)分配 道路选项(RoadOption),用于指示车辆在该航点应该采取的行动(如直行、左转、右转、变道等)。
+
+
+
+
 ## 使用 Traffic Manager
 
-### 创建和配置
 
-```python
-import carla
 
-client = carla.Client('localhost', 2000)
-world = client.get_world()
-
-# 设置同步模式
-settings = world.get_settings()
-settings.synchronous_mode = True
-settings.fixed_delta_seconds = 0.05
-world.apply_settings(settings)
-
-# 获取 Traffic Manager 实例
-traffic_manager = client.get_trafficmanager()
-traffic_manager.set_synchronous_mode(True)
-```
-
-### 控制车辆行为
-
-```python
-# 获取车辆蓝图
-blueprint_library = world.get_blueprint_library()
-vehicle_bp = blueprint_library.filter('vehicle.*')[0]
-
-# 获取地图上的生成点
-spawn_points = world.get_map().get_spawn_points()
-
-# 生成车辆
-vehicle = world.spawn_actor(vehicle_bp, spawn_points[0])
-
-# 启用自动驾驶
-vehicle.set_autopilot(True)
-
-# 设置车辆行为参数
-traffic_manager.ignore_lights_percentage(vehicle, 30.0)  # 30% 的概率忽略红灯
-traffic_manager.set_desired_speed(vehicle, 20.0)         # 设置期望速度为 20 m/s
-```
-
-# Traffic Manager与其他板块的区别  
+# Traffic Manager与其他模块的区别  
 
 ## 1. Traffic Manager vs. 蓝图库（Blueprint Library）
 Traffic Manager

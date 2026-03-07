@@ -9,11 +9,23 @@
 
 * 运行`world.get_blueprint_library()`报错：ValueError: role_name: colors must have 3 channels (R,G,B)
 
-> 服务端和客户端版本不一致，比如服务端是ue4-dev的最新代码，而客户端为0.9.15的代码。
+    > 服务端和客户端版本不一致，比如服务端是ue4-dev的最新代码，而客户端为0.9.15的代码。
 
 * 连接不上服务端，又没有报错信息
 
-> 很可能是因为和 PythonAPI 相关的 [LibCarla 模块](https://github.com/OpenHUTB/hutb/issues/3200#issuecomment-3717221506) 做了更新，而客户端 whl 文件没有更新。
+    > 很可能是因为和 PythonAPI 相关的 [LibCarla 模块](https://github.com/OpenHUTB/hutb/issues/3200#issuecomment-3717221506) 做了更新，而客户端 whl 文件没有更新。
+
+
+* 运行 Python 程序报错：`Assertion failed: (_data.size() - _offset) % sizeof(T) == 0u, file C:\b\_w\jcarla\jcarla\LibCarla\cmake\..\source\carla/sensor/data/Array.h, line 132`
+
+    原因：由于通过`pip install carla`安装客户端导致import carla混乱。
+
+    解决：
+    ```shell
+    pip uninstall carla
+    pip uninstall hutb
+    pip install hutb-2.9.16-cp310-cp310-win_amd64.whl
+    ```
 
 
 ## 库的问题
