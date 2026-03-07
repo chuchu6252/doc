@@ -318,42 +318,14 @@
 <p><strong>车灯控制阶段</strong>：根据运动规划的结果（如是否刹车、转向）设置车辆灯光状态。例如：当车辆计划左转时，激活左转向灯；减速时激活刹车灯；在夜间或低光照区域自动打开前照灯等。</p>
 </li>
 </ol>
+<h2 id="_3">各个模块分析</h2>
+<h3 id="inmemorymap">内存地图 <a href="https://github.com/OpenHUTB/hutb/blob/hutb/LibCarla/source/carla/trafficmanager/InMemoryMap.cpp">InMemoryMap</a></h3>
+<ul>
+<li>为每个航点分配道路选项: <a href="https://github.com/OpenHUTB/hutb/blob/e0cebb0dd84a498616c2d5407f9092abf82d0a0f/LibCarla/source/carla/trafficmanager/InMemoryMap.cpp#L378">InMemoryMap::SetUpRoadOption()</a></li>
+</ul>
+<p>SetUpRoadOption 方法为交通管理器中的每个航点(waypoint)分配 道路选项(RoadOption),用于指示车辆在该航点应该采取的行动(如直行、左转、右转、变道等)。</p>
 <h2 id="traffic-manager_2">使用 Traffic Manager</h2>
-<h3 id="_3">创建和配置</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">carla</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">carla</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
-<span class="n">world</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_world</span><span class="p">()</span>
-
-<span class="c1"># 设置同步模式</span>
-<span class="n">settings</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_settings</span><span class="p">()</span>
-<span class="n">settings</span><span class="o">.</span><span class="n">synchronous_mode</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">settings</span><span class="o">.</span><span class="n">fixed_delta_seconds</span> <span class="o">=</span> <span class="mf">0.05</span>
-<span class="n">world</span><span class="o">.</span><span class="n">apply_settings</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
-
-<span class="c1"># 获取 Traffic Manager 实例</span>
-<span class="n">traffic_manager</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_trafficmanager</span><span class="p">()</span>
-<span class="n">traffic_manager</span><span class="o">.</span><span class="n">set_synchronous_mode</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="_4">控制车辆行为</h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># 获取车辆蓝图</span>
-<span class="n">blueprint_library</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_blueprint_library</span><span class="p">()</span>
-<span class="n">vehicle_bp</span> <span class="o">=</span> <span class="n">blueprint_library</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;vehicle.*&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c1"># 获取地图上的生成点</span>
-<span class="n">spawn_points</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_map</span><span class="p">()</span><span class="o">.</span><span class="n">get_spawn_points</span><span class="p">()</span>
-
-<span class="c1"># 生成车辆</span>
-<span class="n">vehicle</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">spawn_actor</span><span class="p">(</span><span class="n">vehicle_bp</span><span class="p">,</span> <span class="n">spawn_points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-<span class="c1"># 启用自动驾驶</span>
-<span class="n">vehicle</span><span class="o">.</span><span class="n">set_autopilot</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># 设置车辆行为参数</span>
-<span class="n">traffic_manager</span><span class="o">.</span><span class="n">ignore_lights_percentage</span><span class="p">(</span><span class="n">vehicle</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">)</span>  <span class="c1"># 30% 的概率忽略红灯</span>
-<span class="n">traffic_manager</span><span class="o">.</span><span class="n">set_desired_speed</span><span class="p">(</span><span class="n">vehicle</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">)</span>         <span class="c1"># 设置期望速度为 20 m/s</span>
-</code></pre></div>
-<h1 id="traffic-manager_3">Traffic Manager与其他板块的区别</h1>
+<h1 id="traffic-manager_3">Traffic Manager与其他模块的区别</h1>
 <h2 id="1-traffic-manager-vs-blueprint-library">1. Traffic Manager vs. 蓝图库（Blueprint Library）</h2>
 <p>Traffic Manager</p>
 <p><strong>确定性模式（Deterministic Mode）</strong>：确定性模式是 Traffic Manager 中用于控制仿真可重复性的关键机制，确保在相同输入、相同配置下，仿真每次执行结果一致。这一模式在算法验证、回归测试、行为对比等应用场景中具有重要意义。其主要功能包括：</p>
@@ -565,7 +537,7 @@
 <p>自动驾驶代理（如CARLA的ROAD算法）</p>
 <p>复杂决策：使用强化学习或规划算法实现端到端驾驶。</p>
 <p>主车控制：通常用于测试或训练主角车辆，而非管理交通流。</p>
-<h2 id="_5">区别总结</h2>
+<h2 id="_4">区别总结</h2>
 <table>
 <thead>
 <tr>
@@ -675,7 +647,7 @@ Traffic Manager 可根据天气/时间系统的参数调整 NPC 行为：</p>
 <p>主车的自动驾驶代理与 Traffic Manager 控制的交通流交互，Recorder 保存场景数据。</p>
 <p>回放与调试</p>
 <p>回放时是通过 Traffic Manager 修改特定 NPC 行为，来测试主车应对异常情况的能力。</p>
-<h3 id="_6">核心联系总结</h3>
+<h3 id="_5">核心联系总结</h3>
 <table>
 <thead>
 <tr>
@@ -710,7 +682,7 @@ Traffic Manager 可根据天气/时间系统的参数调整 NPC 行为：</p>
 </tr>
 </tbody>
 </table>
-<h3 id="_7">协同价值总结</h3>
+<h3 id="_6">协同价值总结</h3>
 <table>
 <thead>
 <tr>
