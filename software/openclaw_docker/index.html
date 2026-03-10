@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>🦞 Openclaw + DeepSeek Docker 部署教程 - 人车孪创</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\ud83e\udd9e Openclaw + DeepSeek Docker \u90e8\u7f72\u6559\u7a0b";
+        var mkdocs_page_input_path = "software/openclaw_docker.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 人车孪创
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="搜索文档" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">简介</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../introduction/">入门</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pedestrian/">人</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../vehicle/">车</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">模拟</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../concept/">概念</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../modules/">模块</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../development/">开发</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">场景</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../map_twin/">地图孪生</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../assert_twin/">资产孪生</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../unreal_engine/">模拟引擎</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">其他</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ref/">参考目录</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ecology/">生态系统</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contribution/">贡献指南</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">人车孪创</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">🦞 Openclaw + DeepSeek Docker 部署教程</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/OpenHUTB/doc/edit/master/docs/software/openclaw_docker.md" class="icon icon-github"> 在 GitHub 上编辑</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="openclaw-deepseek-docker">🦞 Openclaw + DeepSeek Docker 部署教程</h1>
+<blockquote>
+<p>本教程记录了在 Windows 11 上使用 Docker 部署 Openclaw 并成功对接 DeepSeek API 的<strong>完整真实过程</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="_1">环境信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>详情</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作系统</td>
+<td>Windows 11 Home China 25H2 64位</td>
+</tr>
+<tr>
+<td>处理器</td>
+<td>AMD Ryzen 9 7945HX 十六核</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>16GB DDR5 5200MHz</td>
+</tr>
+<tr>
+<td>显卡</td>
+<td>NVIDIA GeForce RTX 5070 Ti Laptop GPU (12GB)</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>Docker Desktop（官网下载 www.docker.com）</td>
+</tr>
+<tr>
+<td>AI 模型</td>
+<td>DeepSeek Chat（通过 DeepSeek 官网 API）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_2">前置准备</h2>
+<h3 id="1-git">1. 安装 Git</h3>
+<p>前往 https://git-scm.com 下载安装，安装后在 PowerShell 验证：
+<div class="highlight"><pre><span></span><code><span class="n">git</span> <span class="p">-</span><span class="n">-version</span>
+</code></pre></div></p>
+<h3 id="2-docker-desktop">2. 安装 Docker Desktop</h3>
+<p>前往 https://www.docker.com 下载安装，安装后确保 Docker Desktop 已启动。</p>
+<h3 id="3-deepseek-api-key">3. 获取 DeepSeek API Key</h3>
+<p>前往 https://platform.deepseek.com/api_keys 注册并充值（最低 10 元），创建 API Key 并保存好。</p>
+<hr />
+<h2 id="_3">部署步骤</h2>
+<h3 id="git">第一步：配置 Git 代理（如有需要）</h3>
+<p>国内网络访问 GitHub 较慢，建议配置代理（端口根据自己的代理软件填写）：</p>
+<div class="highlight"><pre><span></span><code><span class="n">git</span> <span class="n">config</span> <span class="p">-</span><span class="n">-global</span> <span class="n">http</span><span class="p">.</span><span class="n">proxy</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">10808</span>
+<span class="n">git</span> <span class="n">config</span> <span class="p">-</span><span class="n">-global</span> <span class="n">https</span><span class="p">.</span><span class="n">proxy</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">10808</span>
+</code></pre></div>
+<h3 id="openclaw">第二步：克隆 Openclaw 仓库</h3>
+<div class="highlight"><pre><span></span><code><span class="nb">cd </span><span class="n">D</span><span class="p">:\</span><span class="n">AI</span>   <span class="c"># 切换到你想存放项目的目录</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="p">-</span><span class="n">-depth</span> <span class="n">1</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">openclaw</span><span class="p">/</span><span class="n">openclaw</span>
+<span class="nb">cd </span><span class="n">openclaw</span>
+</code></pre></div>
+<blockquote>
+<p><code>--depth 1</code> 表示只克隆最新版本，速度更快，节省空间。</p>
+</blockquote>
+<h3 id="_4">第三步：配置环境变量</h3>
+<p>复制模板文件并编辑：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Copy-Item</span> <span class="p">.</span><span class="n">env</span><span class="p">.</span><span class="n">example</span> <span class="p">.</span><span class="n">env</span>
+<span class="n">notepad</span> <span class="p">.</span><span class="n">env</span>
+</code></pre></div>
+<p>在 <code>.env</code> 文件中找到并填写以下内容（注意：变量前<strong>不要有空格</strong>）：</p>
+<div class="highlight"><pre><span></span><code>OPENAI_API_KEY=sk-你的DeepSeek密钥
+OPENAI_BASE_URL=https://api.deepseek.com/v1
+OPENCLAW_CONFIG_DIR=./config
+OPENCLAW_WORKSPACE_DIR=./workspace
+OPENCLAW_GATEWAY_BIND=loopback
+OPENCLAW_GATEWAY_TOKEN=你自己生成一个随机token
+</code></pre></div>
+<blockquote>
+<p><strong>重要</strong>：变量名前不能有空格！<code>OPENAI_API_KEY=xxx</code>（错误）vs <code>OPENAI_API_KEY=xxx</code>（正确）<br />
+这是我踩的最深的坑，导致 API Key 一直读取失败。</p>
+</blockquote>
+<h3 id="docker">第四步：构建 Docker 镜像</h3>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">build</span> <span class="n">-t</span> <span class="n">openclaw</span><span class="p">:</span><span class="n">local</span> <span class="p">.</span>
+</code></pre></div>
+<blockquote>
+<p>这一步需要较长时间（我花了约 7 分钟），请耐心等待。<br />
+如果遇到 <code>unexpected EOF</code> 错误，是网络中断导致的，重新运行即可。</p>
+</blockquote>
+<h3 id="docker-composeyml">第五步：修改 docker-compose.yml</h3>
+<p>用记事本打开 <code>docker-compose.yml</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="n">notepad</span> <span class="n">docker-compose</span><span class="p">.</span><span class="n">yml</span>
+</code></pre></div>
+<p>在 <code>environment</code> 部分添加 DeepSeek 相关变量：</p>
+<div class="highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># ... 原有内容保持不变 ...</span>
+<span class="w">  </span><span class="nt">OPENAI_API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OPENAI_API_KEY}</span>
+<span class="w">  </span><span class="nt">OPENAI_BASE_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OPENAI_BASE_URL}</span>
+</code></pre></div>
+<p>同时在 <code>command</code> 部分末尾加上 <code>--allow-unconfigured</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="nt">command</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="s">&quot;node&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;dist/index.js&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;gateway&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;--bind&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;${OPENCLAW_GATEWAY_BIND:-lan}&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;--port&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;18789&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="s">&quot;--allow-unconfigured&quot;</span><span class="w">   </span><span class="c1"># 添加这一行</span>
+<span class="w">  </span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h3 id="_5">第六步：启动容器</h3>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="n">up</span> <span class="n">-d</span>
+</code></pre></div>
+<p>验证是否正常运行：</p>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="nb">ps</span>
+</code></pre></div>
+<p>看到 <code>STATUS: Up xx seconds (healthy)</code> 说明成功。</p>
+<h3 id="_6">第七步：运行配置向导</h3>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">openclaw-cli</span> <span class="n">configure</span>
+</code></pre></div>
+<p>按照向导提示依次配置：
+- <strong>Gateway 位置</strong>：选 <code>Local (this machine)</code>
+- <strong>Model 提供商</strong>：选 <code>Custom Provider</code>
+- <strong>API Base URL</strong>：填 <code>https://api.deepseek.com</code>（注意是 https，不是 http）
+- <strong>API Key</strong>：粘贴你的 DeepSeek Key
+- <strong>Model ID</strong>：填 <code>deepseek-chat</code>
+- <strong>Gateway bind</strong>：选 <code>Loopback (Local only)</code>
+- <strong>Gateway token</strong>：填你在 <code>.env</code> 里设置的 token（必须一致！）</p>
+<p>看到 <code>Gateway: reachable</code> 和 <code>Configure complete</code> 说明配置成功。</p>
+<h3 id="_7">第八步：测试是否正常工作</h3>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">openclaw-cli</span> <span class="n">agent</span> <span class="p">-</span><span class="n">-session-id</span> <span class="n">test01</span> <span class="n">-m</span> <span class="s2">&quot;你好，请自我介绍一下&quot;</span>
+</code></pre></div>
+<p>如果 DeepSeek 正常回复，恭喜你部署成功！</p>
+<hr />
+<h2 id="_8">常见报错与解决方法</h2>
+<h3 id="1pull-access-denied-for-openclaw">错误 1：<code>pull access denied for openclaw</code></h3>
+<p><strong>原因</strong>：Docker Hub 上没有公开镜像，需要本地构建。<br />
+<strong>解决</strong>：执行 <code>docker build -t openclaw:local .</code></p>
+<h3 id="2missing-configgateway">错误 2：<code>Missing config</code>（gateway 一直重启）</h3>
+<p><strong>原因</strong>：首次启动时没有配置文件。<br />
+<strong>解决</strong>：在 <code>docker-compose.yml</code> 的 command 中加入 <code>--allow-unconfigured</code></p>
+<h3 id="3non-loopback-control-ui-requires-gatewaycontroluiallowedorigins">错误 3：<code>non-loopback Control UI requires gateway.controlUi.allowedOrigins</code></h3>
+<p><strong>原因</strong>：bind 模式设置为了 <code>lan</code> 但没有配置允许的来源。<br />
+<strong>解决</strong>：将 <code>.env</code> 中 <code>OPENCLAW_GATEWAY_BIND</code> 改为 <code>loopback</code></p>
+<h3 id="4invalid-bind-use-loopback-lan-tailnet-auto-or-custom">错误 4：<code>Invalid --bind (use "loopback", "lan", "tailnet", "auto", or "custom")</code></h3>
+<p><strong>原因</strong>：<code>.env</code> 文件中变量前有多余空格，导致值被读取为空字符串。<br />
+<strong>解决</strong>：检查 <code>.env</code> 文件，确保所有变量前没有空格。</p>
+<h3 id="5openai_api_key-is-not-set-defaulting-to-a-blank-string">错误 5：<code>OPENAI_API_KEY is not set. Defaulting to a blank string</code></h3>
+<p><strong>原因</strong>：同上，<code>.env</code> 文件中变量名前有空格（<code>OPENAI_API_KEY=xxx</code>）。<br />
+<strong>解决</strong>：删除变量名前的所有空格。</p>
+<h3 id="6no-api-key-found-for-provider-anthropic">错误 6：<code>No API key found for provider "anthropic"</code></h3>
+<p><strong>原因</strong>：Openclaw 默认使用 Anthropic，需要手动切换到 DeepSeek。<br />
+<strong>解决</strong>：运行 <code>docker compose run --rm openclaw-cli configure</code>，在向导中选择 Custom Provider 并配置 DeepSeek。</p>
+<h3 id="7gateway-token-mismatch">错误 7：<code>gateway token mismatch</code></h3>
+<p><strong>原因</strong>：<code>.env</code> 中的 <code>OPENCLAW_GATEWAY_TOKEN</code> 和 <code>openclaw.json</code> 中的 token 不一致。<br />
+<strong>解决</strong>：在 configure 向导的 Gateway Token 步骤中，填入与 <code>.env</code> 完全相同的 token。</p>
+<h3 id="8404-status-code-no-body">错误 8：<code>404 status code (no body)</code></h3>
+<p><strong>原因</strong>：模型路径格式不正确（如 <code>openai/deepseek-chat</code>）。<br />
+<strong>解决</strong>：通过 configure 向导重新配置，使用 <code>custom-api-deepseek-com/deepseek-chat</code> 格式。</p>
+<h3 id="9verification-failed-status-402">错误 9：<code>Verification failed: status 402</code></h3>
+<p><strong>原因</strong>：DeepSeek 账户余额不足。<br />
+<strong>解决</strong>：前往 https://platform.deepseek.com 充值（最低 10 元）。</p>
+<h3 id="10verification-failed-status-401">错误 10：<code>Verification failed: status 401</code></h3>
+<p><strong>原因</strong>：API Base URL 填写错误（填成了 <code>http://</code> 而不是 <code>https://</code>）。<br />
+<strong>解决</strong>：确保 API Base URL 为 <code>https://api.deepseek.com</code>。</p>
+<hr />
+<h2 id="_9">安全注意事项</h2>
+<ol>
+<li><strong>绝对不要</strong>将 <code>.env</code> 文件上传到 GitHub（项目自带的 <code>.gitignore</code> 已经排除了它）</li>
+<li><strong>绝对不要</strong>在 <code>openclaw.json</code> 中硬编码 API Key，应通过环境变量传入</li>
+<li>API Key 一旦泄露，立刻前往 https://platform.deepseek.com/api_keys 作废并重新生成</li>
+</ol>
+<hr />
+<h2 id="_10">仓库文件说明</h2>
+<div class="highlight"><pre><span></span><code>├── docker-compose.yml   # 修改版：添加了 DeepSeek 环境变量和 --allow-unconfigured
+└── .env.example         # 环境变量模板，复制为 .env 后填入真实值
+</code></pre></div>
+<hr />
+<h2 id="_11">参考资料</h2>
+<ul>
+<li><a href="https://docs.openclaw.ai">Openclaw 官方文档</a></li>
+<li><a href="https://platform.deepseek.com/docs">DeepSeek API 文档</a></li>
+<li><a href="https://www.docker.com">Docker Desktop 官网</a></li>
+</ul>
+<hr />
+<h2 id="_12">关于作者</h2>
+<p>湖南工商大学 机器人工程专业 大一学生，借助 AI 大模型的力量完成了这次部署实践。<br />
+如有问题欢迎提 <a href="https://github.com/sy-175/openclaw-deepseek-deploy/issues">Issue</a>公开讨论。</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>OpenHUTB 版权所有 &copy; 2026</p>
+  </div>
+
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/OpenHUTB/doc" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script>
+      <script src="../../js/umlconvert.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
