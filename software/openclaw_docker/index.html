@@ -247,14 +247,16 @@ OPENCLAW_GATEWAY_TOKEN=你自己生成一个随机token
 <h3 id="_5">第七步：运行配置向导</h3>
 <p><div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">openclaw-cli</span> <span class="n">configure</span>
 </code></pre></div>
-按照向导提示依次配置：
-- <strong>Gateway 位置</strong>：选 <code>Local (this machine)</code>
-- <strong>Model 提供商</strong>：选 <code>Custom Provider</code>
-- <strong>API Base URL</strong>：填 <code>https://api.deepseek.com</code>
-- <strong>API Key</strong>：粘贴你的 DeepSeek Key
-- <strong>Model ID</strong>：填 <code>deepseek-chat</code>
-- <strong>Gateway bind</strong>：选 <code>lan</code>
-- <strong>Gateway token</strong>：填你在 <code>.env</code> 里设置的 token（<strong>必须完全一致！</strong>）</p>
+按照向导提示依次配置：</p>
+<ul>
+<li><strong>Gateway 位置</strong>：选 <code>Local (this machine)</code></li>
+<li><strong>Model 提供商</strong>：选 <code>Custom Provider</code></li>
+<li><strong>API Base URL</strong>：填 <code>https://api.deepseek.com</code></li>
+<li><strong>API Key</strong>：粘贴你的 DeepSeek Key</li>
+<li><strong>Model ID</strong>：填 <code>deepseek-chat</code></li>
+<li><strong>Gateway bind</strong>：选 <code>lan</code></li>
+<li><strong>Gateway token</strong>：填你在 <code>.env</code> 里设置的 token（<strong>必须完全一致！</strong>）</li>
+</ul>
 <p>看到 <code>Gateway: reachable</code> 和 <code>Configure complete</code> 说明配置成功。</p>
 <h3 id="openclawjson">第八步：修改 <code>openclaw.json</code></h3>
 <p>打开 <code>config\openclaw.json</code>，确认/修改以下配置：
