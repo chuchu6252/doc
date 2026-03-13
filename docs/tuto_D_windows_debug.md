@@ -84,8 +84,10 @@ value 'MD_DynamicRelease' 项目对应的，当前的lib，一般都要和文件
 即：Release 库使用了 Debug 的库。
 
 
-解决：需要将虚幻的 SharedPCH.UnrealEd.h.obj 编译为debug模式。
+解决：需要将虚幻的 SharedPCH.UnrealEd.h.obj [编译为 debug 模式](https://blog.csdn.net/mrbaolong/article/details/114947090) 。
 PCH (PreCompiled Headers) 是一种宏管理方法，
+
+`\MDd` ：Multi-threaded Debug DLL。
 
 
 1.打开`x64 Native Tools Command for VS 2019`
