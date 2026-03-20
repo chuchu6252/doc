@@ -42,7 +42,15 @@ git config --global --unset https.proxy
 
 ### Steamapp 加速
 
-[下载地址](https://steampp.net/) 。
+[下载地址](https://steampp.net/) 。定制软件启动的特性：
+
+* 默认启动加速页面：
+
+    将`steam/AppData/Settings/UISettings.json`设置为`  "StartDefaultPageName": "Accelerator-CommunityFix"`
+
+* 启动软件时默认开启加速：
+
+    将`steam/AppData/Plugins/Accelerator/Settings/ProxySettings.json`设置为`"ProgramStartupRunProxy": true,`
 
 ### Github 访问加速
 
