@@ -321,6 +321,16 @@ pygame.font.Font(pygame.font.get_default_font(), 20)
 ```
 获得的字体文件为`freesansbold.ttf`，最后将字体文件拷贝到和exe文件相同的路径，然后执行即可。
 
+* The following component(s) are required to run this program: Microsoft Visual C++ Runtime
+
+dll所在路径：C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.44.35112\x64\Microsoft.VC143.CRT\*.dll
+
+解决：vc_redist.x64.exe（位于：C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.44.35112）
+```bat
+rem 安装命令
+VC_redist.x64.exe /install /quiet /norestart
+```
+
 ## 参考
 * [内网穿透](https://natapp.cn/article/config_ini)
 * [元数据检查](https://stackoverflow.com/questions/79791079/twine-error-with-recent-setuptools-build-but-previous-ones-fine-invaliddistribu)

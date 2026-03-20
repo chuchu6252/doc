@@ -89,6 +89,12 @@ Examples\CppClient\out\build\x64-Debug\Detour-d.lib(DetourNavMesh.obj) : error L
 解决：需要将虚幻的 SharedPCH.UnrealEd.h.obj [编译为 debug 模式](https://blog.csdn.net/mrbaolong/article/details/114947090) 。
 PCH (PreCompiled Headers) 是一种宏管理方法，
 
+
+Carla.Build.cs 中说明了：在Windows环境下，虚幻引擎（Unreal）即使在调试模式下也使用 Release C++ 运行时（CRT），因此除非我们重新编译引擎，否则无法链接调试库。
+
+这是因为调试虚幻引擎项目时，Debug C++运行时库的作用不大，而且与 Debug CRT 库链接会迫使我们的第三方库依赖项也使用 Debug CRT 进行编译（通常性能会更低）。为了调试程序代码，需要单独复制第三方静态库的调试版本，这通常很不方便。
+
+
 `\MDd` ：Multi-threaded Debug DLL。
 
 通过CppClient运行的客户端连接CarlaUE4.exe会显示`log_warning()`（LibCarla/source/carla/trafficmanager/InMemoryMap.cpp）的警告信息。
