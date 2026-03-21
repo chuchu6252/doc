@@ -1,8 +1,8 @@
 # [使用 Carla 的仓库列表](https://github.com/carla-simulator/carla/network/dependents)
 
-<!-- 更新到最新的页面： https://github.com/carla-simulator/carla/network/dependents?dependents_before=NDEwMzMzMDAyODc    --> 
+<!-- 更新到最新的页面： https://github.com/carla-simulator/carla/network/dependents?dependents_before=NDMyMjE4MzQ3MzI    --> 
 
-<!-- 更新到最新的仓库： https://github.com/TO-autonomy/CARLA-vehicle-simulation- --> 
+<!-- 更新到最新的仓库： https://github.com/tepk2924/Controller --> 
 
 
 - [__感知__](#perception)
@@ -124,6 +124,8 @@
 [端到端自动驾驶的多模态融合Transformer](https://github.com/partha-ghosh/semi-self-driving)
 
 [基于 Transformer 的传感器融合模拟，实现自动驾驶](https://github.com/autonomousvision/transfuser)
+
+[TransFuser：基于Transformer的传感器融合在自动驾驶中的模拟应用](https://github.com/ChloeXue00/transfuser)
 
 [自监督多模态感知 + 自动驾驶强化学习](https://github.com/sushmamareddy/Autonomous-Driving---SSL-RL)
 
@@ -304,6 +306,8 @@
 
 [近端策略优化 (PPO) 和软行为者-评论 (SAC)](https://github.com/Anujchobe/Crashless) - 来训练和评估 AI 在导航和避障任务
 
+[定制的 CARLA Gymnasium 环境](https://github.com/calstephano/CARLA-Gymnasium-RL)
+
 [端到端深度 Q 学习管道](https://github.com/Jerrychin125/Autonomous-Driving-Car-Simulation-with-CARLA)
 
 
@@ -362,6 +366,8 @@
 
 [航路点预测多模态数据融合](https://github.com/Hwansoo-Choi/Cognitive-Transfuser)
 
+[DNOAG - 端到端自动驾驶的轨迹预测](https://github.com/louardibrahim/dinoag)
+
 [通过推测在线前瞻自适应实现非平稳环境中的自适应驾驶](https://github.com/Panshark/COLA)
 
 ### 决策 <span id="decision"></span>
@@ -390,6 +396,8 @@
 [于有机神经网络数学模型的汽车控制辅助系统](https://github.com/HabKaffee/ncp_for_automotive)
 
 [车道保持辅助](https://github.com/C2G-BR/Active-Lane-Keeping-Assistant)
+
+[模型预测控制（MPC）算法，旨在优化车辆在模拟环境（例如 CARLA）中预测范围内的油门和加速度](https://github.com/MoYasser1777/Digital-Twin-GP)
 
 [噪音自适应驾驶辅助系统](https://github.com/kochlisGit/Noise-Adaptive-Driving-Assistance-System)
 
@@ -510,6 +518,8 @@
 
 [基于视觉语言模型的检索增强自动驾驶极端情况理解](https://github.com/yjwangtj/RA-ADC)
 
+[LMDrive：基于大型语言模型的闭环端到端驱动](https://github.com/YXTong17/LMDrive-FL)
+
 [iLLM-TSC：集成强化学习和大型语言模型以改进交通信号控制策略](https://github.com/Traffic-Alpha/iLLM-TSC)
 
 [利用大型语言模型（LLM）增强自动驾驶场景模糊测试的多样性](https://github.com/ldegao/ScenarioFuzz-LLM)
@@ -596,6 +606,8 @@
 
 [使用 SUMO 和 CARLA 模拟 AR 挡风玻璃 HUD 对驾驶性能的影响](https://github.com/Pascal-Jansen/HUD-SUMO)
 
+[基于搜索的场景生成算法](https://github.com/idslab-autosec/AutoSVT-Algorithms)
+
 [3种基准场景](https://github.com/revacholiere/rulebook_benchmark)
 
 [高效自动驾驶的矢量化场景表示](https://github.com/tier4/VAD)
@@ -678,6 +690,8 @@
 [基于LLM的交通流生成](https://github.com/CXYyp5SkNg/CXYyp5SkNg.github.io) ，效果[视频](https://github.com/CXYyp5SkNg/CXYyp5SkNg.github.io/blob/main/README.md) 
 
 [情境感知交通规则例外情况的知情强化学习](https://github.com/fzi-forschungszentrum-informatik/informed_rl)
+
+[用于可靠自动驾驶的高级可定制多智能体训练平台](https://github.com/TrustAISys/cmad-gym)
 
 [模拟器与 ROTRA 公路法规工具相结合](https://github.com/Kcuga/carla-rotra) 
 
@@ -862,6 +876,8 @@
 
 [简单数据收集功能](https://github.com/PDillis/carla-data-collection)
 
+[SynDiff-AD：基于扩散模型的自动驾驶合成数据生成](https://github.com/UTAustin-SwarmLab/SynDiff-AD)
+
 [Carla 环境收集数据](https://github.com/Merealtea/CarlaEnv)
 
 [在 Carla 模拟环境中高效收集数据](https://github.com/command-z-z/CarlaDataCollector)
@@ -910,6 +926,11 @@
 
 [CarDreamer 是一个专为开发和评估基于世界模型的自动驾驶而设计的开源平台](https://github.com/kims124/Dynamic_Termination_for_CarDreamer)
 
+[持续学习、适应和改进：自动驾驶的双过程方法](https://github.com/PJLab-ADG/LeapAD)
+
+[ExpertAD：利用专家组合增强自动驾驶系统](https://github.com/Expert-AD/ExpertAD)
+
+
 ## 比赛  <span id="contest"></span>
 
 [东风比赛](https://github.com/donymorph/Dongfeng_competition)
@@ -926,11 +947,15 @@
 
 [在各种环境中尝试训练和迁移深度强化模型](https://github.com/Guthax/Sim2Sim2Real)
 
+[LIBRA：车辆抬头显示器智能设计与验证的一站式平台](https://github.com/ZhilingResearch/Libra)
+
 [用于可视化、跟踪和映射 CARLA 模拟器数据的查看器](https://github.com/zhumorui/CARLA2NMR)
 
 [允许研究人员在模拟环境中对各种车辆进行驾驶试验并记录](https://github.com/johnny-mai7/carlaSimulator)
 
 [提供 API 以将基于 CommonRoad 的工具与CARLA一起使用](https://github.com/CommonRoad/commonroad-carla-interface) 
+
+[CARLA模拟试验管理](https://github.com/VIPERFGCU/FGCUDrivingSimulator)
 
 [自动驾驶算法测试平台](https://github.com/siupal/UniversalPlatformForAutodriving)
 
@@ -1106,6 +1131,8 @@
 
 [基于触觉的 CARLA 模拟的 ROS 包](https://github.com/MohamedOmda92/haptic_carla_pkg)
 
+[ROS 的应用程序]()
+
 [壳牌环保马拉松 2022 自主编程比赛 ROS 软件包](https://github.com/KON-Team/shell_simulation)
 
 [ROAR RL 管道的 ROS2 基础设施](https://github.com/amansrf/ROAR_RL_ROS)
@@ -1130,6 +1157,22 @@
 [ADAS API](https://github.com/shreyash212002/API)
 
 [在 Carla 模拟器中开发能够完成各种自主任务的模型](https://github.com/Piotr-Czechowski/AV)
+
+[AITyrimas](https://github.com/sutasmantas/AITyrimas)
+
+[CARLA自动驾驶车辆仿真](https://github.com/deepc0py/weathering-the-storm)
+
+[CARLA_experiments](https://github.com/Dan-Bu/CARLA_experiments)
+
+[能够避开所有障碍物完成路线行驶](https://github.com/jonathanung/AutoStop)
+
+[智能车辆系统实验室练习](https://github.com/benedettapacilli/smart-vehicular-systems-lab-exercises)
+
+[carla_sac_version1](https://github.com/capstone-RL-teamproject/carla_sac_version1)
+
+[使用 CARLA 的 RL 自动驾驶项目](https://github.com/DebSaikia892/Self-Driving-model-RL)
+
+[capo-autodrive](https://github.com/capo-urjc/capo-autodrive)
 
 [通过专家协作增强自动驾驶系统](https://github.com/Expert-AD/ExpertAD)
 
