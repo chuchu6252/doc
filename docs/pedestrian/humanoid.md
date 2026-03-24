@@ -2,11 +2,11 @@
 
 <!-- 共5k+个仓库，
 更新到的页面： 
-https://github.com/google-deepmind/mujoco/network/dependents?dependents_before=NDk1NDkxMjg3NTI
+https://github.com/google-deepmind/mujoco/network/dependents?dependents_before=NDk2NzQxMDI1NTI
 -->
 
 <!-- 更新到最新的仓库： 
-https://github.com/tsilva/gymsolve
+https://github.com/ann-w/solving_drl_tasks_with_es_and_linear_policy_networks
 -->
 
 - [__人__](#humanoid)
@@ -330,7 +330,11 @@ https://github.com/tsilva/gymsolve
 
 [SPIDER：可扩展的基于物理的灵巧重定向](https://github.com/facebookresearch/spider)
 
+[Genesis Humanoid 是一个基于 Genesis 模拟器的一体化人形机器人研究平台。它支持实时人机重定向，包含格式统一的不同运动数据集，提供端到端的学习流程，并提供模块化的底层控制测试平台用于实验。](https://github.com/vesoma-main/Genesis-Humanoid)
+
 [包含模型检查点和脚本，用于训练、评估和部署用于人形机器人的高级全身控制器](https://github.com/NVlabs/GR00T-WholeBodyControl)
+
+[ProtoMotions 是一个 GPU 加速的仿真和学习框架，用于训练物理模拟的数字人和人形机器人。](https://github.com/NVlabs/ProtoMotions)
 
 [专家接近度作为单次演示模仿学习的替代奖励](https://github.com/stanl1y/tdil)
 
@@ -1140,6 +1144,8 @@ https://github.com/tsilva/gymsolve
 
 [rl-test](https://github.com/Oyveloper/rl-test)
 
+[使用线性策略网络解决深度强化学习基准测试](https://github.com/ann-w/solving_drl_tasks_with_es_and_linear_policy_networks)
+
 [CQL，PDQN，离线RL评估](https://github.com/zhuhxi/DriverOrderOfflineRL)
 
 [使用来自 4 个种子的 Mujoco Benchmark 结果对 SAC、TD3 和 TD7 进行 pytorch 实现](https://github.com/seungju-k1m/sac-td3-td7)
@@ -1198,6 +1204,8 @@ https://github.com/tsilva/gymsolve
 
 [用于离线强化学习的组合合成数据生成](https://github.com/spatank/compositional-rl-synth-data)
 
+[InternDataEngine：开创性的高保真合成数据生成器，用于机器人操作](https://github.com/InternRobotics/InternDataEngine)
+
 [结果分享](https://github.com/ykh6581394/resultshare)
 
 [训练或发展可控且多样化的级别生成器](https://github.com/smearle/control-pcgrl)
@@ -1209,6 +1217,8 @@ https://github.com/tsilva/gymsolve
 
 ## 大模型 <span id="llm"></span>
 
+
+[RoboMind：基于LLM的Unitree G1机器人预测规划控制——Nebius AI黑客马拉松](https://github.com/0-5-blood-prince/nebius-build)
 
 [利用言语纠正来提升机器人在执行复杂的长期任务时的表现](https://github.com/yay-robot/yay_robot)
 
@@ -2076,6 +2086,8 @@ https://github.com/tsilva/gymsolve
 
 [使用 LLM 实现全自动具身模拟](https://github.com/MetaX-MACA/Embodied_AI_Simulation)
 
+[强化学习训练评估框架](https://github.com/UoA-CARES/cares_reinforcement_learning)
+
 [mjswan 是一个功能强大的框架，用于创建具有实时策略控制的交互式 MuJoCo 仿真，并且完全在浏览器中运行](https://github.com/ttktjmt/mjswan)
 
 [Newton 是一款基于NVIDIA Warp 的GPU 加速物理模拟​​引擎](https://github.com/newton-physics/newton)
@@ -2146,6 +2158,8 @@ https://github.com/tsilva/gymsolve
 
 [Dimensional 是用于物理空间的智能体操作系统。Vibecode 可以用自然语言为类人机器人、四足机器人、无人机和其他硬件平台编写代码，并构建与物理输入（摄像头、激光雷达、执行器）无缝协作的多智能体系统](https://github.com/dimensionalOS/dimos)
 
+[强化学习研究框架](https://github.com/nico-bohlinger/RL-X) - 包括人形机器人
+
 [这是一个用于 LeKiwi 机器人软件开发的综合性单体仓库，集成了仿真、控制和机器学习功能](https://github.com/Ekumen-OS/lekiwi)
 
 [在加速器硬件上进行大规模并行刚体物理模拟](https://github.com/google/brax)
@@ -2158,6 +2172,10 @@ https://github.com/tsilva/gymsolve
 [MuJoCo 模拟、可视化和数据处理的综合工具包](https://github.com/ShanningZhuang/mujoco_tools)
 
 [将 robot urdf 文件转换为 mjcf 的工具](https://github.com/FFTAI/Wiki-GRx-MJCF) - [将 URDF 模型转换为 MJCF 模型的实用工具](https://github.com/ipa320/urdf2mjcf) - [其他](https://github.com/kscalelabs/urdf2mjcf)
+
+[MuJoCo 到 OpenUSD 数据转换器](https://github.com/newton-physics/mujoco-usd-converter)
+
+[从 Python 或命令行编译 xacro 文件为纯 URDF 或 MJCF（无需 ROS）](https://github.com/adamheins/xacrodoc)
 
 [用于将MJCF（MuJoCo 建模格式）机器人模型文件中的有限元素转换为 URDF 的脚本](https://github.com/Yasu31/mjcf_urdf_simple_converter)
 
@@ -2273,6 +2291,10 @@ https://github.com/tsilva/gymsolve
 [SERL：用于样本高效机器人强化学习的软件套件](https://github.com/rail-berkeley/serl) - [其他](https://github.com/serl-robot/serl)
 
 [为许多有用的机器人库提供通用 API](https://github.com/Tass0sm/corallab-lib)
+
+[Dimensional 是用于物理空间的智能体操作系统。Vibecode 可以用自然语言为类人机器人、四足机器人、无人机和其他硬件平台编写代码，并构建与物理输入（摄像头、激光雷达、执行器）无缝协作的多智能体系统。](https://github.com/dimensionalOS/dimos)
+
+[受 Isaac Lab 和 Gymnasium 启发，用于 Genesis 的模块化机器人训练框架](https://github.com/jgillick/genesis-forge)
 
 [MCPHC_old](https://github.com/NamiNaziri/MCPHC_old)
 
